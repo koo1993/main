@@ -93,7 +93,7 @@ public class AddressBookTest {
         AddressBook expectedAddressBook = new AddressBookBuilder().withPerson(aliceWithoutFriendTag)
                 .withPerson(bensonWithoutFriendTag).build();
 
-        assertEquals(expectedAddressBook.getPersonList(), addressBookWithAliceAndBenson.getPersonList());
+        assertEquals(expectedAddressBook, addressBookWithAliceAndBenson);
     }
 
     /**

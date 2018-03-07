@@ -141,6 +141,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public boolean removePerson(Person key) throws PersonNotFoundException {
         if (persons.remove(key)) {
+            removeUnusedTag();
             return true;
         } else {
             throw new PersonNotFoundException();
@@ -165,8 +166,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         if (!newTags.contains(tag)) {
             return;
-        }
-        else {
+        } else {
             newTags.remove(tag);
         }
 
@@ -182,6 +182,21 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
     }
+
+    /**
+     * remove tag that is unused in addressbook
+     */
+    private void removeUnusedTag() {
+        HashSet newSet = new HashSet();
+        for (Person person:persons) {
+            for (Tag tag: person.getTags()) {
+                if (!newSet.contains(tag)) {
+                    newSet.add(tag);
+                }
+            }
+        }
+        tags.setTags(newSet);
+    }
     /**
      * Remove tags from everyone in the address book
      * @param tag
@@ -190,6 +205,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         for (Person person: persons) {
             removeTagFromPerson(tag, person);
         }
+        removeUnusedTag();
     }
 
     @Override
