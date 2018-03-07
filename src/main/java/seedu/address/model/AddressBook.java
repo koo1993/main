@@ -163,8 +163,9 @@ public class AddressBook implements ReadOnlyAddressBook {
     private void removeTagFromPerson(Tag tag, Person person) {
         Set<Tag> newTags = new HashSet<>(person.getTags());
 
-        if (!newTags.contains(tag))
+        if (!newTags.contains(tag)) {
             return;
+        }
         else {
             newTags.remove(tag);
         }
@@ -176,7 +177,7 @@ public class AddressBook implements ReadOnlyAddressBook {
             updatePerson(person, newPerson);
         } catch (DuplicatePersonException dpe) {
             throw new AssertionError("updating person should not result in duplicated person");
-        } catch (PersonNotFoundException pnfe){
+        } catch (PersonNotFoundException pnfe) {
             throw new AssertionError("updating person should always be able to find the person you are editing");
         }
 
