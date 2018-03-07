@@ -15,6 +15,7 @@ import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.tag.Tag;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -82,6 +83,10 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     //=========== Filtered Person List Accessors =============================================================
+    @Override
+    public void deleteTagFromAllPerson(Tag tag) {
+        addressBook.removeTagFromAllPersons(tag);
+    }
 
     /**
      * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
