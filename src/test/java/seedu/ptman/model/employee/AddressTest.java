@@ -22,7 +22,7 @@ public class AddressTest {
 
     @Test
     public void isValidAddress() {
-        // null ptman
+        // null address
         Assert.assertThrows(NullPointerException.class, () -> Address.isValidAddress(null));
 
         // invalid addresses

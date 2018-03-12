@@ -88,15 +88,15 @@ public class Password {
      * @return passwordHash in String
      */
     public String generatePasswordHash(String password) {
+        String encodedHash = null;
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] byteHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            String encodedHash = Base64.getEncoder().encodeToString(byteHash);
-            return encodedHash;
+            encodedHash = Base64.getEncoder().encodeToString(byteHash);
         } catch (NoSuchAlgorithmException noSuchAlgoException) {
             System.out.println("cannot generate hash: MessageDigest.getInstance");
         }
-        return null;
+        return encodedHash;
     }
 
     @Override
