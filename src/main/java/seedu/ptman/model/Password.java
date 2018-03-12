@@ -1,4 +1,4 @@
-package seedu.address.model;
+package seedu.ptman.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
@@ -67,10 +67,7 @@ public class Password {
      * @return true if same
      */
     public boolean isCorrectPassword(String password) {
-        if (passwordHash.equals(generatePasswordHash(password))) {
-            return true;
-        }
-        return false;
+        return passwordHash.equals(generatePasswordHash(password));
     }
 
     /**

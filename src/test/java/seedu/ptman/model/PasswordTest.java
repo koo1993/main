@@ -1,4 +1,4 @@
-package seedu.address.model;
+package seedu.ptman.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -54,6 +54,17 @@ public class PasswordTest {
         assertTrue(password.checkAndChangePassword("ThisIsThePassword", "newPassword")); //wrong password
         assertEquals(password, expectedPassword);
 
+    }
+
+    @Test
+    public void changeHash() {
+        String encodedHash = "XCmpWavOTtpfDnpOfqU9zk+g8Ku+jqpjcX4v7V8ZPTE="; // hash code for newPassword
+        Password password = new Password("ThisIsThePassword");
+
+        assertFalse(password.isCorrectPassword("newPassword"));
+
+        password.changeHash(encodedHash);
+        assertTrue(password.isCorrectPassword("newPassword"));
     }
 
 }
