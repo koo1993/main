@@ -16,7 +16,18 @@ public class PasswordTest {
     }
 
     @Test
+    public void constructor_defaultConstructor_noError() {
+        Password password = new Password();
+        Password expectPassword = new Password("DEFAULT1");
+
+        assertEquals(password, expectPassword);
+    }
+
+    @Test
     public void isValidPassword() {
+        // null password
+        Assert.assertThrows(NullPointerException.class, () -> Password.isValidPassword(null));
+
         // invalid Password
         assertFalse(Password.isValidPassword("")); // empty string
         assertFalse(Password.isValidPassword(" ")); // spaces only
@@ -35,25 +46,27 @@ public class PasswordTest {
     public void isCorrectPassword() {
         Password password = new Password("ThisIsThePassword");
 
-        assertFalse(password.isCorrectPassword("thisiswrongpassword")); //wrong password
-        assertFalse(password.isCorrectPassword("ThisIsThepassword")); // wrong password
+        // wrong password
+        assertFalse(password.isCorrectPassword("thisiswrongpassword"));
+        assertFalse(password.isCorrectPassword("ThisIsThepassword"));
 
+        //correct password
         assertTrue(password.isCorrectPassword("ThisIsThePassword")); //correct password
     }
 
 
     @Test
     public void changePassword() {
-
         Password password = new Password("ThisIsThePassword");
         Password expectedPassword = new Password("newPassword");
 
-        assertFalse(password.checkAndChangePassword("this is the password", "newPassword")); //wrong password
-        assertFalse(password.checkAndChangePassword("notapassword", "newPassword")); //wrong password
+        //wrong password
+        assertFalse(password.checkAndChangePassword("this is the password", "newPassword"));
+        assertFalse(password.checkAndChangePassword("notapassword", "newPassword"));
 
-        assertTrue(password.checkAndChangePassword("ThisIsThePassword", "newPassword")); //wrong password
+        //correct password and changed
+        assertTrue(password.checkAndChangePassword("ThisIsThePassword", "newPassword"));
         assertEquals(password, expectedPassword);
-
     }
 
     @Test
