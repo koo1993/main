@@ -14,6 +14,7 @@ import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
+import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -31,6 +32,8 @@ public class XmlAdaptedEmployee {
     private String email;
     @XmlElement(required = true)
     private String address;
+    @XmlElement(required = true)
+    private String salary;
 
     @XmlElement
     private List<XmlAdaptedTag> tagged = new ArrayList<>();
@@ -44,11 +47,13 @@ public class XmlAdaptedEmployee {
     /**
      * Constructs an {@code XmlAdaptedEmployee} with the given employee details.
      */
-    public XmlAdaptedEmployee(String name, String phone, String email, String address, List<XmlAdaptedTag> tagged) {
+    public XmlAdaptedEmployee(String name, String phone, String email, String address,
+                              String salary, List<XmlAdaptedTag> tagged) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.salary = salary;
         if (tagged != null) {
             this.tagged = new ArrayList<>(tagged);
         }
@@ -64,6 +69,7 @@ public class XmlAdaptedEmployee {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
+        salary = source.getSalary().value;
         tagged = new ArrayList<>();
         for (Tag tag : source.getTags()) {
             tagged.add(new XmlAdaptedTag(tag));
@@ -113,8 +119,16 @@ public class XmlAdaptedEmployee {
         }
         final Address address = new Address(this.address);
 
+        if (this.salary == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Salary.class.getSimpleName()));
+        }
+        if (!Salary.isValidSalary(this.salary)) {
+            throw new IllegalValueException(Salary.MESSAGE_SALARY_CONSTRAINTS);
+        }
+        final Salary salary = new Salary(this.salary);
+
         final Set<Tag> tags = new HashSet<>(employeeTags);
-        return new Employee(name, phone, email, address, tags);
+        return new Employee(name, phone, email, address, salary, tags);
     }
 
     @Override

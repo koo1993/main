@@ -136,6 +136,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
                 employee.getPhone(),
                 employee.getEmail(),
                 employee.getAddress(),
+                employee.getSalary(),
                 correctTagReferences
         );
     }
@@ -176,7 +177,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         }
 
         Employee newEmployee = new Employee(employee.getName(), employee.getPhone(), employee.getEmail(),
-                employee.getAddress(), newTags);
+                employee.getAddress(), employee.getSalary(), newTags);
 
         try {
             updateEmployee(employee, newEmployee);
