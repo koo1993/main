@@ -10,11 +10,11 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 
 == Project Team
 
-=== John Doe
-image::damithc.jpg[width="150", align="left"]
-{empty}[http://www.comp.nus.edu.sg/~damithch[homepage]] [https://github.com/damithc[github]] [<<johndoe#, portfolio>>]
+=== Shannon Wong
+image::shanwpf.jpg[width="150", align="left"]
+{empty}[https://github.com/shanwpf[github]] [<<shannonwong#, portfolio>>]
 
-Role: Project Advisor
+Role: Developer
 
 '''
 
