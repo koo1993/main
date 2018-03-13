@@ -10,11 +10,14 @@ import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
+import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_SALARY_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.NAME_DESC_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
+import static seedu.ptman.logic.commands.CommandTestUtil.SALARY_DESC_AMY;
+import static seedu.ptman.logic.commands.CommandTestUtil.SALARY_DESC_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static seedu.ptman.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
@@ -43,6 +46,7 @@ import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
+import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
 import seedu.ptman.model.tag.Tag;
@@ -125,7 +129,7 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         index = INDEX_FIRST_EMPLOYEE;
         selectEmployee(index);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-                + ADDRESS_DESC_AMY + TAG_DESC_FRIEND;
+                + ADDRESS_DESC_AMY + SALARY_DESC_AMY + TAG_DESC_FRIEND;
         // this can be misleading: card selection actually remains unchanged but the
         // browser's url is updated to reflect the new employee's name
         assertCommandSuccess(command, index, AMY, index);
@@ -165,9 +169,13 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + INVALID_EMAIL_DESC,
                 Email.MESSAGE_EMAIL_CONSTRAINTS);
 
-        /* Case: invalid ptman -> rejected */
+        /* Case: invalid address -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + INVALID_ADDRESS_DESC,
                 Address.MESSAGE_ADDRESS_CONSTRAINTS);
+
+        /* Case: invalid salary -> rejected */
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + INVALID_SALARY_DESC,
+                Salary.MESSAGE_SALARY_CONSTRAINTS);
 
         /* Case: invalid tag -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + INVALID_TAG_DESC,
@@ -179,13 +187,13 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         index = INDEX_FIRST_EMPLOYEE;
         assertFalse(getModel().getFilteredEmployeeList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
+                + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_EMPLOYEE);
 
         /* Case: edit a employee with new values same as another employee's values
          * but with different tags -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND;
+                + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_HUSBAND;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_EMPLOYEE);
     }
 
