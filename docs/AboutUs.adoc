@@ -44,8 +44,8 @@ Responsibilities: UI + Testing + Documentation
 
 '''
 
-=== Bang Jie
-image::SunBangjie.jpg[width="150", align="left"]
+=== Sun Bangjie
+image::SunBangjie.JPG[width="150", align="left"]
 {empty}[http://github.com/SunBangjie[github]] [<<SunBangjie#, portfolio>>]
 
 Role: Developer +
