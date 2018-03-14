@@ -3,9 +3,8 @@
 :imagesDir: images
 :stylesDir: stylesheets
 
-AddressBook - Level 4 was developed by the https://se-edu.github.io/docs/Team.html[se-edu] team. +
-_{The dummy content given below serves as a placeholder to be used by future forks of the project.}_ +
-{empty} +
+PTMan was developed by the CS2103T AY17/18 W14-B2 Team.
+
 We are a team based in the http://www.comp.nus.edu.sg[School of Computing, National University of Singapore].
 
 == Project Team
@@ -14,42 +13,43 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 image::shanwpf.jpg[width="150", align="left"]
 {empty}[https://github.com/shanwpf[github]] [<<shannonwong#, portfolio>>]
 
-Role: Developer
+Role: Developer +
+Responsibilities: Storage + Deliverables and Deadlines + Documentation
 
 '''
 
-=== John Roe
-image::lejolly.jpg[width="150", align="left"]
-{empty}[http://github.com/lejolly[github]] [<<johndoe#, portfolio>>]
-
-Role: Team Lead +
-Responsibilities: UI
-
-'''
-
-=== Johnny Doe
-image::yijinl.jpg[width="150", align="left"]
-{empty}[http://github.com/yijinl[github]] [<<johndoe#, portfolio>>]
+=== Koo Chin Chye
+image::koo1993.jpg[width="150", align="left"]
+{empty}[http://github.com/koo1993[github]] [<<koo1993#, portfolio>>]
 
 Role: Developer +
-Responsibilities: Data
+Responsibilities: Logic + Documentation
+
+* Features Implemented : +
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/32[Create Additional Salary Parameter]
+
+
+
+* Other Contributions : +
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/20[Password Class]
 
 '''
 
-=== Johnny Roe
-image::m133225.jpg[width="150", align="left"]
-{empty}[http://github.com/m133225[github]] [<<johndoe#, portfolio>>]
+=== Caryn Heng
+image::hzxcaryn.jpg[width="150", align="left"]
+{empty}[http://github.com/hzxcaryn[github]] [<<hzxcaryn#, portfolio>>]
 
 Role: Developer +
-Responsibilities: Dev Ops + Threading
+Responsibilities: UI + Testing + Documentation
 
 '''
 
-=== Benson Meier
-image::yl_coder.jpg[width="150", align="left"]
-{empty}[http://github.com/yl-coder[github]] [<<johndoe#, portfolio>>]
+=== Bang Jie
+image::SunBangjie.jpg[width="150", align="left"]
+{empty}[http://github.com/SunBangjie[github]] [<<SunBangjie#, portfolio>>]
 
 Role: Developer +
-Responsibilities: UI
+Responsibilities: Integration + Model component + Documentation
 
 '''
+
