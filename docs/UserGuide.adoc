@@ -19,6 +19,13 @@ By: `W14-B2`      Since: `March 2018`      Licence: `MIT`
 
 Part-time Manager (PTMan) is for employers who *prefer to use a desktop app for managing part-time employees*. More importantly, PTMan is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, PTMan can get your employee management tasks done faster than traditional GUI apps. Interested? Jump to the <<Quick Start>> to get started. Enjoy!
 
+== About
+This user guide shows you how to get started using PTman +
+ +
+This user guide introduces you to the features PTMan have and leads you through with examples. +
+ +
+You are required to know how to use Java to run a Graphical User Interface (GUI) application. +
+
 == Quick Start
 
 Here are the steps required to get PTMan up and running on your computer:
@@ -40,8 +47,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 *  Some example commands you can try:
 
 ** *`list`* : Lists all contacts.
-** **`add`**`n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds an employee named `John Doe` to PTMan.
-** **`delete`**`3` : Deletes the 3rd contact shown in the current list.
+** **`add`** `n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 s/0` : Adds an employee named `John Doe` to PTMan.
+** **`delete`** `3` `pw/AdminPassword` : Deletes the 3rd contact shown in the current list.
 ** *`exit`* : Exits the app.
 
 *  Refer to <<Features>> for details of each command.
@@ -67,7 +74,7 @@ Format: `help`
 === Adding an employee: `add`
 
 Adds an employee to PTMan. +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]...` +
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY pw/AdminPassword [t/TAG]...` +
 Alias: `a`
 
 [TIP]
@@ -75,9 +82,9 @@ An employee can have any number of tags (including 0)
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 s/0`  +
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 s/0 pw/DEFAULT1`  +
 Adds an employee named `John Doe` with phone number `98765432`, address `John street, block 123, #01-01`, and salary earned so far $`0`.
-* `add n/Betsy Crowe e/betsycrowe@example.com a/Newgate Prison p/1234567 s/100`  +
+* `add n/Betsy Crowe e/betsycrowe@example.com a/Newgate Prison p/1234567 s/100  pw/DEFAULT1`  +
 Adds an employee named `Betsy Crowe` with email `betsycrowe@example.com`, address `Newgate Prison`, phone number `1234567`, and salary earned so far $`100`.
 
 === Listing all employees : `list`
@@ -91,6 +98,9 @@ Alias: `l`
 Edits an existing employee in PTMan. +
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...` +
 Alias: `e`
+
+[NOTE]
+An employer password can't be edited. [refer to `rp` (reset password)]
 
 ****
 * Edits the employee at the specified `INDEX`. The index refers to the index number shown in the last employee listing. The index *must be a positive integer* 1, 2, 3, ...
@@ -131,7 +141,7 @@ Returns any employee having names `Betsy`, `Tim`, or `John`.
 === Deleting an employee : `delete`
 
 Deletes the specified employee from PTMan. +
-Format: `delete INDEX` +
+Format: `delete INDEX pw/AdminPassword` +
 Alias: `d`
 
 ****
@@ -143,10 +153,10 @@ Alias: `d`
 Examples:
 
 * `list` +
-`delete 2` +
+`delete 2 pw/AdminPassword` +
 Deletes the 2nd employee in PTMan.
 * `find Betsy` +
-`delete 1` +
+`delete 1 pw/AdminPassword` +
 Deletes the 1st employee in the results of the `find` command.
 
 === Selecting an employee : `select`
@@ -236,7 +246,7 @@ The `redo` command fails as there are no `undo` commands executed previously.
 === Clearing all entries : `clear`
 
 Clears all employees from PTMan. +
-Format: `clear` +
+Format: `clear pw/AdminPassword` +
 Alias: `c`
 
 === Exiting the program : `exit`
@@ -254,6 +264,44 @@ There is no need to save manually.
 
 _{explain how the user can enable/disable data encryption}_
 // end::dataencryption[]
+
+=== View all details of employee
+PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allot employer to view all the detail of employe. +
+Format: `viewall` `pw/AdminPassword`
+
+=== Edit outlet all information [v2.0?]
+PTman outlets should be able to modify anytime by the admin. +
+Format: unclear
+
+=== add shift to outlet
+PTman outlets should be able to add shift to the timetable indicating with how many people the shift needs. +
+Format: `addshift` `startday` `starttime`` `endtime`
+
+[NOTE]
+====
+`startday` in DDMMYY format. +
+`starttime` `endtime` in HHMM format
+====
+
+=== choose shift
+Employee should be able to choose the slot they want in the timetable. +
+Format: `take` `n/name pw/password i/1..... `
+
+[NOTE]
+====
+user can indicate many i/1 , i/2 according to the shift given in timetable.
+====
+
+=== Change password
+Employee are given default password everytime their entry is create by the admin.
+They are required to change password the moment their account is created. +
+Format: `cp n/name` `pw/CurrentPassword pw/ModifiedPassword`
+
+[NOTE]
+====
+Employee should change the moment they are in PTMan
+====
+
 
 == FAQ
 
