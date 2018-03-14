@@ -1,4 +1,4 @@
-= AddressBook Level 4 - Developer Guide
+= PTMan - Developer Guide
 :toc:
 :toc-title:
 :toc-placement: preamble
@@ -12,11 +12,17 @@ ifdef::env-github[]
 endif::[]
 :repoURL: https://github.com/CS2103JAN2018-W14-B2/main
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `W14-B2`      Since: `March 2018`      Licence: `MIT`
+
+== Introduction
+
+PTMan is a Java application that helps employers manage and schedule their part-time employees. +
+It provides a graphical user interface for displaying schedules and employee information while making use of a command-line interface as the primary mode of input.
 
 == Setting up
 
 === Prerequisites
+You need to make sure the following prerequisites are installed on your computer before proceeding:
 
 . *JDK `1.8.0_60`* or later
 +
@@ -33,42 +39,41 @@ Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plu
 
 
 === Setting up the project in your computer
+Follow these steps to set up the project in your computer:
 
-. Fork this repo, and clone the fork to your computer
-. Open IntelliJ (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project dialog first)
-. Set up the correct JDK version for Gradle
-.. Click `Configure` > `Project Defaults` > `Project Structure`
-.. Click `New...` and find the directory of the JDK
-. Click `Import Project`
-. Locate the `build.gradle` file and select it. Click `OK`
-. Click `Open as Project`
-. Click `OK` to accept the default settings
+. Fork this repo, and clone the fork to your computer.
+. Open IntelliJ (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project dialog first).
+. Set up the correct JDK version for Gradle.
+.. Click `Configure` > `Project Defaults` > `Project Structure`.
+.. Click `New...` and find the directory of the JDK.
+. Click `Import Project`.
+. Locate the `build.gradle` file and select it. Click `OK`.
+. Click `Open as Project`.
+. Click `OK` to accept the default settings.
 . Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
 This will generate all resources required by the application and tests.
 
 === Verifying the setup
+You may check that you have setup the project correctly by following these steps:
 
-. Run the `seedu.address.MainApp` and try a few commands
+. Run the `seedu.ptman.MainApp` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Configurations to do before writing code
 
 ==== Configuring the coding style
 
-This project follows https://github.com/oss-generic/process/blob/master/docs/CodingStandards.adoc[oss-generic coding standards]. IntelliJ's default style is mostly compliant with ours but it uses a different import order from ours. To rectify,
+This project follows https://github.com/oss-generic/process/blob/master/docs/CodingStandards.adoc[oss-generic coding standards]. IntelliJ's default style is mostly compliant with ours but it uses a different import order from ours. To rectify:
 
-. Go to `File` > `Settings...` (Windows/Linux), or `IntelliJ IDEA` > `Preferences...` (macOS)
-. Select `Editor` > `Code Style` > `Java`
-. Click on the `Imports` tab to set the order
-
-* For `Class count to use import with '\*'` and `Names count to use static import with '*'`: Set to `999` to prevent IntelliJ from contracting the import statements
-* For `Import Layout`: The order is `import static all other imports`, `import java.\*`, `import javax.*`, `import org.\*`, `import com.*`, `import all other imports`. Add a `<blank line>` between each `import`
+. Go to `File` > `Settings...` (Windows/Linux), or `IntelliJ IDEA` > `Preferences...` (macOS) . Select `Editor` > `Code Style` > `Java` . Click on the `Imports` tab to set the order.
+* For `Class count to use import with '\*'` and `Names count to use static import with '*'`: Set to `999` to prevent IntelliJ from contracting the import statements.
+* For `Import Layout`: The order is `import static all other imports`, `import java.\*`, `import javax.*`, `import org.\*`, `import com.*`, `import all other imports`. Add a `<blank line>` between each `import`.
 
 Optionally, you can follow the <<UsingCheckstyle#, UsingCheckstyle.adoc>> document to configure Intellij to check style-compliance as you write code.
 
 ==== Updating documentation to match your fork
 
-After forking the repo, links in the documentation will still point to the `se-edu/addressbook-level4` repo. If you plan to develop this as a separate product (i.e. instead of contributing to the `se-edu/addressbook-level4`) , you should replace the URL in the variable `repoURL` in `DeveloperGuide.adoc` and `UserGuide.adoc` with the URL of your fork.
+After forking the repo, links in the documentation will still point to the `CS2103JAN2018/main` repo. If you plan to develop this as a separate product (i.e. instead of contributing to the `CS2103JAN2018/main`) , you should replace the URL in the variable `repoURL` in `DeveloperGuide.adoc` and `UserGuide.adoc` with the URL of your fork.
 
 ==== Setting up CI
 
@@ -86,7 +91,7 @@ Having both Travis and AppVeyor ensures your App works on both Unix-based platfo
 
 ==== Getting started with coding
 
-When you are ready to start coding,
+Here are some tips before you get started with coding:
 
 1. Get some sense of the overall design by reading <<Design-Architecture>>.
 2. Take a look at <<GetStartedProgramming>>.
@@ -96,35 +101,37 @@ When you are ready to start coding,
 [[Design-Architecture]]
 === Architecture
 
+The _Architecture Diagram_ given below illustrates the high-level design of the app.
+
 .Architecture Diagram
 image::Architecture.png[width="600"]
-
-The *_Architecture Diagram_* given above explains the high-level design of the App. Given below is a quick overview of each component.
 
 [TIP]
 The `.pptx` files used to create diagrams in this document can be found in the link:{repoURL}/docs/diagrams/[diagrams] folder. To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
 
-`Main` has only one class called link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp`]. It is responsible for,
+Here are some quick overviews of each component:
 
-* At app launch: Initializes the components in the correct sequence, and connects them up with each other.
-* At shut down: Shuts down the components and invokes cleanup method where necessary.
+* `Main` has only one class called link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp`]. It is responsible for:
 
-<<Design-Commons,*`Commons`*>> represents a collection of classes used by multiple other components. Two of those classes play important roles at the architecture level.
+** At app launch: Initializing the components in the correct sequence, and connecting them up with each other.
+** At shut down: Shutting down the components and invoking cleanup methods where necessary.
 
-* `EventsCenter` : This class (written using https://github.com/google/guava/wiki/EventBusExplained[Google's Event Bus library]) is used by components to communicate with other components using events (i.e. a form of _Event Driven_ design)
-* `LogsCenter` : Used by many classes to write log messages to the App's log file.
+* <<Design-Commons,*`Commons`*>> represents a collection of classes used by multiple other components. Two of those classes play important roles at the architectural level.
 
-The rest of the App consists of four components.
+** `EventsCenter` : This class (written using https://github.com/google/guava/wiki/EventBusExplained[Google's Event Bus library]) is used by components to communicate with other components using events (i.e. a form of _Event Driven_ design).
+** `LogsCenter` : Used by many classes to write log messages to the app's log file.
 
-* <<Design-Ui,*`UI`*>>: The UI of the App.
-* <<Design-Logic,*`Logic`*>>: The command executor.
-* <<Design-Model,*`Model`*>>: Holds the data of the App in-memory.
+The rest of the app consists of four components:
+
+* <<Design-Ui,*`UI`*>>: Displays the UI of the app.
+* <<Design-Logic,*`Logic`*>>: Executes commands.
+* <<Design-Model,*`Model`*>>: Holds the data of the app in-memory.
 * <<Design-Storage,*`Storage`*>>: Reads data from, and writes data to, the hard disk.
 
-Each of the four components
+Each of the four components:
 
-* Defines its _API_ in an `interface` with the same name as the Component.
-* Exposes its functionality using a `{Component Name}Manager` class.
+* Defines their API in an `interface` with the same name as the component.
+* Exposes their functionality using a `{Component Name}Manager` class.
 
 For example, the `Logic` component (see the class diagram given below) defines it's API in the `Logic.java` interface and exposes its functionality using the `LogicManager.java` class.
 
@@ -155,6 +162,9 @@ The sections below give more details of each component.
 [[Design-Ui]]
 === UI component
 
+The `UI` component is responsible for displaying information to the user. +
+_Figure 5_ below shows the structure of the `UI` component.
+
 .Structure of the UI Component
 image::UiClassDiagram.png[width="800"]
 
@@ -164,7 +174,7 @@ The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `Re
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
-The `UI` component,
+The `UI` component:
 
 * Executes user commands using the `Logic` component.
 * Binds itself to some data in the `Model` so that the UI can auto-update when data in the `Model` change.
@@ -405,7 +415,7 @@ Certain properties of the application can be controlled (e.g App name, logging l
 
 == Documentation
 
-We use asciidoc for writing documentation.
+This section describes how to edit, publish and convert documentation. We use asciidoc for writing documentation.
 
 [NOTE]
 We chose asciidoc over Markdown because asciidoc, although a bit more complex than Markdown, provides more flexibility in formatting.
@@ -423,67 +433,78 @@ See <<UsingTravis#deploying-github-pages, UsingTravis.adoc>> to learn how to dep
 
 We use https://www.google.com/chrome/browser/desktop/[Google Chrome] for converting documentation to PDF format, as Chrome's PDF engine preserves hyperlinks used in webpages.
 
-Here are the steps to convert the project documentation files to PDF format.
+Here are the steps to convert the project documentation files to PDF format:
 
 .  Follow the instructions in <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to convert the AsciiDoc files in the `docs/` directory to HTML format.
-.  Go to your generated HTML files in the `build/docs` folder, right click on them and select `Open with` -> `Google Chrome`.
-.  Within Chrome, click on the `Print` option in Chrome's menu.
-.  Set the destination to `Save as PDF`, then click `Save` to save a copy of the file in PDF format. For best results, use the settings indicated in the screenshot below.
+.  Go to `build/docs` folder, your should see the generated HTML files.
+.  Right click on the file and select `Open with` -> `Google Chrome`. You should see a Google Chrome window.
+.  Click on the `Print` option in Chrome's menu. You should see a `Print` window as shown in Figure 11 below.
+.  Set the destination to `Save as PDF`.
+.  Click `Save` to save a copy of the file in PDF format. For the best results, use the settings indicated in Figure 11.
 
-.Saving documentation as PDF files in Chrome
+.Saving Documentation as PDF Files in Chrome
 image::chrome_save_as_pdf.png[width="300"]
 
 [[Testing]]
 == Testing
+
+This section explains how to run tests, the different types of tests and test troubleshooting.
 
 === Running Tests
 
 There are three ways to run tests.
 
 [TIP]
-The most reliable way to run tests is the 3rd one. The first two methods might fail some GUI tests due to platform/resolution-specific idiosyncrasies.
+The most reliable way to run tests is the third one. The first two methods might fail in some GUI tests due to platform/resolution-specific idiosyncrasies.
 
-*Method 1: Using IntelliJ JUnit test runner*
+*Method 1: Using IntelliJ JUnit Test Runner*
 
-* To run all tests, right-click on the `src/test/java` folder and choose `Run 'All Tests'`
-* To run a subset of tests, you can right-click on a test package, test class, or a test and choose `Run 'ABC'`
+* Right-click on the `src/test/java` folder and choose `Run 'All Tests'` to run all tests.
+* Right-click on a test package, test class, or a test and choose `Run 'ABC'` to run a subset of tests.
 
 *Method 2: Using Gradle*
 
-* Open a console and run the command `gradlew clean allTests` (Mac/Linux: `./gradlew clean allTests`)
+* Open a console and run the command `gradlew clean allTests`. If you are using Mac/Linux system, run the command `./gradlew clean allTests` instead.
 
 [NOTE]
-See <<UsingGradle#, UsingGradle.adoc>> for more info on how to run tests using Gradle.
+See <<UsingGradle#, UsingGradle.adoc>> for more information on how to run tests using Gradle.
 
-*Method 3: Using Gradle (headless)*
+*Method 3: Using Gradle (Headless)*
 
-Thanks to the https://github.com/TestFX/TestFX[TestFX] library we use, our GUI tests can be run in the _headless_ mode. In the headless mode, GUI tests do not show up on the screen. That means the developer can do other things on the Computer while the tests are running.
+* Open a console and run the command `gradlew clean headless allTests` to run tests in headless mode. If you are using Mac/Linux system, run the command `./gradlew clean headless allTests` instead.
 
-To run tests in headless mode, open a console and run the command `gradlew clean headless allTests` (Mac/Linux: `./gradlew clean headless allTests`)
+[NOTE]
+Thanks to the https://github.com/TestFX/TestFX[TestFX] library, our GUI tests can be run in the _headless_ mode. In the headless mode, GUI tests do not show up on the screen. That means the developer can do other things on the computer while the tests are running.
 
 === Types of tests
 
 We have two types of tests:
 
-.  *GUI Tests* - These are tests involving the GUI. They include,
-.. _System Tests_ that test the entire App by simulating user actions on the GUI. These are in the `systemtests` package.
-.. _Unit tests_ that test the individual components. These are in `seedu.address.ui` package.
-.  *Non-GUI Tests* - These are tests not involving the GUI. They include,
-..  _Unit tests_ targeting the lowest level methods/classes. +
-e.g. `seedu.address.commons.StringUtilTest`
-..  _Integration tests_ that are checking the integration of multiple code units (those code units are assumed to be working). +
-e.g. `seedu.address.storage.StorageManagerTest`
-..  Hybrids of unit and integration tests. These test are checking multiple code units as well as how the are connected together. +
-e.g. `seedu.address.logic.LogicManagerTest`
+.  *GUI Tests*
+* These are tests involving the GUI. They include:
+.. _System tests_ that test the entire app by simulating user actions on the GUI. These are in the `systemtests` package.
+.. _Unit tests_ that test the individual components. These are in the `seedu.ptman.ui` package.
+.  *Non-GUI Tests*
+* These are tests not involving the GUI. They include:
+..  _Unit tests_ targeting methods/classes at the lowest level. +
+e.g. `seedu.ptman.commons.StringUtilTest`
+..  _Integration tests_ that are checking the integration of multiple code units. Those code units are assumed to be working. +
+e.g. `seedu.ptman.storage.StorageManagerTest`
+..  Hybrids of _unit_ and _integration tests_. These test are checking multiple code units as well as how they are connected together. +
+e.g. `seedu.ptman.logic.LogicManagerTest`
 
 
 === Troubleshooting Testing
-**Problem: `HelpWindowTest` fails with a `NullPointerException`.**
+
+The common problems encountered while testing are listed here.
+
+**Problem:** `HelpWindowTest` fails with a `NullPointerException`.
 
 * Reason: One of its dependencies, `UserGuide.html` in `src/main/resources/docs` is missing.
 * Solution: Execute Gradle task `processResources`.
 
 == Dev Ops
+The following sections help you ensure that the project is fully integrated, tested, and built for release.
 
 === Build Automation
 
@@ -491,7 +512,7 @@ See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build auto
 
 === Continuous Integration
 
-We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
+We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform continuous integration on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
 
 === Coverage Reporting
 
@@ -502,7 +523,7 @@ When a pull request has changes to asciidoc files, you can use https://www.netli
 
 === Making a Release
 
-Here are the steps to create a new release.
+Here are the steps to create a new release:
 
 .  Update the version number in link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
@@ -511,9 +532,10 @@ Here are the steps to create a new release.
 
 === Managing Dependencies
 
-A project often depends on third-party libraries. For example, Address Book depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives. +
-a. Include those libraries in the repo (this bloats the repo size) +
-b. Require developers to download those libraries manually (this creates extra work for developers)
+A project often depends on third-party libraries. For example, PTMan depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these dependencies can be automated using Gradle. One advantage of Gradle is that it can download these dependencies automatically, which is better than the below alternatives: +
+
+..  Including the third-party libraries in the repo. This bloats the repo size. +
+..  Making developers download the third-party libraries manually. This creates extra work for developers.
 
 [[GetStartedProgramming]]
 [appendix]
@@ -816,21 +838,20 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 [width="59%",cols="22%,<23%,<25%,<30%",options="header",]
 |=======================================================================
 |Priority |As a ... |I want to ... |So that I can...
+
 |`* * *` |user |have a user manual |know how to use the app.
 
-|`* * *` |user |have an authentication page |prevent unauthorized access to my information.
+|`* * *` |user |have access control |prevent unauthorized access to my information.
 
-|`* * *` |user |update my password |keep my account secure.
+|`* * *` |user |update my password |keep my information secure.
+
+|`* * *` |employer |add a new employee |store them in the record.
 
 |`* * *` |employer |view an employee’s contact |contact them.
 
-|`* * *` |employer |edit an employee’s contact |update their outdated contact information.
+|`* * *` |employer |view an employee’s salary |view their salary.
 
-|`* * *` |employer |view an employee’s salary|view their salary.
-
-|`* * *` |employer |edit an employee’s salary|update their salary.
-
-|`* * *` |employer |add a new employee |store them in the record.
+|`* * *` |employer |edit an employee’s salary |update their salary.
 
 |`* * *` |employer |delete an existing employee |remove employees that are no longer working.
 
@@ -838,21 +859,15 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |employee |view the schedule |choose when I want to work.
 
-|`* * *` |employee |select from the available slots |work during that slot.
+|`* * *` |employee |select from the available slots in the schedule |work during that slot.
 
-|`* * *` |employer |add outlet |update the app with new outlets
+|`* *` |employer |edit an employee’s contact |update their outdated contact information.
+
+|`* *` |employer |edit the outlet information |update the outdated outlet information.
 
 |`* *` |employer |sort employees by name |have a clearer view of all employees’ details.
 
-|`* *` |employer |add a new admin account |have multiple managers.
-
 |`* *` |employer |find an employee by name |locate details of employees without having to go through the entire list.
-
-|`* *` |employer |find employees by outlet |locate details of employees according to the outlet they are working at.
-
-|`* *` |employer |view an employee’s working outlet |view their working outlet.
-
-|`* *` |employer |edit an employee’s working outlet |edit their working outlet.
 
 |`* *` |employer |view an employee’s address|view their address information.
 
@@ -862,17 +877,19 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* *` |employee |view my salary so far for the month |plan my expenses.
 
-|`*` |employer |add an employee’s photo|view it at any time.
+|`*` |user |export timetable as image |have easy access to the time slots I'm working at.
 
-|`*` |employer |edit an employee’s photo|change an employee's photo to a newer one.
+|`*` |employer |add an employee’s photo |view it at any time.
 
-|`*` |employer |view an employee’s photo|recognize the employee.
+|`*` |employer |edit an employee’s photo |change an employee's photo to a newer one.
 
-|`*` |employer |remove an employee’s photo|remove their old photo.
+|`*` |employer |view an employee’s photo |recognize the employee.
+
+|`*` |employer |remove an employee’s photo |remove their old photo.
 
 |`*` |employee |add a photo |be easily identified by my employer.
 
-|`*` |employee |have notification for the selected slot |be assured that I am working at that slot.
+|`*` |employee |have a notification for slot confirmation |be assured that I am working at that slot.
 |=======================================================================
 
 [appendix]
