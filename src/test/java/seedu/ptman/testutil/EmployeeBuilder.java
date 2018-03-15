@@ -3,6 +3,7 @@ package seedu.ptman.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
@@ -30,6 +31,7 @@ public class EmployeeBuilder {
     private Address address;
     private Salary salary;
     private Set<Tag> tags;
+    private Password password;
 
     public EmployeeBuilder() {
         name = new Name(DEFAULT_NAME);
@@ -37,6 +39,7 @@ public class EmployeeBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         salary = new Salary(DEFAULT_SALARY);
+        password = new Password();
         tags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
     }
 
@@ -49,6 +52,7 @@ public class EmployeeBuilder {
         email = employeeToCopy.getEmail();
         address = employeeToCopy.getAddress();
         salary = employeeToCopy.getSalary();
+        password = employeeToCopy.getPassword();
         tags = new HashSet<>(employeeToCopy.getTags());
     }
 
@@ -99,9 +103,16 @@ public class EmployeeBuilder {
         this.salary = new Salary(salary);
         return this;
     }
+    /**
+     * Sets the {@code Password} of the {@code Employee} that we are building.
+     */
+    public EmployeeBuilder withPassword(String passwordHash) {
+        this.password = new Password(passwordHash);
+        return this;
+    }
 
     public Employee build() {
-        return new Employee(name, phone, email, address, salary, tags);
+        return new Employee(name, phone, email, address, salary, password, tags);
     }
 
 }

@@ -40,6 +40,7 @@ public class XmlUtilTest {
     private static final String VALID_EMAIL = "hans@example";
     private static final String VALID_ADDRESS = "4th street";
     private static final String VALID_SALARY = "0";
+    private static final String DEFAULT1_HASH = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=";
     private static final List<XmlAdaptedTag> VALID_TAGS = Collections.singletonList(new XmlAdaptedTag("friends"));
 
     @Rule
@@ -82,7 +83,7 @@ public class XmlUtilTest {
         XmlAdaptedEmployee actualEmployee = XmlUtil.getDataFromFile(
                 MISSING_EMPLOYEE_FIELD_FILE, XmlAdaptedEmployeeWithRootElement.class);
         XmlAdaptedEmployee expectedEmployee = new XmlAdaptedEmployee(
-                null, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY, VALID_TAGS);
+                null, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
         assertEquals(expectedEmployee, actualEmployee);
     }
 
@@ -91,7 +92,7 @@ public class XmlUtilTest {
         XmlAdaptedEmployee actualEmployee = XmlUtil.getDataFromFile(
                 INVALID_EMPLOYEE_FIELD_FILE, XmlAdaptedEmployeeWithRootElement.class);
         XmlAdaptedEmployee expectedEmployee = new XmlAdaptedEmployee(
-                VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY, VALID_TAGS);
+                VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
         assertEquals(expectedEmployee, actualEmployee);
     }
 
@@ -100,7 +101,7 @@ public class XmlUtilTest {
         XmlAdaptedEmployee actualEmployee = XmlUtil.getDataFromFile(
                 VALID_EMPLOYEE_FILE, XmlAdaptedEmployeeWithRootElement.class);
         XmlAdaptedEmployee expectedEmployee = new XmlAdaptedEmployee(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY, VALID_TAGS);
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
         assertEquals(expectedEmployee, actualEmployee);
     }
 

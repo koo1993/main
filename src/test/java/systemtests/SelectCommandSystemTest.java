@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX;
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.logic.commands.SelectCommand.MESSAGE_SELECT_EMPLOYEE_SUCCESS;
 import static seedu.ptman.testutil.TypicalEmployees.KEYWORD_MATCHING_MEIER;
 import static seedu.ptman.testutil.TypicalEmployees.getTypicalEmployees;
@@ -34,12 +35,12 @@ public class SelectCommandSystemTest extends PartTimeManagerSystemTest {
         assertCommandSuccess(command, employeeCount);
 
         /* Case: undo previous selection -> rejected */
-        command = UndoCommand.COMMAND_WORD;
+        command = UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
         String expectedResultMessage = UndoCommand.MESSAGE_FAILURE;
         assertCommandFailure(command, expectedResultMessage);
 
         /* Case: redo selecting last card in the list -> rejected */
-        command = RedoCommand.COMMAND_WORD;
+        command = RedoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
         expectedResultMessage = RedoCommand.MESSAGE_FAILURE;
         assertCommandFailure(command, expectedResultMessage);
 

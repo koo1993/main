@@ -3,6 +3,7 @@ package systemtests;
 import static org.junit.Assert.assertTrue;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX;
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.logic.commands.DeleteCommand.MESSAGE_DELETE_EMPLOYEE_SUCCESS;
 import static seedu.ptman.testutil.TestUtil.getEmployee;
 import static seedu.ptman.testutil.TestUtil.getLastIndex;
@@ -33,7 +34,8 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
         /* Case: delete the first employee in the list, command with leading spaces and trailing spaces -> deleted */
         Model expectedModel = getModel();
         String command =
-                "     " + DeleteCommand.COMMAND_WORD + "      " + INDEX_FIRST_EMPLOYEE.getOneBased() + "       ";
+                "     " + DeleteCommand.COMMAND_WORD + "      " + INDEX_FIRST_EMPLOYEE.getOneBased() + "       "
+                + DEFAULT_DESC_ADMINPASSWORD;
         Employee deletedEmployee = removeEmployee(expectedModel, INDEX_FIRST_EMPLOYEE);
         String expectedResultMessage = String.format(MESSAGE_DELETE_EMPLOYEE_SUCCESS, deletedEmployee);
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
@@ -44,12 +46,12 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
         assertCommandSuccess(lastEmployeeIndex);
 
         /* Case: undo deleting the last employee in the list -> last employee restored */
-        command = UndoCommand.COMMAND_WORD;
+        command = UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
         expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, modelBeforeDeletingLast, expectedResultMessage);
 
         /* Case: redo deleting the last employee in the list -> last employee deleted again */
-        command = RedoCommand.COMMAND_WORD;
+        command = RedoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
         removeEmployee(modelBeforeDeletingLast, lastEmployeeIndex);
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, modelBeforeDeletingLast, expectedResultMessage);
@@ -71,7 +73,7 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
          */
         showEmployeesWithName(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getPartTimeManager().getEmployeeList().size();
-        command = DeleteCommand.COMMAND_WORD + " " + invalidIndex;
+        command = DeleteCommand.COMMAND_WORD + " " + invalidIndex + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
 
         /* ------------------- Performing delete operation while a employee card is selected ---------------------- */
@@ -82,7 +84,7 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
         Index selectedIndex = getLastIndex(expectedModel);
         Index expectedIndex = Index.fromZeroBased(selectedIndex.getZeroBased() - 1);
         selectEmployee(selectedIndex);
-        command = DeleteCommand.COMMAND_WORD + " " + selectedIndex.getOneBased();
+        command = DeleteCommand.COMMAND_WORD + " " + selectedIndex.getOneBased() + DEFAULT_DESC_ADMINPASSWORD;
         deletedEmployee = removeEmployee(expectedModel, selectedIndex);
         expectedResultMessage = String.format(MESSAGE_DELETE_EMPLOYEE_SUCCESS, deletedEmployee);
         assertCommandSuccess(command, expectedModel, expectedResultMessage, expectedIndex);
@@ -90,17 +92,17 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
         /* --------------------------------- Performing invalid delete operation ------------------------------------ */
 
         /* Case: invalid index (0) -> rejected */
-        command = DeleteCommand.COMMAND_WORD + " 0";
+        command = DeleteCommand.COMMAND_WORD + " 0 " + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
         /* Case: invalid index (-1) -> rejected */
-        command = DeleteCommand.COMMAND_WORD + " -1";
+        command = DeleteCommand.COMMAND_WORD + " -1 " + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
         /* Case: invalid index (size + 1) -> rejected */
         Index outOfBoundsIndex = Index.fromOneBased(
                 getModel().getPartTimeManager().getEmployeeList().size() + 1);
-        command = DeleteCommand.COMMAND_WORD + " " + outOfBoundsIndex.getOneBased();
+        command = DeleteCommand.COMMAND_WORD + " " + outOfBoundsIndex.getOneBased() + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
 
         /* Case: invalid arguments (alphabets) -> rejected */
@@ -137,8 +139,8 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
         Employee deletedEmployee = removeEmployee(expectedModel, toDelete);
         String expectedResultMessage = String.format(MESSAGE_DELETE_EMPLOYEE_SUCCESS, deletedEmployee);
 
-        assertCommandSuccess(
-                DeleteCommand.COMMAND_WORD + " " + toDelete.getOneBased(), expectedModel, expectedResultMessage);
+        assertCommandSuccess(DeleteCommand.COMMAND_WORD + " " + toDelete.getOneBased()
+                        + DEFAULT_DESC_ADMINPASSWORD, expectedModel, expectedResultMessage);
     }
 
     /**

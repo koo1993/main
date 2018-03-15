@@ -7,7 +7,8 @@
         <phone>85355255</phone>
         <email>alice@example.com</email>
         <address>123, Jurong West Ave 6, #08-111</address>
-		<salary>10</salary>
+        <salary>10</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
         <tagged>friends</tagged>
     </employees>
     <employees>
@@ -16,6 +17,7 @@
         <email>johnd@example.com</email>
         <address>311, Clementi Ave 2, #02-25</address>
 		<salary>0</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
         <tagged>owesMoney</tagged>
         <tagged>friends</tagged>
     </employees>
@@ -25,6 +27,7 @@
         <email>heinz@example.com</email>
         <address>wall street</address>
 		<salary>0</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
     </employees>
     <employees>
         <name>Daniel Meier</name>
@@ -32,6 +35,7 @@
         <email>cornelia@example.com</email>
         <address>10th street</address>
 		<salary>0</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
     </employees>
     <employees>
         <name>Elle Meyer</name>
@@ -39,6 +43,7 @@
         <email>werner@example.com</email>
         <address>michegan ave</address>
 		<salary>0</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
     </employees>
     <employees>
         <name>Fiona Kunz</name>
@@ -46,6 +51,7 @@
         <email>lydia@example.com</email>
         <address>little tokyo</address>
 		<salary>0</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
     </employees>
     <employees>
         <name>George Best</name>
@@ -53,6 +59,7 @@
         <email>anna@example.com</email>
         <address>4th street</address>
 		<salary>0</salary>
+        <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
     </employees>
     <tags>friends</tags>
     <tags>owesMoney</tags>

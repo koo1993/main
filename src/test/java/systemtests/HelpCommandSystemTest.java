@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.ui.testutil.GuiTestAssert.assertListMatching;
 
@@ -69,7 +70,8 @@ public class HelpCommandSystemTest extends PartTimeManagerSystemTest {
 
         // assert that the status bar too is updated correctly while the help window is open
         // note: the select command tested above does not update the status bar
-        executeCommand(DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased());
+        executeCommand(DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
+                + DEFAULT_DESC_ADMINPASSWORD);
         assertNotEquals(StatusBarFooter.SYNC_STATUS_INITIAL, getStatusBarFooter().getSyncStatus());
     }
 

@@ -3,6 +3,7 @@ package systemtests;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
@@ -71,16 +72,17 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
          */
         Employee toAdd = AMY;
         String command = "   " + AddCommand.COMMAND_WORD + "  " + NAME_DESC_AMY + "  " + PHONE_DESC_AMY + " "
-                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + " " + SALARY_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + " " + SALARY_DESC_AMY + "   " + TAG_DESC_FRIEND + " "
+                + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: undo adding Amy to the list -> Amy deleted */
-        command = UndoCommand.COMMAND_WORD;
+        command = UndoCommand.COMMAND_WORD + " " + DEFAULT_DESC_ADMINPASSWORD;
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
 
         /* Case: redo adding Amy to the list -> Amy added again */
-        command = RedoCommand.COMMAND_WORD;
+        command = RedoCommand.COMMAND_WORD + " " + DEFAULT_DESC_ADMINPASSWORD;
         model.addEmployee(toAdd);
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
@@ -89,35 +91,35 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
         toAdd = new EmployeeBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
                 .withAddress(VALID_ADDRESS_AMY).withSalary(VALID_SALARY_AMY).withTags(VALID_TAG_FRIEND).build();
         command = AddCommand.COMMAND_WORD + NAME_DESC_BOB + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY + TAG_DESC_FRIEND;
+                + SALARY_DESC_AMY + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: add a employee with all fields same as another employee in PTMan except phone -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_AMY)
                 .withAddress(VALID_ADDRESS_AMY).withSalary(VALID_SALARY_AMY).withTags(VALID_TAG_FRIEND).build();
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_BOB + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY + TAG_DESC_FRIEND;
+                + SALARY_DESC_AMY + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: add a employee with all fields same as another employee in PTMan except email -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_AMY).withSalary(VALID_SALARY_AMY).withTags(VALID_TAG_FRIEND).build();
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_BOB + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY + TAG_DESC_FRIEND;
+                + SALARY_DESC_AMY + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: add a employee with all fields same as another employee in PTMan except address -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
                 .withAddress(VALID_ADDRESS_BOB).withSalary(VALID_SALARY_AMY).withTags(VALID_TAG_FRIEND).build();
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_BOB
-                + SALARY_DESC_AMY + TAG_DESC_FRIEND;
+                + SALARY_DESC_AMY + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: add a employee with all fields same as another employee in PTMan except salary -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
                 .withAddress(VALID_ADDRESS_AMY).withSalary(VALID_SALARY_BOB).withTags(VALID_TAG_FRIEND).build();
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + SALARY_DESC_BOB + TAG_DESC_FRIEND;
+                + SALARY_DESC_BOB + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: add to empty ptman book -> added */
@@ -127,7 +129,7 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
         /* Case: add a employee with tags, command with parameters in random order -> added */
         toAdd = BOB;
         command = AddCommand.COMMAND_WORD + TAG_DESC_FRIEND + PHONE_DESC_BOB + ADDRESS_DESC_BOB + NAME_DESC_BOB
-                + SALARY_DESC_BOB + TAG_DESC_HUSBAND + EMAIL_DESC_BOB;
+                + SALARY_DESC_BOB + TAG_DESC_HUSBAND + EMAIL_DESC_BOB + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandSuccess(command, toAdd);
 
         /* Case: add a employee, missing tags -> added */
@@ -159,23 +161,28 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
         assertCommandFailure(command, AddCommand.MESSAGE_DUPLICATE_EMPLOYEE);
 
         /* Case: missing name -> rejected */
-        command = AddCommand.COMMAND_WORD + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + SALARY_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + SALARY_DESC_AMY
+                + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: missing phone -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + SALARY_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + SALARY_DESC_AMY
+                + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: missing email -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + ADDRESS_DESC_AMY + SALARY_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + ADDRESS_DESC_AMY + SALARY_DESC_AMY
+                + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: missing address -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + SALARY_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + SALARY_DESC_AMY
+                + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: missing salary -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
+                + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: invalid keyword -> rejected */
@@ -184,32 +191,32 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
 
         /* Case: invalid name -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_NAME_DESC + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY;
+                + SALARY_DESC_AMY + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Name.MESSAGE_NAME_CONSTRAINTS);
 
         /* Case: invalid phone -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + INVALID_PHONE_DESC + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY;
+                + SALARY_DESC_AMY + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Phone.MESSAGE_PHONE_CONSTRAINTS);
 
         /* Case: invalid email -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + INVALID_EMAIL_DESC + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY;
+                + SALARY_DESC_AMY + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Email.MESSAGE_EMAIL_CONSTRAINTS);
 
         /* Case: invalid address -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + INVALID_ADDRESS_DESC
-                + SALARY_DESC_AMY;
+                + SALARY_DESC_AMY + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Address.MESSAGE_ADDRESS_CONSTRAINTS);
 
         /* Case: invalid salary -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + INVALID_SALARY_DESC;
+                + INVALID_SALARY_DESC + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Salary.MESSAGE_SALARY_CONSTRAINTS);
 
         /* Case: invalid tag -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                + SALARY_DESC_AMY + INVALID_TAG_DESC;
+                + SALARY_DESC_AMY + INVALID_TAG_DESC + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Tag.MESSAGE_TAG_CONSTRAINTS);
     }
 

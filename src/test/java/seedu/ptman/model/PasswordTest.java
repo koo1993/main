@@ -8,17 +8,19 @@ import org.junit.Test;
 
 import seedu.ptman.testutil.Assert;
 
+
 public class PasswordTest {
+    public static final String DEFAULT1_HASH = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00="; // hash code for DEFAULT1
+    public static final String DEFAULT2_HASH = "j9R1Y0IIRVI052lxIOkweVd88O+EiSLGJvnXAZXKD40=";
     @Test
-    public void constructor_invalidPassword_throwsIllegalArgumentException() {
-        String invalidName = "have space";
-        Assert.assertThrows(IllegalArgumentException.class, () -> new Password(invalidName));
+    public void constructor_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> new Password(null));
     }
 
     @Test
     public void constructor_defaultConstructor_noError() {
         Password password = new Password();
-        Password expectPassword = new Password("DEFAULT1");
+        Password expectPassword = new Password(DEFAULT1_HASH);
 
         assertEquals(password, expectPassword);
     }
@@ -44,40 +46,41 @@ public class PasswordTest {
 
     @Test
     public void isCorrectPassword() {
-        Password password = new Password("ThisIsThePassword");
+        Password password = new Password(DEFAULT1_HASH);
 
         // wrong password
         assertFalse(password.isCorrectPassword("thisiswrongpassword"));
-        assertFalse(password.isCorrectPassword("ThisIsThepassword"));
+        assertFalse(password.isCorrectPassword("THISISNOTTHEPASS"));
 
         //correct password
-        assertTrue(password.isCorrectPassword("ThisIsThePassword")); //correct password
+        assertTrue(password.isCorrectPassword("DEFAULT1")); //correct password
     }
 
 
     @Test
     public void changePassword() {
-        Password password = new Password("ThisIsThePassword");
-        Password expectedPassword = new Password("newPassword");
+        Password password = new Password(DEFAULT1_HASH);
+        Password expectedPassword = new Password(DEFAULT2_HASH);
 
         //wrong password
         assertFalse(password.checkAndChangePassword("this is the password", "newPassword"));
         assertFalse(password.checkAndChangePassword("notapassword", "newPassword"));
 
         //correct password and changed
-        assertTrue(password.checkAndChangePassword("ThisIsThePassword", "newPassword"));
+        assertTrue(password.checkAndChangePassword("DEFAULT1", "DEFAULT2"));
         assertEquals(password, expectedPassword);
+
     }
 
     @Test
     public void changeHash() {
-        String encodedHash = "XCmpWavOTtpfDnpOfqU9zk+g8Ku+jqpjcX4v7V8ZPTE="; // hash code for newPassword
-        Password password = new Password("ThisIsThePassword");
+        String encodedHash = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00="; // hash code for DEFAULT1
+        Password password = new Password(encodedHash);
 
         assertFalse(password.isCorrectPassword("newPassword"));
 
-        password.changeHash(encodedHash);
-        assertTrue(password.isCorrectPassword("newPassword"));
+
+        assertTrue(password.isCorrectPassword("DEFAULT1"));
     }
 
 }

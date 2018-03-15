@@ -3,6 +3,7 @@ package systemtests;
 import static org.junit.Assert.assertFalse;
 import static seedu.ptman.commons.core.Messages.MESSAGE_EMPLOYEES_LISTED_OVERVIEW;
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.testutil.TypicalEmployees.BENSON;
 import static seedu.ptman.testutil.TypicalEmployees.CARL;
 import static seedu.ptman.testutil.TypicalEmployees.DANIEL;
@@ -71,17 +72,17 @@ public class FindCommandSystemTest extends PartTimeManagerSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: undo previous find command -> rejected */
-        command = UndoCommand.COMMAND_WORD;
+        command = UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
         String expectedResultMessage = UndoCommand.MESSAGE_FAILURE;
         assertCommandFailure(command, expectedResultMessage);
 
         /* Case: redo previous find command -> rejected */
-        command = RedoCommand.COMMAND_WORD;
+        command = RedoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
         expectedResultMessage = RedoCommand.MESSAGE_FAILURE;
         assertCommandFailure(command, expectedResultMessage);
 
         /* Case: find same employees in ptman book after deleting 1 of them -> 1 employee found */
-        executeCommand(DeleteCommand.COMMAND_WORD + " 1");
+        executeCommand(DeleteCommand.COMMAND_WORD + " 1" + DEFAULT_DESC_ADMINPASSWORD);
         assertFalse(getModel().getPartTimeManager().getEmployeeList().contains(BENSON));
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();
