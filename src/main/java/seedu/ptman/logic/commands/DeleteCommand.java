@@ -32,6 +32,7 @@ public class DeleteCommand extends UndoableCommand {
 
     public DeleteCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
+        isAdminCommand = true;
     }
 
 

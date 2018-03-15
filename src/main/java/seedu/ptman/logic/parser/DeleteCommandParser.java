@@ -1,6 +1,7 @@
 package seedu.ptman.logic.parser;
 
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.exceptions.IllegalValueException;
@@ -19,11 +20,23 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      */
     public DeleteCommand parse(String args) throws ParseException {
         try {
-            Index index = ParserUtil.parseIndex(args);
+            Index index = ParserUtil.parseIndex(clearPasswordFromCommand(args));
             return new DeleteCommand(index);
         } catch (IllegalValueException ive) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        }
+    }
+
+    /**
+     * cut away password at the end of the command
+     */
+    private String clearPasswordFromCommand(String args) {
+        int startIndex = args.indexOf(PREFIX_PASSWORD.getPrefix());
+        if (startIndex == -1) {
+            return args;
+        } else {
+            return args.substring(0, startIndex);
         }
     }
 

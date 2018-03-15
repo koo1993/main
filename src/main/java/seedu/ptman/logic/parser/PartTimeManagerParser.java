@@ -10,6 +10,7 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_SALARY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,13 +108,18 @@ public class PartTimeManagerParser {
     }
 
     /**
-     * extract out password when given a commandText
+     * Extract out password when given a commandText
      * @param commandText
      * @return password in String
      */
-    public String parseCommandForPassword(String commandText) {
-            ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(commandText, PREFIX_NAME, PREFIX_ADDRESS,
-                    PREFIX_PHONE, PREFIX_SALARY, PREFIX_EMAIL, PREFIX_PASSWORD, PREFIX_TAG);
-            return argMultimap.getValue(PREFIX_PASSWORD).get();
+    public String parseCommandForPassword(String commandText) throws ParseException {
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(commandText, PREFIX_NAME, PREFIX_ADDRESS,
+                PREFIX_PHONE, PREFIX_SALARY, PREFIX_EMAIL, PREFIX_PASSWORD, PREFIX_TAG);
+        Optional<String> passwordOptional = argMultimap.getValue(PREFIX_PASSWORD);
+
+        if (!passwordOptional.isPresent()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, commandText));
+        }
+        return argMultimap.getValue(PREFIX_PASSWORD).get();
     }
 }

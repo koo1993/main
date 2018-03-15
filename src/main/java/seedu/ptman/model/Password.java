@@ -1,6 +1,5 @@
 package seedu.ptman.model;
 
-import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
 
@@ -28,7 +27,7 @@ public class Password {
     public static final String PASSWORD_VALIDATION_REGEX = "^(?=\\S+$).{8,}$";
 
     private String passwordHash;
-    private final String IV = "IV";
+    private final String initialValue = "IV";
 
     /**
      * constructor for default password
@@ -82,7 +81,8 @@ public class Password {
      * Create passwordHash when password is entered in plain text
      * @param password
      */
-    public void createPassword(String password){
+    public void createPassword(String password) {
+        checkArgument(isValidPassword(password), MESSAGE_PASSWORD_CONSTRAINTS);
         passwordHash = generatePasswordHash(password);
     }
 
@@ -99,7 +99,7 @@ public class Password {
         String encodedHash = null;
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            digest.update(IV.getBytes());
+            digest.update(initialValue.getBytes());
             byte[] byteHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             encodedHash = Base64.getEncoder().encodeToString(byteHash);
         } catch (NoSuchAlgorithmException noSuchAlgoException) {
