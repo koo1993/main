@@ -290,25 +290,44 @@ Alias: `c` `pw/AdminPassword`
 PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allows employer to view all the details for all the employee. +
 Format: `viewall` `pw/AdminPassword`
 
-==== Add shift to outlet: `addshift`
-PTman outlets should be able to add shift to the timetable indicating with how many people the shift needs. +
-Format: `addshift` `startday` `starttime` `endtime`
+==== Edit outlet information [coming in v1.3]
+PTman outlet information can be modified anytime by the admin. +
+Format: `editoutlet pw/MasterPassword n/name h/OperatingHours` +
 
 [NOTE]
 ====
-`startday` in DDMMYY format. +
-`starttime` `endtime` in HHMM format
+`OperatingHours` in HHMM-HHMM format. +
+For example, `h/0900-2200` +
 ====
 
-==== Delete shift from outlet: `deleteshift`
-PTman outlets should be able to add shift to the timetable indicating with how many people the shift needs. +
-Format: `deleteshift` `index`
+==== Change master password [coming in v1.3]
+PTman should be able to allow employers to change master password. +
+Format: `cmp old/CurrentPassword new/ModifiedPassword` +
+
+==== Add shift to outlet [coming in v1.4]
+PTman outlets should be able to add a shift to the timetable indicating with how many people the shift needs. +
+Format: `addshift date `starttime endtime employeename1 employeename2 ...` +
+
+
 
 [NOTE]
 ====
-`startday` in DDMMYY format. +
+`date` in DDMMYY format. +
 `starttime` `endtime` in HHMM format
 ====
+
+==== Add employee to shift [coming in v1.4]
+PTman outlets should be able to add an employee to a shift in the timetable. +
+Format: `addto date starttime endtime employeename` +
+
+==== Delete employee from shift [coming in v1.4]
+PTman outlets should be able to delete an employee from a shift in the timetable. +
+Format: `deletefrom date starttime endtime employeename` +
+
+==== Reset to default shift [coming in v1.4]
+PTman outlets should be able to reset a shift from the timetable to its default value. +
+Format: `resetshift date starttime endtime` +
+
 
 === Employee features
 These commands can only be executed by employees and require a password.
@@ -343,42 +362,6 @@ There is no need to save manually.
 _{explain how the user can enable/disable data encryption}_
 // end::dataencryption[]
 
-=== View all details of employee
-PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allot employer to view all the detail of employe. +
-Format: `viewall` `pw/AdminPassword`
-
-=== Edit outlet all information [v2.0?]
-PTman outlets should be able to modify anytime by the admin. +
-Format: unclear
-
-=== add shift to outlet
-PTman outlets should be able to add shift to the timetable indicating with how many people the shift needs. +
-Format: `addshift` `startday` `starttime`` `endtime`
-
-[NOTE]
-====
-`startday` in DDMMYY format. +
-`starttime` `endtime` in HHMM format
-====
-
-=== choose shift
-Employee should be able to choose the slot they want in the timetable. +
-Format: `take` `n/name pw/password i/1..... `
-
-[NOTE]
-====
-user can indicate many i/1 , i/2 according to the shift given in timetable.
-====
-
-=== Change password
-Employee are given default password everytime their entry is create by the admin.
-They are required to change password the moment their account is created. +
-Format: `cp n/name` `pw/CurrentPassword pw/ModifiedPassword`
-
-[NOTE]
-====
-Employee should change the moment they are in PTMan
-====
 
 
 == FAQ
