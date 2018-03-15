@@ -13,6 +13,8 @@ public abstract class Command {
     protected Model model;
     protected CommandHistory history;
     protected UndoRedoStack undoRedoStack;
+    protected boolean isAdminCommand;
+
 
     /**
      * Constructs a feedback message to summarise an operation that displayed a listing of employees.
@@ -39,5 +41,9 @@ public abstract class Command {
      */
     public void setData(Model model, CommandHistory history, UndoRedoStack undoRedoStack) {
         this.model = model;
+    }
+
+    public boolean isAdminCommand() {
+        return isAdminCommand;
     }
 }

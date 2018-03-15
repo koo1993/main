@@ -1,12 +1,12 @@
 package seedu.ptman.model.employee.exceptions;
 
-import seedu.ptman.commons.exceptions.IllegalValueException;
+import seedu.ptman.logic.commands.exceptions.CommandException;
 
 /**
  * Signals that the operation will result in incorrect Password objects.
  */
-public class InvalidPasswordException extends IllegalValueException {
-    public InvalidPasswordException(String string) {
-        super(string);
+public class InvalidPasswordException extends CommandException {
+    public InvalidPasswordException() {
+        super("Password is incorrect");
     }
 }

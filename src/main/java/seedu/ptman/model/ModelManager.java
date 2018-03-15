@@ -15,7 +15,6 @@ import seedu.ptman.commons.events.model.PartTimeManagerChangedEvent;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -68,13 +67,15 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public synchronized void addEmployee(Employee employee, String password) throws DuplicateEmployeeException, InvalidPasswordException {
-        if( !partTimeManager.isAdmin(password)) {
-            throw new InvalidPasswordException("Password is incorrect");
-        }
+    public synchronized void addEmployee(Employee employee) throws DuplicateEmployeeException {
         partTimeManager.addEmployee(employee);
         updateFilteredEmployeeList(PREDICATE_SHOW_ALL_EMPLOYEES);
         indicatePartTimeManagerChanged();
+    }
+
+    @Override
+    public synchronized boolean isAdmin(String password) {
+        return partTimeManager.isAdmin(password);
     }
 
     @Override

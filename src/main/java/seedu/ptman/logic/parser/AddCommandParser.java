@@ -37,10 +37,10 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_ADDRESS, PREFIX_SALARY, PREFIX_PASSWORD, PREFIX_TAG);
+                        PREFIX_ADDRESS, PREFIX_SALARY, PREFIX_TAG, PREFIX_PASSWORD);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_SALARY, PREFIX_EMAIL)
-                || !argMultimap.getPreamble().isEmpty()) {
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_SALARY,
+                PREFIX_EMAIL, PREFIX_PASSWORD) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
@@ -51,11 +51,9 @@ public class AddCommandParser implements Parser<AddCommand> {
             Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS)).get();
             Salary salary = ParserUtil.parseSalary(argMultimap.getValue(PREFIX_SALARY)).get();
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
+
             Employee employee = new Employee(name, phone, email, address, salary, new Password(), tagList);
-
-            String password =  ParserUtil.parsePassword(argMultimap.getValue(PREFIX_PASSWORD)).get();
-
-            return new AddCommand(employee, password);
+            return new AddCommand(employee);
         } catch (IllegalValueException ive) {
             throw new ParseException(ive.getMessage(), ive);
         }

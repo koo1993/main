@@ -12,7 +12,6 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 
 /**
  * Adds a employee to PTMan.
@@ -36,41 +35,32 @@ public class AddCommand extends UndoableCommand {
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
             + PREFIX_SALARY + "0 "
-            + PREFIX_PASSWORD + "AdminPassword "
             + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+            + PREFIX_TAG + "owesMoney "
+            + PREFIX_PASSWORD + "AdminPassword";
 
     public static final String MESSAGE_SUCCESS = "New employee added: %1$s";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "This employee already exists in PTMan";
-    public static final String MESSAGE_INCORRECT_PASSWORD = "Password is incorrect";
 
     private final Employee toAdd;
-    private final String password;
 
     /**
      * Creates an AddCommand to add the specified {@code Employee}
      */
-    public AddCommand(Employee employee, String password) {
+    public AddCommand(Employee employee) {
         requireNonNull(employee);
-        requireNonNull(password);
         toAdd = employee;
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
+        isAdminCommand = true;
     }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(model);
         try {
-            model.addEmployee(toAdd, password);
+            model.addEmployee(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         } catch (DuplicateEmployeeException e) {
             throw new CommandException(MESSAGE_DUPLICATE_EMPLOYEE);
-        } catch (InvalidPasswordException ipe) {
-            throw new CommandException(MESSAGE_INCORRECT_PASSWORD);
         }
 
     }

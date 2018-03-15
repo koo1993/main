@@ -26,7 +26,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
 
     private final UniqueEmployeeList employees;
     private final UniqueTagList tags;
-    private Password password;
+    private final Password password;
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -51,9 +51,8 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         resetData(toBeCopied);
     }
 
-    /// password Authorizaation operations
-
-    public boolean isAdmin(String password) throws DuplicateEmployeeException {
+    //// authorization operations
+    public boolean isAdmin(String password) {
         return this.password.isCorrectPassword(password);
     }
 

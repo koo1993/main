@@ -167,17 +167,6 @@ public class ParserUtil {
     }
 
 
-    //TODO
-    public static String parsePassword(String password) {
-        requireNonNull(password);
-        return password;
-    }
-
-     //todo
-    public static Optional<String> parsePassword(Optional<String> password) throws IllegalValueException {
-        requireNonNull(password);
-        return password.isPresent() ? Optional.of(parsePassword(password.get())) : Optional.empty();
-    }
 
     /**
      * Parses a {@code String tag} into a {@code Tag}.
