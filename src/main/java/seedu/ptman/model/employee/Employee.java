@@ -19,18 +19,20 @@ public class Employee {
     private final Phone phone;
     private final Email email;
     private final Address address;
+    private final Salary salary;
 
     private final UniqueTagList tags;
 
     /**
      * Every field must be present and not null.
      */
-    public Employee(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Employee(Name name, Phone phone, Email email, Address address, Salary salary, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.salary = salary;
         // protect internal tags from changes in the arg list
         this.tags = new UniqueTagList(tags);
     }
@@ -49,6 +51,10 @@ public class Employee {
 
     public Address getAddress() {
         return address;
+    }
+
+    public Salary getSalary() {
+        return salary;
     }
 
     /**
@@ -73,7 +79,8 @@ public class Employee {
         return otherEmployee.getName().equals(this.getName())
                 && otherEmployee.getPhone().equals(this.getPhone())
                 && otherEmployee.getEmail().equals(this.getEmail())
-                && otherEmployee.getAddress().equals(this.getAddress());
+                && otherEmployee.getAddress().equals(this.getAddress())
+                && otherEmployee.getSalary().equals(this.getSalary());
     }
 
     @Override
@@ -92,6 +99,8 @@ public class Employee {
                 .append(getEmail())
                 .append(" Address: ")
                 .append(getAddress())
+                .append(" Salary: ")
+                .append(getSalary())
                 .append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();

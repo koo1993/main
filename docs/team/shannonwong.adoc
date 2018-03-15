@@ -1,14 +1,16 @@
-= John Doe - Project Portfolio
+= Shannon Wong - Project Portfolio
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
-
----
+== PROJECT: Part-time Manager (PTMan)
 
 == Overview
 
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+PTMan is a desktop human resource application used for managing part-timer employees. +
+
+PTMan aims to give part-time employees the freedom of choosing when they want to work by registering for the available time slots set by the employer. +
+
+The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
 
 == Summary of contributions
 
@@ -62,10 +64,3 @@ include::../UserGuide.adoc[tag=dataencryption]
 include::../DeveloperGuide.adoc[tag=undoredo]
 
 include::../DeveloperGuide.adoc[tag=dataencryption]
-
-
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_

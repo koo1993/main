@@ -397,7 +397,7 @@ Certain properties of the application can be controlled (e.g App name, logging l
 
 == Documentation
 
-We use asciidoc for writing documentation.
+This section describes how to edit, publish and convert documentation. We use asciidoc for writing documentation.
 
 [NOTE]
 We chose asciidoc over Markdown because asciidoc, although a bit more complex than Markdown, provides more flexibility in formatting.
@@ -415,67 +415,78 @@ See <<UsingTravis#deploying-github-pages, UsingTravis.adoc>> to learn how to dep
 
 We use https://www.google.com/chrome/browser/desktop/[Google Chrome] for converting documentation to PDF format, as Chrome's PDF engine preserves hyperlinks used in webpages.
 
-Here are the steps to convert the project documentation files to PDF format.
+Here are the steps to convert the project documentation files to PDF format:
 
 .  Follow the instructions in <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to convert the AsciiDoc files in the `docs/` directory to HTML format.
-.  Go to your generated HTML files in the `build/docs` folder, right click on them and select `Open with` -> `Google Chrome`.
-.  Within Chrome, click on the `Print` option in Chrome's menu.
-.  Set the destination to `Save as PDF`, then click `Save` to save a copy of the file in PDF format. For best results, use the settings indicated in the screenshot below.
+.  Go to `build/docs` folder, your should see the generated HTML files.
+.  Right click on the file and select `Open with` -> `Google Chrome`. You should see a Google Chrome window.
+.  Click on the `Print` option in Chrome's menu. You should see a `Print` window as shown in Figure 11 below.
+.  Set the destination to `Save as PDF`.
+.  Click `Save` to save a copy of the file in PDF format. For the best results, use the settings indicated in Figure 11.
 
-.Saving documentation as PDF files in Chrome
+.Saving Documentation as PDF Files in Chrome
 image::chrome_save_as_pdf.png[width="300"]
 
 [[Testing]]
 == Testing
+
+This section explains how to run tests, the different types of tests and test troubleshooting.
 
 === Running Tests
 
 There are three ways to run tests.
 
 [TIP]
-The most reliable way to run tests is the 3rd one. The first two methods might fail some GUI tests due to platform/resolution-specific idiosyncrasies.
+The most reliable way to run tests is the third one. The first two methods might fail in some GUI tests due to platform/resolution-specific idiosyncrasies.
 
-*Method 1: Using IntelliJ JUnit test runner*
+*Method 1: Using IntelliJ JUnit Test Runner*
 
-* To run all tests, right-click on the `src/test/java` folder and choose `Run 'All Tests'`
-* To run a subset of tests, you can right-click on a test package, test class, or a test and choose `Run 'ABC'`
+* Right-click on the `src/test/java` folder and choose `Run 'All Tests'` to run all tests.
+* Right-click on a test package, test class, or a test and choose `Run 'ABC'` to run a subset of tests.
 
 *Method 2: Using Gradle*
 
-* Open a console and run the command `gradlew clean allTests` (Mac/Linux: `./gradlew clean allTests`)
+* Open a console and run the command `gradlew clean allTests`. If you are using Mac/Linux system, run the command `./gradlew clean allTests` instead.
 
 [NOTE]
-See <<UsingGradle#, UsingGradle.adoc>> for more info on how to run tests using Gradle.
+See <<UsingGradle#, UsingGradle.adoc>> for more information on how to run tests using Gradle.
 
-*Method 3: Using Gradle (headless)*
+*Method 3: Using Gradle (Headless)*
 
-Thanks to the https://github.com/TestFX/TestFX[TestFX] library we use, our GUI tests can be run in the _headless_ mode. In the headless mode, GUI tests do not show up on the screen. That means the developer can do other things on the Computer while the tests are running.
+* Open a console and run the command `gradlew clean headless allTests` to run tests in headless mode. If you are using Mac/Linux system, run the command `./gradlew clean headless allTests` instead.
 
-To run tests in headless mode, open a console and run the command `gradlew clean headless allTests` (Mac/Linux: `./gradlew clean headless allTests`)
+[NOTE]
+Thanks to the https://github.com/TestFX/TestFX[TestFX] library, our GUI tests can be run in the _headless_ mode. In the headless mode, GUI tests do not show up on the screen. That means the developer can do other things on the computer while the tests are running.
 
 === Types of tests
 
 We have two types of tests:
 
-.  *GUI Tests* - These are tests involving the GUI. They include,
-.. _System Tests_ that test the entire App by simulating user actions on the GUI. These are in the `systemtests` package.
-.. _Unit tests_ that test the individual components. These are in `seedu.ptman.ui` package.
-.  *Non-GUI Tests* - These are tests not involving the GUI. They include,
-..  _Unit tests_ targeting the lowest level methods/classes. +
+.  *GUI Tests*
+* These are tests involving the GUI. They include:
+.. _System tests_ that test the entire app by simulating user actions on the GUI. These are in the `systemtests` package.
+.. _Unit tests_ that test the individual components. These are in the `seedu.ptman.ui` package.
+.  *Non-GUI Tests*
+* These are tests not involving the GUI. They include:
+..  _Unit tests_ targeting methods/classes at the lowest level. +
 e.g. `seedu.ptman.commons.StringUtilTest`
-..  _Integration tests_ that are checking the integration of multiple code units (those code units are assumed to be working). +
+..  _Integration tests_ that are checking the integration of multiple code units. Those code units are assumed to be working. +
 e.g. `seedu.ptman.storage.StorageManagerTest`
-..  Hybrids of unit and integration tests. These test are checking multiple code units as well as how the are connected together. +
+..  Hybrids of _unit_ and _integration tests_. These test are checking multiple code units as well as how they are connected together. +
 e.g. `seedu.ptman.logic.LogicManagerTest`
 
 
 === Troubleshooting Testing
-**Problem: `HelpWindowTest` fails with a `NullPointerException`.**
+
+The common problems encountered while testing are listed here.
+
+**Problem:** `HelpWindowTest` fails with a `NullPointerException`.
 
 * Reason: One of its dependencies, `UserGuide.html` in `src/main/resources/docs` is missing.
 * Solution: Execute Gradle task `processResources`.
 
 == Dev Ops
+The following sections help you ensure that the project is fully integrated, tested, and built for release.
 
 === Build Automation
 
@@ -483,7 +494,7 @@ See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build auto
 
 === Continuous Integration
 
-We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
+We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform continuous integration on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
 
 === Coverage Reporting
 
@@ -494,7 +505,7 @@ When a pull request has changes to asciidoc files, you can use https://www.netli
 
 === Making a Release
 
-Here are the steps to create a new release.
+Here are the steps to create a new release:
 
 .  Update the version number in link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
@@ -503,9 +514,10 @@ Here are the steps to create a new release.
 
 === Managing Dependencies
 
-A project often depends on third-party libraries. For example, Address Book depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives. +
-a. Include those libraries in the repo (this bloats the repo size) +
-b. Require developers to download those libraries manually (this creates extra work for developers)
+A project often depends on third-party libraries. For example, PTMan depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these dependencies can be automated using Gradle. One advantage of Gradle is that it can download these dependencies automatically, which is better than the below alternatives: +
+
+..  Including the third-party libraries in the repo. This bloats the repo size. +
+..  Making developers download the third-party libraries manually. This creates extra work for developers.
 
 [[GetStartedProgramming]]
 [appendix]
@@ -808,21 +820,20 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 [width="59%",cols="22%,<23%,<25%,<30%",options="header",]
 |=======================================================================
 |Priority |As a ... |I want to ... |So that I can...
+
 |`* * *` |user |have a user manual |know how to use the app.
 
-|`* * *` |user |have an authentication page |prevent unauthorized access to my information.
+|`* * *` |user |have access control |prevent unauthorized access to my information.
 
-|`* * *` |user |update my password |keep my account secure.
+|`* * *` |user |update my password |keep my information secure.
+
+|`* * *` |employer |add a new employee |store them in the record.
 
 |`* * *` |employer |view an employee’s contact |contact them.
 
-|`* * *` |employer |edit an employee’s contact |update their outdated contact information.
+|`* * *` |employer |view an employee’s salary |view their salary.
 
-|`* * *` |employer |view an employee’s salary|view their salary.
-
-|`* * *` |employer |edit an employee’s salary|update their salary.
-
-|`* * *` |employer |add a new employee |store them in the record.
+|`* * *` |employer |edit an employee’s salary |update their salary.
 
 |`* * *` |employer |delete an existing employee |remove employees that are no longer working.
 
@@ -830,21 +841,15 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |employee |view the schedule |choose when I want to work.
 
-|`* * *` |employee |select from the available slots |work during that slot.
+|`* * *` |employee |select from the available slots in the schedule |work during that slot.
 
-|`* * *` |employer |add outlet |update the app with new outlets
+|`* *` |employer |edit an employee’s contact |update their outdated contact information.
+
+|`* *` |employer |edit the outlet information |update the outdated outlet information.
 
 |`* *` |employer |sort employees by name |have a clearer view of all employees’ details.
 
-|`* *` |employer |add a new admin account |have multiple managers.
-
 |`* *` |employer |find an employee by name |locate details of employees without having to go through the entire list.
-
-|`* *` |employer |find employees by outlet |locate details of employees according to the outlet they are working at.
-
-|`* *` |employer |view an employee’s working outlet |view their working outlet.
-
-|`* *` |employer |edit an employee’s working outlet |edit their working outlet.
 
 |`* *` |employer |view an employee’s address|view their address information.
 
@@ -854,17 +859,19 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* *` |employee |view my salary so far for the month |plan my expenses.
 
-|`*` |employer |add an employee’s photo|view it at any time.
+|`*` |user |export timetable as image |have easy access to the time slots I'm working at.
 
-|`*` |employer |edit an employee’s photo|change an employee's photo to a newer one.
+|`*` |employer |add an employee’s photo |view it at any time.
 
-|`*` |employer |view an employee’s photo|recognize the employee.
+|`*` |employer |edit an employee’s photo |change an employee's photo to a newer one.
 
-|`*` |employer |remove an employee’s photo|remove their old photo.
+|`*` |employer |view an employee’s photo |recognize the employee.
+
+|`*` |employer |remove an employee’s photo |remove their old photo.
 
 |`*` |employee |add a photo |be easily identified by my employer.
 
-|`*` |employee |have notification for the selected slot |be assured that I am working at that slot.
+|`*` |employee |have a notification for slot confirmation |be assured that I am working at that slot.
 |=======================================================================
 
 [appendix]

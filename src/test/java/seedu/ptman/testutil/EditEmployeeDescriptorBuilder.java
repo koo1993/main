@@ -10,6 +10,7 @@ import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
+import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -36,6 +37,7 @@ public class EditEmployeeDescriptorBuilder {
         descriptor.setPhone(employee.getPhone());
         descriptor.setEmail(employee.getEmail());
         descriptor.setAddress(employee.getAddress());
+        descriptor.setSalary(employee.getSalary());
         descriptor.setTags(employee.getTags());
     }
 
@@ -68,6 +70,14 @@ public class EditEmployeeDescriptorBuilder {
      */
     public EditEmployeeDescriptorBuilder withAddress(String address) {
         descriptor.setAddress(new Address(address));
+        return this;
+    }
+
+    /**
+     * Sets the {@code Salary} of the {@code EditEmployeeDescriptor} that we are building.
+     */
+    public EditEmployeeDescriptorBuilder withSalary(String salary) {
+        descriptor.setSalary(new Salary(salary));
         return this;
     }
 
