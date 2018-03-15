@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+import seedu.ptman.model.Password;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.model.tag.UniqueTagList;
 
@@ -20,19 +21,22 @@ public class Employee {
     private final Email email;
     private final Address address;
     private final Salary salary;
-
     private final UniqueTagList tags;
+    private final Password password;
+
 
     /**
      * Every field must be present and not null.
      */
-    public Employee(Name name, Phone phone, Email email, Address address, Salary salary, Set<Tag> tags) {
+    public Employee(Name name, Phone phone, Email email, Address address, Salary salary,
+                    Password password, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.salary = salary;
+        this.password = password;
         // protect internal tags from changes in the arg list
         this.tags = new UniqueTagList(tags);
     }
@@ -55,6 +59,10 @@ public class Employee {
 
     public Salary getSalary() {
         return salary;
+    }
+
+    public Password getPassword() {
+        return password;
     }
 
     /**
@@ -86,7 +94,7 @@ public class Employee {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, address, salary, tags);
     }
 
     @Override

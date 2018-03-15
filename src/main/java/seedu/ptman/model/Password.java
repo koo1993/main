@@ -1,5 +1,6 @@
 package seedu.ptman.model;
 
+import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
 
@@ -10,9 +11,11 @@ import java.util.Base64;
 
 /**
  * Represents a Password in PartTimeManger
- *
+ * Store password as hashCode
  */
 public class Password {
+
+
     public static final String MESSAGE_PASSWORD_CONSTRAINTS =
             "Password should be at least 8 character and no spaces.";
 
@@ -25,35 +28,28 @@ public class Password {
     public static final String PASSWORD_VALIDATION_REGEX = "^(?=\\S+$).{8,}$";
 
     private String passwordHash;
+    private final String IV = "IV";
 
     /**
      * constructor for default password
      */
     public Password() {
-        passwordHash = generatePasswordHash(DEFAULT_PASSWORD);
+        createPassword(DEFAULT_PASSWORD);
     }
 
     /**
-     * Constructor to assign a password
-     * @param password
+     * use this if hashcode is known
+     * @param hashCode
      */
-    public Password(String password) {
-        requireNonNull(password);
-        checkArgument(isValidPassword(password), MESSAGE_PASSWORD_CONSTRAINTS);
-        passwordHash = generatePasswordHash(password);
+    public Password(String hashCode) {
+        requireNonNull(hashCode);
+        passwordHash = hashCode;
     }
 
-    /**
-     * Only use this method for loading password file,
-     * given that you know the encoded hash.
-     * @param encodedHash
-     */
-    public void changeHash(String encodedHash) {
-        passwordHash = encodedHash;
-    }
+
+
 
     /**
-     *
      * @param test
      * @return true if password is of correct format
      */
@@ -76,10 +72,22 @@ public class Password {
      */
     public boolean checkAndChangePassword(String oldPassword, String newPassword) {
         if (isCorrectPassword(oldPassword)) {
-            this.passwordHash = generatePasswordHash(newPassword);
+            createPassword(newPassword);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Create passwordHash when password is entered in plain text
+     * @param password
+     */
+    public void createPassword(String password){
+        passwordHash = generatePasswordHash(password);
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     /**
@@ -87,10 +95,11 @@ public class Password {
      * @param password
      * @return passwordHash in String
      */
-    public String generatePasswordHash(String password) {
+    private String generatePasswordHash(String password) {
         String encodedHash = null;
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            digest.update(IV.getBytes());
             byte[] byteHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             encodedHash = Base64.getEncoder().encodeToString(byteHash);
         } catch (NoSuchAlgorithmException noSuchAlgoException) {

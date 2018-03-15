@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
@@ -34,6 +35,8 @@ public class XmlAdaptedEmployee {
     private String address;
     @XmlElement(required = true)
     private String salary;
+    @XmlElement(required = true)
+    private String passwordHash;
 
     @XmlElement
     private List<XmlAdaptedTag> tagged = new ArrayList<>();
@@ -48,12 +51,13 @@ public class XmlAdaptedEmployee {
      * Constructs an {@code XmlAdaptedEmployee} with the given employee details.
      */
     public XmlAdaptedEmployee(String name, String phone, String email, String address,
-                              String salary, List<XmlAdaptedTag> tagged) {
+                              String salary, String passwordHash, List<XmlAdaptedTag> tagged) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.salary = salary;
+        this.passwordHash = passwordHash;
         if (tagged != null) {
             this.tagged = new ArrayList<>(tagged);
         }
@@ -70,6 +74,7 @@ public class XmlAdaptedEmployee {
         email = source.getEmail().value;
         address = source.getAddress().value;
         salary = source.getSalary().value;
+        passwordHash = source.getPassword().getPasswordHash();
         tagged = new ArrayList<>();
         for (Tag tag : source.getTags()) {
             tagged.add(new XmlAdaptedTag(tag));
@@ -127,8 +132,10 @@ public class XmlAdaptedEmployee {
         }
         final Salary salary = new Salary(this.salary);
 
+        final Password password = new Password(this.passwordHash);
+
         final Set<Tag> tags = new HashSet<>(employeeTags);
-        return new Employee(name, phone, email, address, salary, tags);
+        return new Employee(name, phone, email, address, salary, password, tags);
     }
 
     @Override

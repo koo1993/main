@@ -10,6 +10,7 @@ import java.util.Set;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.commons.util.StringUtil;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Name;
@@ -163,6 +164,19 @@ public class ParserUtil {
     public static Optional<Salary> parseSalary(Optional<String> salary) throws IllegalValueException {
         requireNonNull(salary);
         return salary.isPresent() ? Optional.of(parseSalary(salary.get())) : Optional.empty();
+    }
+
+
+    //TODO
+    public static String parsePassword(String password) {
+        requireNonNull(password);
+        return password;
+    }
+
+     //todo
+    public static Optional<String> parsePassword(Optional<String> password) throws IllegalValueException {
+        requireNonNull(password);
+        return password.isPresent() ? Optional.of(parsePassword(password.get())) : Optional.empty();
     }
 
     /**

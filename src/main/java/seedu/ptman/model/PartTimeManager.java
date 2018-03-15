@@ -26,6 +26,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
 
     private final UniqueEmployeeList employees;
     private final UniqueTagList tags;
+    private Password password;
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -37,6 +38,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     {
         employees = new UniqueEmployeeList();
         tags = new UniqueTagList();
+        password = new Password();
     }
 
     public PartTimeManager() {}
@@ -47,6 +49,12 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     public PartTimeManager(ReadOnlyPartTimeManager toBeCopied) {
         this();
         resetData(toBeCopied);
+    }
+
+    /// password Authorizaation operations
+
+    public boolean isAdmin(String password) throws DuplicateEmployeeException {
+        return this.password.isCorrectPassword(password);
     }
 
     //// list overwrite operations
@@ -137,6 +145,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
                 employee.getEmail(),
                 employee.getAddress(),
                 employee.getSalary(),
+                employee.getPassword(),
                 correctTagReferences
         );
     }
@@ -177,7 +186,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         }
 
         Employee newEmployee = new Employee(employee.getName(), employee.getPhone(), employee.getEmail(),
-                employee.getAddress(), employee.getSalary(), newTags);
+                employee.getAddress(), employee.getSalary(), employee.getPassword(), newTags);
 
         try {
             updateEmployee(employee, newEmployee);

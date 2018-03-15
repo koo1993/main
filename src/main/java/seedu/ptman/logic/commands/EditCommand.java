@@ -20,6 +20,7 @@ import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.util.CollectionUtil;
 import seedu.ptman.logic.commands.exceptions.CommandException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
@@ -113,8 +114,9 @@ public class EditCommand extends UndoableCommand {
         Address updatedAddress = editEmployeeDescriptor.getAddress().orElse(employeeToEdit.getAddress());
         Salary updatedSalary = editEmployeeDescriptor.getSalary().orElse(employeeToEdit.getSalary());
         Set<Tag> updatedTags = editEmployeeDescriptor.getTags().orElse(employeeToEdit.getTags());
-
-        return new Employee(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSalary, updatedTags);
+        Password notUpdatedPassword = employeeToEdit.getPassword();
+        return new Employee(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSalary,
+                notUpdatedPassword, updatedTags);
     }
 
     @Override
