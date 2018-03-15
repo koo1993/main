@@ -379,7 +379,7 @@ This section highlights the considerations behind our application's design choic
 ===== Aspect: Data structure to support the undo/redo commands
 
 * **Alternative 1 (current choice):** Use separate stack for undo and redo
-** Pros: Easy to understand for new Computer Science student undergraduates to understand, who are likely to be the new incoming developers of our project.
+** Pros: Easy to understand for new Computer Science student undergraduates, who are likely to be the new incoming developers of our project.
 ** Cons: Logic is duplicated twice. For example, when a new command is executed, we must remember to update  both `HistoryManager` and `UndoRedoStack`.
 * **Alternative 2:** Use `HistoryManager` for undo/redo
 ** Pros: We do not need to maintain a separate stack, and just reuse what is already in the codebase.
