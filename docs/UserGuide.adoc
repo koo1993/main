@@ -1,5 +1,6 @@
 = PTMan - User Guide
 :toc:
+:toclevels: 3
 :toc-title:
 :toc-placement: preamble
 :sectnums:
@@ -66,12 +67,44 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * For your convenience, many commands have an alias, eg. `list` and `l` will both show a list of all employees in PTMan.
 ====
 
-=== Viewing help : `help`
+=== Shared Features
+These commands can be executed by both employees and employers.
+
+==== Viewing help : `help`
 
 Displays the help window. +
 Format: `help`
 
-=== Adding an employee: `add`
+==== Selecting an employee : `select`
+
+Selects the employee identified by the index number used in the last employee listing. +
+Format: `select INDEX` +
+Alias: `s`
+
+****
+* Selects the employee and loads the Google search page of the employee at the specified `INDEX`.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* `1, 2, 3, ...`
+****
+
+Examples:
+
+* `list` +
+`select 2` +
+Selects the 2nd employee in PTMan.
+* `find Betsy` +
+`select 1` +
+Selects the 1st employee from the results of the `find` command.
+
+==== Exiting the program : `exit`
+
+Exits the app. +
+Format: `exit`
+
+=== Employer Features
+These commands can only be executed by the employer and will require the employer password.
+
+==== Adding an employee: `add`
 
 Adds an employee to PTMan. +
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY pw/AdminPassword [t/TAG]...` +
@@ -87,13 +120,13 @@ Adds an employee named `John Doe` with phone number `98765432`, address `John st
 * `add n/Betsy Crowe e/betsycrowe@example.com a/Newgate Prison p/1234567 s/100  pw/DEFAULT1`  +
 Adds an employee named `Betsy Crowe` with email `betsycrowe@example.com`, address `Newgate Prison`, phone number `1234567`, and salary earned so far $`100`.
 
-=== Listing all employees : `list`
+==== Listing all employees : `list`
 
 Shows a list of all employees in PTMan. +
 Format: `list` +
 Alias: `l`
 
-=== Editing an employee : `edit`
+==== Editing an employee : `edit`
 
 Edits an existing employee in PTMan. +
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...` +
@@ -117,7 +150,7 @@ Edits the phone number and email address of the 1st employee to be `91234567` an
 * `edit 2 n/Betsy Crower t/` +
 Edits the name of the 2nd employee to be `Betsy Crower` and clears all existing tags.
 
-=== Locating an employee by name: `find`
+==== Locating an employee by name: `find`
 
 Finds employees whose names contain any of the given keywords. +
 Format: `find KEYWORD [MORE_KEYWORDS]` +
@@ -138,7 +171,7 @@ Returns `john` and `John Doe`.
 * `find Betsy Tim John` +
 Returns any employee having names `Betsy`, `Tim`, or `John`.
 
-=== Deleting an employee : `delete`
+==== Deleting an employee : `delete`
 
 Deletes the specified employee from PTMan. +
 Format: `delete INDEX pw/AdminPassword` +
@@ -159,28 +192,8 @@ Deletes the 2nd employee in PTMan.
 `delete 1 pw/AdminPassword` +
 Deletes the 1st employee in the results of the `find` command.
 
-=== Selecting an employee : `select`
 
-Selects the employee identified by the index number used in the last employee listing. +
-Format: `select INDEX` +
-Alias: `s`
-
-****
-* Selects the employee and loads the Google search page of the employee at the specified `INDEX`.
-* The index refers to the index number shown in the most recent listing.
-* The index *must be a positive integer* `1, 2, 3, ...`
-****
-
-Examples:
-
-* `list` +
-`select 2` +
-Selects the 2nd employee in PTMan.
-* `find Betsy` +
-`select 1` +
-Selects the 1st employee from the results of the `find` command.
-
-=== Listing entered commands : `history`
+==== Listing entered commands : `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history` +
@@ -192,7 +205,7 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 ====
 
 // tag::undoredo[]
-=== Undoing previous command : `undo`
+==== Undoing previous command : `undo`
 
 Restores PTMan to the state before the previous _undoable_ command was executed. +
 Format: `undo` +
@@ -219,7 +232,7 @@ The `undo` command fails as there are no undoable commands executed previously.
 `undo` (reverses the `clear` command) +
 `undo` (reverses the `delete 1` command) +
 
-=== Redoing the previously undone command : `redo`
+==== Redoing the previously undone command : `redo`
 
 Reverses the most recent `undo` command. +
 Format: `redo` +
@@ -243,16 +256,51 @@ The `redo` command fails as there are no `undo` commands executed previously.
 `redo` (reapplies the `clear` command) +
 // end::undoredo[]
 
-=== Clearing all entries : `clear`
+==== Clearing all entries : `clear`
 
 Clears all employees from PTMan. +
 Format: `clear pw/AdminPassword` +
 Alias: `c`
 
-=== Exiting the program : `exit`
+==== View all details of employee
+PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allot employer to view all the detail of employe. +
+Format: `viewall` `pw/AdminPassword`
 
-Exits the app. +
-Format: `exit`
+==== Edit outlet all information [v2.0?]
+PTman outlets should be able to modify anytime by the admin. +
+Format: unclear
+
+==== Add shift to outlet
+PTman outlets should be able to add shift to the timetable indicating with how many people the shift needs. +
+Format: `addshift` `startday` `starttime`` `endtime`
+
+[NOTE]
+====
+`startday` in DDMMYY format. +
+`starttime` `endtime` in HHMM format
+====
+
+=== Employee features
+These commands can only be executed by employees and require a password.
+
+==== choose shift
+Employee should be able to choose the slot they want in the timetable. +
+Format: `take` `n/name pw/password i/1..... `
+
+[NOTE]
+====
+user can indicate many i/1 , i/2 according to the shift given in timetable.
+====
+
+==== Change password
+Employee are given default password everytime their entry is create by the admin.
+They are required to change password the moment their account is created. +
+Format: `cp n/name` `pw/CurrentPassword pw/ModifiedPassword`
+
+[NOTE]
+====
+Employee should change the moment they are in PTMan
+====
 
 === Saving the data
 

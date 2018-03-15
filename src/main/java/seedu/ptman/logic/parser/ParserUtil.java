@@ -14,6 +14,7 @@ import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
+import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -137,6 +138,31 @@ public class ParserUtil {
     public static Optional<Email> parseEmail(Optional<String> email) throws IllegalValueException {
         requireNonNull(email);
         return email.isPresent() ? Optional.of(parseEmail(email.get())) : Optional.empty();
+    }
+
+
+    /**
+     * Parses a {@code String salary} into an {@code Salary}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code email} is invalid.
+     */
+    public static Salary parseSalary(String salary) throws IllegalValueException {
+        requireNonNull(salary);
+        String trimmedSalary = salary.trim();
+        if (!Salary.isValidSalary(trimmedSalary)) {
+            throw new IllegalValueException(Salary.MESSAGE_SALARY_CONSTRAINTS);
+        }
+        return new Salary(trimmedSalary);
+    }
+
+    /**
+     * Parses a {@code Optional<String> salary} into an {@code Optional<Salary>} if {@code salary} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Salary> parseSalary(Optional<String> salary) throws IllegalValueException {
+        requireNonNull(salary);
+        return salary.isPresent() ? Optional.of(parseSalary(salary.get())) : Optional.empty();
     }
 
     /**

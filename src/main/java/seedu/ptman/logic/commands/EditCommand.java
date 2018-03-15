@@ -5,6 +5,7 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_SALARY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.ptman.model.Model.PREDICATE_SHOW_ALL_EMPLOYEES;
 
@@ -24,6 +25,7 @@ import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
+import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
 import seedu.ptman.model.tag.Tag;
@@ -44,6 +46,7 @@ public class EditCommand extends UndoableCommand {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_SALARY + "SALARY] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -108,9 +111,10 @@ public class EditCommand extends UndoableCommand {
         Phone updatedPhone = editEmployeeDescriptor.getPhone().orElse(employeeToEdit.getPhone());
         Email updatedEmail = editEmployeeDescriptor.getEmail().orElse(employeeToEdit.getEmail());
         Address updatedAddress = editEmployeeDescriptor.getAddress().orElse(employeeToEdit.getAddress());
+        Salary updatedSalary = editEmployeeDescriptor.getSalary().orElse(employeeToEdit.getSalary());
         Set<Tag> updatedTags = editEmployeeDescriptor.getTags().orElse(employeeToEdit.getTags());
 
-        return new Employee(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Employee(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSalary, updatedTags);
     }
 
     @Override
@@ -141,6 +145,7 @@ public class EditCommand extends UndoableCommand {
         private Phone phone;
         private Email email;
         private Address address;
+        private Salary salary;
         private Set<Tag> tags;
 
         public EditEmployeeDescriptor() {}
@@ -154,6 +159,7 @@ public class EditCommand extends UndoableCommand {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setAddress(toCopy.address);
+            setSalary(toCopy.salary);
             setTags(toCopy.tags);
         }
 
@@ -161,8 +167,9 @@ public class EditCommand extends UndoableCommand {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(this.name, this.phone, this.email, this.address, this.tags);
+            return CollectionUtil.isAnyNonNull(this.name, this.phone, this.email, this.address, this.salary, this.tags);
         }
+
 
         public void setName(Name name) {
             this.name = name;
@@ -194,6 +201,14 @@ public class EditCommand extends UndoableCommand {
 
         public Optional<Address> getAddress() {
             return Optional.ofNullable(address);
+        }
+
+        public void setSalary(Salary salary) {
+            this.salary = salary;
+        }
+
+        public Optional<Salary> getSalary() {
+            return Optional.ofNullable(salary);
         }
 
         /**
@@ -232,6 +247,7 @@ public class EditCommand extends UndoableCommand {
                     && getPhone().equals(e.getPhone())
                     && getEmail().equals(e.getEmail())
                     && getAddress().equals(e.getAddress())
+                    && getSalary().equals(e.getSalary())
                     && getTags().equals(e.getTags());
         }
     }

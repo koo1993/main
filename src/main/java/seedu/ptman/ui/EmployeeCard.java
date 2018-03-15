@@ -40,6 +40,8 @@ public class EmployeeCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label salary;
+    @FXML
     private FlowPane tags;
 
     public EmployeeCard(Employee employee, int displayedIndex) {
@@ -50,6 +52,7 @@ public class EmployeeCard extends UiPart<Region> {
         phone.setText(employee.getPhone().value);
         address.setText(employee.getAddress().value);
         email.setText(employee.getEmail().value);
+        salary.setText("Earned: $" + employee.getSalary().value);
         addTagLabels(employee);
     }
 

@@ -15,8 +15,9 @@ public class OutletInformation {
     private Name name;
     private Password masterPassword;
     private OperatingHours operatingHours;
-    //shift needed
-    //and there should be a default timetable
+
+    // TODO: Use this timetable to store shifts.
+    // private Timetable timetable;
 
     /**
      * Constructs an {@code OutletInformation}.
@@ -67,4 +68,5 @@ public class OutletInformation {
                 .append(getOperatingHours());
         return builder.toString();
     }
+
 }
