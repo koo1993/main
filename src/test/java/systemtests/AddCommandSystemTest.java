@@ -7,6 +7,7 @@ import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSW
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
+import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_DESC_ADMINPASSWORD;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
@@ -218,6 +219,11 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
                 + SALARY_DESC_AMY + INVALID_TAG_DESC + DEFAULT_DESC_ADMINPASSWORD;
         assertCommandFailure(command, Tag.MESSAGE_TAG_CONSTRAINTS);
+
+        /* Case: wrong password -> rejected */
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
+                + SALARY_DESC_AMY + INVALID_DESC_ADMINPASSWORD;
+        assertCommandFailure(command, "Password is incorrect");
     }
 
     /**

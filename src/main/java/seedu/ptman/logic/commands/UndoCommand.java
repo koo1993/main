@@ -17,7 +17,7 @@ public class UndoCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Undo success!";
     public static final String MESSAGE_FAILURE = "No more commands to undo!";
 
-    {
+    public UndoCommand() {
         isAdminCommand = true;
     }
 

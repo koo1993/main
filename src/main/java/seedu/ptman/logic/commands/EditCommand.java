@@ -223,10 +223,6 @@ public class EditCommand extends UndoableCommand {
             this.password = password;
         }
 
-        public Optional<Password> getPassword() {
-            return Optional.ofNullable(password);
-        }
-
         /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.

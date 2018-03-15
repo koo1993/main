@@ -88,13 +88,14 @@ public class Employee {
                 && otherEmployee.getPhone().equals(this.getPhone())
                 && otherEmployee.getEmail().equals(this.getEmail())
                 && otherEmployee.getAddress().equals(this.getAddress())
-                && otherEmployee.getSalary().equals(this.getSalary());
+                && otherEmployee.getSalary().equals(this.getSalary())
+                && otherEmployee.getPassword().equals(this.getPassword());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, salary, tags);
+        return Objects.hash(name, phone, email, address, salary, password, tags);
     }
 
     @Override
