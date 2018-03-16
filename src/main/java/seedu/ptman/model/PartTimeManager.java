@@ -56,6 +56,10 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         return this.password.isCorrectPassword(password);
     }
 
+    public boolean isAdminPassword(Password password) {
+        return this.password.equals(password);
+    }
+
     //// list overwrite operations
 
     public void setEmployees(List<Employee> employees) throws DuplicateEmployeeException {

@@ -20,6 +20,7 @@ import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditCommand.EditEmployeeDescriptor;
 import seedu.ptman.logic.parser.exceptions.ParseException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -39,6 +40,11 @@ public class EditCommandParser implements Parser<EditCommand> {
                         PREFIX_ADDRESS, PREFIX_SALARY, PREFIX_TAG, PREFIX_PASSWORD);
 
         Index index;
+        Password adminPassword;
+
+        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_PASSWORD)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+        }
 
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
@@ -54,6 +60,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS)).ifPresent(editEmployeeDescriptor::setAddress);
             ParserUtil.parseSalary(argMultimap.getValue(PREFIX_SALARY)).ifPresent(editEmployeeDescriptor::setSalary);
             parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editEmployeeDescriptor::setTags);
+            adminPassword = ParserUtil.parsePassword(argMultimap.getValue(PREFIX_PASSWORD)).get();
         } catch (IllegalValueException ive) {
             throw new ParseException(ive.getMessage(), ive);
         }
@@ -62,7 +69,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
 
-        return new EditCommand(index, editEmployeeDescriptor);
+        return new EditCommand(index, editEmployeeDescriptor, adminPassword);
     }
 
     /**

@@ -1,6 +1,7 @@
 package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.ptman.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_NAME;
@@ -10,8 +11,10 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_SALARY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.ptman.logic.commands.exceptions.CommandException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
+import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 
 /**
  * Adds a employee to PTMan.
@@ -43,19 +46,27 @@ public class AddCommand extends UndoableCommand {
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "This employee already exists in PTMan";
 
     private final Employee toAdd;
+    private final Password toCheck;
 
     /**
      * Creates an AddCommand to add the specified {@code Employee}
+     *
      */
-    public AddCommand(Employee employee) {
+    public AddCommand(Employee employee, Password password) {
         requireNonNull(employee);
         toAdd = employee;
+        toCheck = password;
         isAdminCommand = true;
     }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        requireNonNull(model);
+        requireAllNonNull(model, toCheck);
+
+        if (!model.isAdminPassword(toCheck)) {
+            throw new InvalidPasswordException();
+        }
+
         try {
             model.addEmployee(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));

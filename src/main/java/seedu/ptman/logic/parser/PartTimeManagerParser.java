@@ -96,30 +96,14 @@ public class PartTimeManagerParser {
 
         case UndoCommand.COMMAND_WORD:
         case UndoCommand.COMMAND_ALIAS:
-            return new UndoCommand();
+            return new UndoCommandParser().parse(arguments);
 
         case RedoCommand.COMMAND_WORD:
         case RedoCommand.COMMAND_ALIAS:
-            return new RedoCommand();
+            return new RedoCommandParser().parse(arguments);
 
         default:
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
-    }
-
-    /**
-     * Extract out password when given a commandText
-     * @param commandText
-     * @return password in String
-     */
-    public String parseCommandForPassword(String commandText) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(commandText, PREFIX_NAME, PREFIX_ADDRESS,
-                PREFIX_PHONE, PREFIX_SALARY, PREFIX_EMAIL, PREFIX_PASSWORD, PREFIX_TAG);
-        Optional<String> passwordOptional = argMultimap.getValue(PREFIX_PASSWORD);
-
-        if (!passwordOptional.isPresent()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, commandText));
-        }
-        return argMultimap.getValue(PREFIX_PASSWORD).get();
     }
 }

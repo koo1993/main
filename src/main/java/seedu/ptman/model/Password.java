@@ -82,7 +82,7 @@ public class Password {
      * @param password
      */
     public void createPassword(String password) {
-        checkArgument(isValidPassword(password), MESSAGE_PASSWORD_CONSTRAINTS);
+        requireNonNull(password);
         passwordHash = generatePasswordHash(password);
     }
 
