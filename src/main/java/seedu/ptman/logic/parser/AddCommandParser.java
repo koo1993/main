@@ -52,9 +52,12 @@ public class AddCommandParser implements Parser<AddCommand> {
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
             Employee employee = new Employee(name, phone, email, address, salary, new Password(), tagList);
 
+
             Password adminPassword = ParserUtil.parsePassword(argMultimap.getValue(PREFIX_PASSWORD)).get();
 
-            return new AddCommand(employee, adminPassword);
+            Employee employee = new Employee(name, phone, email, address, salary, new Password(), tagList);
+             return new AddCommand(employee, adminPassword);
+
         } catch (IllegalValueException ive) {
             throw new ParseException(ive.getMessage(), ive);
         }

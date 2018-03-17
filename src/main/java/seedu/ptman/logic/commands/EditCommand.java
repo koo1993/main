@@ -54,7 +54,7 @@ public class EditCommand extends UndoableCommand {
             + PREFIX_PASSWORD + "AdminPassword\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com "
+            + PREFIX_EMAIL + "johndoe@example.com"
             + PREFIX_PASSWORD + "AdminPassword";
 
     public static final String MESSAGE_EDIT_EMPLOYEE_SUCCESS = "Edited Employee: %1$s";

@@ -56,7 +56,6 @@ public class AddCommand extends UndoableCommand {
         requireNonNull(employee);
         toAdd = employee;
         toCheck = password;
-        isAdminCommand = true;
     }
 
     @Override

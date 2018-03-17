@@ -167,6 +167,8 @@ public class ParserUtil {
         return salary.isPresent() ? Optional.of(parseSalary(salary.get())) : Optional.empty();
     }
 
+
+
     /**
      * Parses a {@code String password} into an {@code Password}.
      * Leading and trailing whitespaces will be trimmed.

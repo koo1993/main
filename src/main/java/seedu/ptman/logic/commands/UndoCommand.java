@@ -19,6 +19,7 @@ public class UndoCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Undo success!";
     public static final String MESSAGE_FAILURE = "No more commands to undo!";
 
+
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undo Previous command.\n "
             + "Example: " + COMMAND_WORD + " " + "pw/AdminPassword";
 
