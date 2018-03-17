@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
@@ -38,21 +40,22 @@ import seedu.ptman.testutil.EmployeeUtil;
 public class PartTimeManagerParserTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
     private final PartTimeManagerParser parser = new PartTimeManagerParser();
+
+    private Password defaultPassword = new Password();
 
     @Test
     public void parseCommand_add() throws Exception {
         Employee employee = new EmployeeBuilder().build();
         AddCommand command = (AddCommand) parser.parseCommand(EmployeeUtil.getAddCommand(employee));
-        assertEquals(new AddCommand(employee), command);
+        assertEquals(new AddCommand(employee, defaultPassword), command);
     }
 
     @Test
     public void parseCommand_addAlias() throws Exception {
         Employee employee = new EmployeeBuilder().build();
         AddCommand command = (AddCommand) parser.parseCommand(EmployeeUtil.getAliasedAddCommand(employee));
-        assertEquals(new AddCommand(employee), command);
+        assertEquals(new AddCommand(employee, defaultPassword), command);
     }
 
     @Test
@@ -70,15 +73,15 @@ public class PartTimeManagerParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased());
-        assertEquals(new DeleteCommand(INDEX_FIRST_EMPLOYEE), command);
+                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + DEFAULT_DESC_ADMINPASSWORD);
+        assertEquals(new DeleteCommand(INDEX_FIRST_EMPLOYEE, defaultPassword), command);
     }
 
     @Test
     public void parseCommand_deleteAlias() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased());
-        assertEquals(new DeleteCommand(INDEX_FIRST_EMPLOYEE), command);
+                DeleteCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + DEFAULT_DESC_ADMINPASSWORD);
+        assertEquals(new DeleteCommand(INDEX_FIRST_EMPLOYEE, defaultPassword), command);
     }
 
     @Test
@@ -87,7 +90,7 @@ public class PartTimeManagerParserTest {
         EditEmployeeDescriptor descriptor = new EditEmployeeDescriptorBuilder(employee).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + EmployeeUtil.getEmployeeDetails(employee));
-        assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor), command);
+        assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor, defaultPassword), command);
     }
 
     @Test
@@ -96,7 +99,7 @@ public class PartTimeManagerParserTest {
         EditEmployeeDescriptor descriptor = new EditEmployeeDescriptorBuilder(employee).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_ALIAS + " "
                 + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + EmployeeUtil.getEmployeeDetails(employee));
-        assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor), command);
+        assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor, defaultPassword), command);
     }
 
     @Test
@@ -181,26 +184,26 @@ public class PartTimeManagerParserTest {
 
     @Test
     public void parseCommand_redoCommandWord_returnsRedoCommand() throws Exception {
-        assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD) instanceof RedoCommand);
-        assertTrue(parser.parseCommand("redo 1") instanceof RedoCommand);
+        assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD) instanceof RedoCommand);
+        assertTrue(parser.parseCommand("redo 1" + DEFAULT_DESC_ADMINPASSWORD) instanceof RedoCommand);
     }
 
     @Test
     public void parseCommand_redoCommandAlias_returnsRedoCommand() throws Exception {
-        assertTrue(parser.parseCommand(RedoCommand.COMMAND_ALIAS) instanceof RedoCommand);
-        assertTrue(parser.parseCommand("r 1") instanceof RedoCommand);
+        assertTrue(parser.parseCommand(RedoCommand.COMMAND_ALIAS + DEFAULT_DESC_ADMINPASSWORD) instanceof RedoCommand);
+        assertTrue(parser.parseCommand("r 1" + DEFAULT_DESC_ADMINPASSWORD) instanceof RedoCommand);
     }
 
     @Test
     public void parseCommand_undoCommandWord_returnsUndoCommand() throws Exception {
-        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD) instanceof UndoCommand);
-        assertTrue(parser.parseCommand("undo 3") instanceof UndoCommand);
+        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD) instanceof UndoCommand);
+        assertTrue(parser.parseCommand("undo 3" + DEFAULT_DESC_ADMINPASSWORD) instanceof UndoCommand);
     }
 
     @Test
     public void parseCommand_undoCommandAlias_returnsUndoCommand() throws Exception {
-        assertTrue(parser.parseCommand(UndoCommand.COMMAND_ALIAS) instanceof UndoCommand);
-        assertTrue(parser.parseCommand("u 3") instanceof UndoCommand);
+        assertTrue(parser.parseCommand(UndoCommand.COMMAND_ALIAS + DEFAULT_DESC_ADMINPASSWORD) instanceof UndoCommand);
+        assertTrue(parser.parseCommand("u 3" + DEFAULT_DESC_ADMINPASSWORD) instanceof UndoCommand);
     }
 
     @Test

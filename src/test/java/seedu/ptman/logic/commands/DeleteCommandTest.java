@@ -20,6 +20,7 @@ import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 
@@ -30,6 +31,7 @@ import seedu.ptman.model.employee.Employee;
 public class DeleteCommandTest {
 
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private final Password defaultPassword = new Password();
 
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {
@@ -84,8 +86,8 @@ public class DeleteCommandTest {
     @Test
     public void executeUndoRedo_validIndexUnfilteredList_success() throws Exception {
         UndoRedoStack undoRedoStack = new UndoRedoStack();
-        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack);
-        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
+        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack, defaultPassword);
+        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack, defaultPassword);
         Employee employeeToDelete = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());
         DeleteCommand deleteCommand = prepareCommand(INDEX_FIRST_EMPLOYEE);
         Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
@@ -105,8 +107,8 @@ public class DeleteCommandTest {
     @Test
     public void executeUndoRedo_invalidIndexUnfilteredList_failure() {
         UndoRedoStack undoRedoStack = new UndoRedoStack();
-        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack);
-        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
+        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack, defaultPassword);
+        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack, defaultPassword);
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredEmployeeList().size() + 1);
         DeleteCommand deleteCommand = prepareCommand(outOfBoundIndex);
 
@@ -128,8 +130,8 @@ public class DeleteCommandTest {
     @Test
     public void executeUndoRedo_validIndexFilteredList_sameEmployeeDeleted() throws Exception {
         UndoRedoStack undoRedoStack = new UndoRedoStack();
-        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack);
-        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
+        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack, defaultPassword);
+        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack, defaultPassword);
         DeleteCommand deleteCommand = prepareCommand(INDEX_FIRST_EMPLOYEE);
         Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
 
@@ -178,7 +180,7 @@ public class DeleteCommandTest {
      * Returns a {@code DeleteCommand} with the parameter {@code index}.
      */
     private DeleteCommand prepareCommand(Index index) {
-        DeleteCommand deleteCommand = new DeleteCommand(index);
+        DeleteCommand deleteCommand = new DeleteCommand(index, defaultPassword);
         deleteCommand.setData(model, new CommandHistory(), new UndoRedoStack());
         return deleteCommand;
     }

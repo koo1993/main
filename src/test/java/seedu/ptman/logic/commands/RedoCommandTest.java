@@ -18,15 +18,17 @@ import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 
 public class RedoCommandTest {
     private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
     private static final UndoRedoStack EMPTY_STACK = new UndoRedoStack();
+    private final Password defaultPassword = new Password();
 
     private final Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
-    private final DeleteCommand deleteCommandOne = new DeleteCommand(INDEX_FIRST_EMPLOYEE);
-    private final DeleteCommand deleteCommandTwo = new DeleteCommand(INDEX_SECOND_EMPLOYEE);
+    private final DeleteCommand deleteCommandOne = new DeleteCommand(INDEX_FIRST_EMPLOYEE, defaultPassword);
+    private final DeleteCommand deleteCommandTwo = new DeleteCommand(INDEX_SECOND_EMPLOYEE, defaultPassword);
 
     @Before
     public void setUp() throws Exception {
@@ -40,7 +42,7 @@ public class RedoCommandTest {
     public void execute() {
         UndoRedoStack undoRedoStack = prepareStack(
                 Collections.emptyList(), Arrays.asList(deleteCommandTwo, deleteCommandOne));
-        RedoCommand redoCommand = new RedoCommand();
+        RedoCommand redoCommand = new RedoCommand(defaultPassword);
         redoCommand.setData(model, EMPTY_COMMAND_HISTORY, undoRedoStack);
         Model expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
 

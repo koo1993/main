@@ -8,6 +8,7 @@ import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import org.junit.Test;
 
 import seedu.ptman.logic.commands.DeleteCommand;
+import seedu.ptman.model.Password;
 
 /**
  * As we are only doing white-box testing, our test cases do not cover path variations
@@ -19,10 +20,11 @@ import seedu.ptman.logic.commands.DeleteCommand;
 public class DeleteCommandParserTest {
 
     private DeleteCommandParser parser = new DeleteCommandParser();
+    private final Password defaultPassword = new Password();
 
     @Test
     public void parse_validArgs_returnsDeleteCommand() {
-        assertParseSuccess(parser, "1", new DeleteCommand(INDEX_FIRST_EMPLOYEE));
+        assertParseSuccess(parser, "1 pw/DEFAULT1", new DeleteCommand(INDEX_FIRST_EMPLOYEE, defaultPassword));
     }
 
     @Test

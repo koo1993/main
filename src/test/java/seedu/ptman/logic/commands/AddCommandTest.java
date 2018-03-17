@@ -20,6 +20,7 @@ import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.PartTimeManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
@@ -28,14 +29,20 @@ import seedu.ptman.model.tag.Tag;
 import seedu.ptman.testutil.EmployeeBuilder;
 
 public class AddCommandTest {
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private final Password defaultPassword = new Password();
 
     @Test
     public void constructor_nullEmployee_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        new AddCommand(null);
+        new AddCommand(null, defaultPassword);
+    }
+    @Test
+    public void constructor_nullPassword_throwsNullPointerException() {
+        Employee validEmployee = new EmployeeBuilder().build();
+        new AddCommand(validEmployee, null);
     }
 
     @Test
@@ -43,7 +50,7 @@ public class AddCommandTest {
         ModelStubAcceptingEmployeeAdded modelStub = new ModelStubAcceptingEmployeeAdded();
         Employee validEmployee = new EmployeeBuilder().build();
 
-        CommandResult commandResult = getAddCommandForEmployee(validEmployee, modelStub).execute();
+        CommandResult commandResult = getAddCommandForEmployee(validEmployee, modelStub, defaultPassword).execute();
 
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, validEmployee), commandResult.feedbackToUser);
         assertEquals(Arrays.asList(validEmployee), modelStub.employeesAdded);
@@ -57,21 +64,21 @@ public class AddCommandTest {
         thrown.expect(CommandException.class);
         thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_EMPLOYEE);
 
-        getAddCommandForEmployee(validEmployee, modelStub).execute();
+        getAddCommandForEmployee(validEmployee, modelStub, defaultPassword).execute();
     }
 
     @Test
     public void equals() {
         Employee alice = new EmployeeBuilder().withName("Alice").build();
         Employee bob = new EmployeeBuilder().withName("Bob").build();
-        AddCommand addAliceCommand = new AddCommand(alice);
-        AddCommand addBobCommand = new AddCommand(bob);
+        AddCommand addAliceCommand = new AddCommand(alice, defaultPassword);
+        AddCommand addBobCommand = new AddCommand(bob, defaultPassword);
 
         // same object -> returns true
         assertTrue(addAliceCommand.equals(addAliceCommand));
 
         // same values -> returns true
-        AddCommand addAliceCommandCopy = new AddCommand(alice);
+        AddCommand addAliceCommandCopy = new AddCommand(alice, defaultPassword);
         assertTrue(addAliceCommand.equals(addAliceCommandCopy));
 
         // different types -> returns false
@@ -87,8 +94,8 @@ public class AddCommandTest {
     /**
      * Generates a new AddCommand with the details of the given employee.
      */
-    private AddCommand getAddCommandForEmployee(Employee employee, Model model) {
-        AddCommand command = new AddCommand(employee);
+    private AddCommand getAddCommandForEmployee(Employee employee, Model model, Password password) {
+        AddCommand command = new AddCommand(employee, password);
         command.setData(model, new CommandHistory(), new UndoRedoStack());
         return command;
     }
@@ -103,7 +110,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean isAdmin(String password) {
+        public boolean isAdminPassword(Password password) {
             fail("This method should not be called.");
             return true;
         }
@@ -157,6 +164,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean isAdminPassword(Password password) {
+            return true;
+        }
+
+        @Override
         public ReadOnlyPartTimeManager getPartTimeManager() {
             return new PartTimeManager();
         }
@@ -168,10 +180,18 @@ public class AddCommandTest {
     private class ModelStubAcceptingEmployeeAdded extends ModelStub {
         final ArrayList<Employee> employeesAdded = new ArrayList<>();
 
+
+
         @Override
         public void addEmployee(Employee employee) throws DuplicateEmployeeException {
             requireNonNull(employee);
             employeesAdded.add(employee);
+        }
+
+        @Override
+        public boolean isAdminPassword(Password password) {
+            requireNonNull(password);
+            return true;
         }
 
         @Override
