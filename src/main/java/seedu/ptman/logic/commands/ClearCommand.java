@@ -16,7 +16,7 @@ public class ClearCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "c";
     public static final String MESSAGE_SUCCESS = "PTMan has been cleared!";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undo Previous command.\n "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Clear all data in PTMan.\n "
             + "Example: " + COMMAND_WORD + " " + "pw/AdminPassword";
 
     private final Password toCheck;
@@ -36,5 +36,13 @@ public class ClearCommand extends UndoableCommand {
 
         model.resetData(new PartTimeManager());
         return new CommandResult(MESSAGE_SUCCESS);
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ClearCommand // instanceof handles nulls
+                && toCheck.equals(((ClearCommand) other).toCheck));
     }
 }

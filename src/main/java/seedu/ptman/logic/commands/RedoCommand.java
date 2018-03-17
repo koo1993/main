@@ -49,4 +49,11 @@ public class RedoCommand extends Command {
         this.model = model;
         this.undoRedoStack = undoRedoStack;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof RedoCommand // instanceof handles nulls
+                && toCheck.equals(((RedoCommand) other).toCheck));
+    }
 }
