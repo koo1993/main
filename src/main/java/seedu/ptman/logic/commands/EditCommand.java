@@ -75,7 +75,6 @@ public class EditCommand extends UndoableCommand {
     public EditCommand(Index index, EditEmployeeDescriptor editEmployeeDescriptor, Password password) {
         requireNonNull(index);
         requireNonNull(editEmployeeDescriptor);
-        isAdminCommand = true;
         this.index = index;
         this.editEmployeeDescriptor = new EditEmployeeDescriptor(editEmployeeDescriptor);
         toCheck = password;

@@ -25,7 +25,6 @@ public class RedoCommand extends Command {
     private Password toCheck;
 
     public RedoCommand(Password password) {
-        isAdminCommand = true;
         toCheck = password;
     }
     @Override

@@ -26,7 +26,6 @@ public class UndoCommand extends Command {
     private Password toCheck;
 
     public UndoCommand(Password password) {
-        isAdminCommand = true;
         toCheck = password;
     }
 

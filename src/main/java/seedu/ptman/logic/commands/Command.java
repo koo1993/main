@@ -13,7 +13,6 @@ public abstract class Command {
     protected Model model;
     protected CommandHistory history;
     protected UndoRedoStack undoRedoStack;
-    protected boolean isAdminCommand;
 
 
     /**
@@ -43,7 +42,4 @@ public abstract class Command {
         this.model = model;
     }
 
-    public boolean isAdminCommand() {
-        return isAdminCommand;
-    }
 }

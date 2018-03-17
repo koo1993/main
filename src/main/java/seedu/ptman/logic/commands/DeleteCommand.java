@@ -36,7 +36,6 @@ public class DeleteCommand extends UndoableCommand {
 
     public DeleteCommand(Index targetIndex, Password password) {
         this.targetIndex = targetIndex;
-        isAdminCommand = true;
         toCheck = password;
     }
 
