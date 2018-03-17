@@ -51,12 +51,9 @@ public class AddCommandParser implements Parser<AddCommand> {
             Salary salary = ParserUtil.parseSalary(argMultimap.getValue(PREFIX_SALARY)).get();
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
             Employee employee = new Employee(name, phone, email, address, salary, new Password(), tagList);
-
-
             Password adminPassword = ParserUtil.parsePassword(argMultimap.getValue(PREFIX_PASSWORD)).get();
 
-            Employee employee = new Employee(name, phone, email, address, salary, new Password(), tagList);
-             return new AddCommand(employee, adminPassword);
+            return new AddCommand(employee, adminPassword);
 
         } catch (IllegalValueException ive) {
             throw new ParseException(ive.getMessage(), ive);

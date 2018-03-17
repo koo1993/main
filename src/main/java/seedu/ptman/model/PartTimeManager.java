@@ -51,9 +51,12 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         resetData(toBeCopied);
     }
 
+
     /**
-    * Check if given password is of outlet's 
-    */
+     * Check if given password is of outlet's
+     * @param password
+     * @return true if password is the same
+     */
     public boolean isAdminPassword(Password password) {
         return this.password.equals(password);
     }
