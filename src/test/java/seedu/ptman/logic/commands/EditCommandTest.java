@@ -17,7 +17,9 @@ import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_SECOND_EMPLOYEE;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
@@ -30,6 +32,7 @@ import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
+import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
 import seedu.ptman.testutil.EmployeeBuilder;
 
@@ -37,6 +40,9 @@ import seedu.ptman.testutil.EmployeeBuilder;
  * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for EditCommand.
  */
 public class EditCommandTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
     private Password defaultPassword = new Password();
@@ -86,6 +92,14 @@ public class EditCommandTest {
         Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_invalidPassword_invalidPasswordException() throws Exception {
+        EditCommand editCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, new EditEmployeeDescriptor(),
+                new Password("wrongPAss"));
+        thrown.expect(InvalidPasswordException.class);
+        editCommand.execute();
     }
 
     @Test
