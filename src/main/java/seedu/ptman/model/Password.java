@@ -1,7 +1,6 @@
 package seedu.ptman.model;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.ptman.commons.util.AppUtil.checkArgument;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

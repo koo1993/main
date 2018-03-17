@@ -42,7 +42,7 @@ public class DeleteCommand extends UndoableCommand {
 
 
     @Override
-    public CommandResult executeUndoableCommand() throws InvalidPasswordException{
+    public CommandResult executeUndoableCommand() throws InvalidPasswordException {
         requireNonNull(employeeToDelete);
         requireNonNull(toCheck);
 

@@ -15,7 +15,6 @@ import seedu.ptman.commons.events.model.PartTimeManagerChangedEvent;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.model.tag.Tag;
 
 /**

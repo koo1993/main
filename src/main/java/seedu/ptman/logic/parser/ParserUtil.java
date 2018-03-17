@@ -167,7 +167,11 @@ public class ParserUtil {
         return salary.isPresent() ? Optional.of(parseSalary(salary.get())) : Optional.empty();
     }
 
-
+    /**
+     * Parses a {@code String password} into an {@code Password}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     */
     public static Password parsePassword(String password) {
         requireNonNull(password);
         String trimmedPassword = password.trim();
@@ -176,7 +180,10 @@ public class ParserUtil {
         return newPassword;
     }
 
-
+    /**
+     * Parses a {@code Optional<String> password} into an {@code Optional<Password>} if {@code password} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
     public static Optional<Password> parsePassword(Optional<String> password) {
         requireNonNull(password);
         return password.isPresent() ? Optional.of(parsePassword(password.get())) : Optional.empty();

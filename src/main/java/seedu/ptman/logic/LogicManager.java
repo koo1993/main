@@ -12,7 +12,6 @@ import seedu.ptman.logic.parser.PartTimeManagerParser;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.employee.Employee;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 
 /**
  * The main LogicManager of the app.

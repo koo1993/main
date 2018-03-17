@@ -63,6 +63,7 @@ public class AddCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() throws CommandException {
         requireAllNonNull(model, toCheck);
 
+
         if (!model.isAdminPassword(toCheck)) {
             throw new InvalidPasswordException();
         }

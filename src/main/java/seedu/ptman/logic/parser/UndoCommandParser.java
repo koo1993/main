@@ -12,15 +12,15 @@ import seedu.ptman.model.Password;
  */
 public class UndoCommandParser implements Parser<UndoCommand> {
     /**
-     * Parses the given {@code String} of arguments in the context of the DeleteCommand
-     * and returns an DeleteCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the UndoCommand
+     * and returns an UndoCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     public UndoCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_PASSWORD);
 
-        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_PASSWORD) || !argMultimap.getPreamble().isEmpty()) {
+        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_PASSWORD)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE));
         }
 
