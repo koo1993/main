@@ -838,6 +838,15 @@ See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-
 .. *Select/Deselect shifts*: Added commands for employees to choose the shifts they want to work in.
 . *Command aliases (Minor)*: Added aliases to most commands. These aliases can be used in place of the full length commands for the user's convenience.
 
+*Chin Chye*:
+
+. *Access Control (Major)*:
+.. *Password*: Added password to every single employee and outlet.
+.. *Password governed commands*: All employer commands need to have admin password to work. Employee's passwords is needed if he/she wants to allocate to a working slot.
+.. *Change password command*: Employee and employer are able to change password to keep their data/password a secret.
+. *Salary (Minor)*: Added salary to employee. This variable is used to keep track of how much employee has earned so far.
+
+
 [appendix]
 == User Stories
 
