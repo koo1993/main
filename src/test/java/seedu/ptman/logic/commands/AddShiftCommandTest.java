@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static seedu.ptman.testutil.TypicalShifts.MONDAY_AM;
+import static seedu.ptman.testutil.TypicalShifts.MONDAY_PM;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +22,6 @@ import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.PartTimeManager;
-import seedu.ptman.model.Password;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
@@ -29,70 +30,68 @@ import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
 import seedu.ptman.model.tag.Tag;
-import seedu.ptman.testutil.EmployeeBuilder;
+import seedu.ptman.testutil.ShiftBuilder;
 
-public class AddCommandTest {
+public class AddShiftCommandTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void constructor_nullEmployee_throwsNullPointerException() {
+    public void constructor_nullShift_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        new AddCommand(null);
+        new AddShiftCommand(null);
     }
 
     @Test
-    public void execute_employeeAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingEmployeeAdded modelStub = new ModelStubAcceptingEmployeeAdded();
-        Employee validEmployee = new EmployeeBuilder().build();
+    public void execute_shiftAcceptedByModel_addSuccessful() throws Exception {
+        ModelStubAcceptingShiftAdded modelStub = new ModelStubAcceptingShiftAdded();
+        Shift validShift = new ShiftBuilder().build();
 
-        CommandResult commandResult = getAddCommandForEmployee(validEmployee, modelStub).execute();
+        CommandResult commandResult = getAddShiftCommandForShift(validShift, modelStub).execute();
 
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, validEmployee), commandResult.feedbackToUser);
-        assertEquals(Arrays.asList(validEmployee), modelStub.employeesAdded);
+        assertEquals(String.format(AddShiftCommand.MESSAGE_SUCCESS, validShift), commandResult.feedbackToUser);
+        assertEquals(Arrays.asList(validShift), modelStub.shiftsAdded);
     }
 
     @Test
-    public void execute_duplicateEmployee_throwsCommandException() throws Exception {
-        ModelStub modelStub = new ModelStubThrowingDuplicateEmployeeException();
-        Employee validEmployee = new EmployeeBuilder().build();
+    public void execute_duplicateShift_throwsCommandException() throws Exception {
+        ModelStub modelStub = new ModelStubThrowingDuplicateShiftException();
+        Shift validShift = new ShiftBuilder().build();
 
         thrown.expect(CommandException.class);
-        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_EMPLOYEE);
+        thrown.expectMessage(AddShiftCommand.MESSAGE_DUPLICATE_SHIFT);
 
-        getAddCommandForEmployee(validEmployee, modelStub).execute();
+        getAddShiftCommandForShift(validShift, modelStub).execute();
     }
 
     @Test
     public void equals() {
-        Employee alice = new EmployeeBuilder().withName("Alice").build();
-        Employee bob = new EmployeeBuilder().withName("Bob").build();
-        AddCommand addAliceCommand = new AddCommand(alice);
-        AddCommand addBobCommand = new AddCommand(bob);
+        AddShiftCommand addMondayAmCommand = new AddShiftCommand(MONDAY_AM);
+        AddShiftCommand addMondayPmCommand = new AddShiftCommand(MONDAY_PM);
 
         // same object -> returns true
-        assertTrue(addAliceCommand.equals(addAliceCommand));
+        assertTrue(addMondayAmCommand.equals(addMondayAmCommand));
 
         // same values -> returns true
-        AddCommand addAliceCommandCopy = new AddCommand(alice);
-        assertTrue(addAliceCommand.equals(addAliceCommandCopy));
+        AddShiftCommand addMondayAmCommandCopy = new AddShiftCommand(MONDAY_AM);
+        assertTrue(addMondayAmCommand.equals(addMondayAmCommandCopy));
 
         // different types -> returns false
-        assertFalse(addAliceCommand.equals(1));
+        assertFalse(addMondayAmCommand.equals(1));
 
         // null -> returns false
-        assertFalse(addAliceCommand.equals(null));
+        assertFalse(addMondayAmCommand.equals(null));
 
         // different employee -> returns false
-        assertFalse(addAliceCommand.equals(addBobCommand));
+        assertFalse(addMondayAmCommand.equals(addMondayPmCommand));
     }
 
     /**
      * Generates a new AddCommand with the details of the given employee.
      */
-    private AddCommand getAddCommandForEmployee(Employee employee, Model model) {
-        AddCommand command = new AddCommand(employee);
+    private AddShiftCommand getAddShiftCommandForShift(Shift shift, Model model) {
+        AddShiftCommand command = new AddShiftCommand(shift);
         command.setData(model, new CommandHistory(), new UndoRedoStack());
         return command;
     }
@@ -107,29 +106,13 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean isAdminMode() {
-            fail("This method should not be called.");
-            return false;
-        }
-
-        @Override
-        public boolean setTrueAdminMode(Password password) {
-            fail("This method should not be called.");
-            return false;
-        }
-
-        @Override
-        public void setFalseAdminMode() {
-            fail("This method should not be called.");
-        }
-
         public void addShift(Shift shift) throws DuplicateShiftException {
             fail("This method should not be called.");
         }
 
         public boolean isAdmin(String password) {
             fail("This method should not be called.");
-            return false;
+            return true;
         }
 
         @Override
@@ -185,15 +168,10 @@ public class AddCommandTest {
     /**
      * A Model stub that always throw a DuplicateEmployeeException when trying to add an employee.
      */
-    private class ModelStubThrowingDuplicateEmployeeException extends ModelStub {
+    private class ModelStubThrowingDuplicateShiftException extends ModelStub {
         @Override
-        public void addEmployee(Employee employee) throws DuplicateEmployeeException {
-            throw new DuplicateEmployeeException();
-        }
-
-        @Override
-        public boolean isAdminMode() {
-            return true;
+        public void addShift(Shift shift) throws DuplicateShiftException {
+            throw new DuplicateShiftException();
         }
 
         @Override
@@ -205,18 +183,13 @@ public class AddCommandTest {
     /**
      * A Model stub that always accept the employee being added.
      */
-    private class ModelStubAcceptingEmployeeAdded extends ModelStub {
-        final ArrayList<Employee> employeesAdded = new ArrayList<>();
+    private class ModelStubAcceptingShiftAdded extends ModelStub {
+        final ArrayList<Shift> shiftsAdded = new ArrayList<>();
 
         @Override
-        public void addEmployee(Employee employee) throws DuplicateEmployeeException {
-            requireNonNull(employee);
-            employeesAdded.add(employee);
-        }
-
-        @Override
-        public boolean isAdminMode()  {
-            return true;
+        public void addShift(Shift shift) throws DuplicateShiftException {
+            requireNonNull(shift);
+            shiftsAdded.add(shift);
         }
 
         @Override

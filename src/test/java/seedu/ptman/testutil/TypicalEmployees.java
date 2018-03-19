@@ -12,6 +12,14 @@ import static seedu.ptman.logic.commands.CommandTestUtil.VALID_SALARY_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_SALARY_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.ptman.testutil.TypicalShifts.MONDAY_AM;
+import static seedu.ptman.testutil.TypicalShifts.MONDAY_PM;
+import static seedu.ptman.testutil.TypicalShifts.SUNDAY_AM;
+import static seedu.ptman.testutil.TypicalShifts.SUNDAY_PM;
+import static seedu.ptman.testutil.TypicalShifts.TUESDAY_AM;
+import static seedu.ptman.testutil.TypicalShifts.TUESDAY_PM;
+import static seedu.ptman.testutil.TypicalShifts.WEDNESDAY_AM;
+import static seedu.ptman.testutil.TypicalShifts.WEDNESDAY_PM;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +28,8 @@ import java.util.List;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
+import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 
 /**
  * A utility class containing a list of {@code Employee} objects to be used in tests.
@@ -74,18 +84,30 @@ public class TypicalEmployees {
      * Returns an {@code PartTimeManager} with all the typical employees.
      */
     public static PartTimeManager getTypicalPartTimeManager() {
-        PartTimeManager ab = new PartTimeManager();
+        PartTimeManager ptman = new PartTimeManager();
         for (Employee employee : getTypicalEmployees()) {
             try {
-                ab.addEmployee(employee);
+                ptman.addEmployee(employee);
             } catch (DuplicateEmployeeException e) {
                 throw new AssertionError("not possible");
             }
         }
-        return ab;
+        for (Shift shift : getTypicalShifts()) {
+            try {
+                ptman.addShift(shift);
+            } catch (DuplicateShiftException e) {
+                throw new AssertionError("not possible");
+            }
+        }
+        return ptman;
     }
 
     public static List<Employee> getTypicalEmployees() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    public static List<Shift> getTypicalShifts() {
+        return new ArrayList<>(Arrays.asList(MONDAY_AM, MONDAY_PM, TUESDAY_AM, TUESDAY_PM,
+                WEDNESDAY_AM, WEDNESDAY_PM, SUNDAY_PM, SUNDAY_AM));
     }
 }

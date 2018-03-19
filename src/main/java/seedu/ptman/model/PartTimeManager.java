@@ -15,6 +15,13 @@ import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.UniqueEmployeeList;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
+import seedu.ptman.model.outlet.Name;
+import seedu.ptman.model.outlet.OperatingHours;
+import seedu.ptman.model.outlet.OutletInformation;
+import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.outlet.UniqueShiftList;
+import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
+import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.model.tag.UniqueTagList;
 
@@ -25,9 +32,11 @@ import seedu.ptman.model.tag.UniqueTagList;
 public class PartTimeManager implements ReadOnlyPartTimeManager {
 
     private final UniqueEmployeeList employees;
+    private final UniqueShiftList shifts;
     private final UniqueTagList tags;
     private final Password password;
     private boolean isAdminMode;
+    private final OutletInformation outlet;
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -38,9 +47,11 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
      */
     {
         employees = new UniqueEmployeeList();
+        shifts = new UniqueShiftList();
         tags = new UniqueTagList();
         password = new Password();
         isAdminMode = false;
+        outlet = new OutletInformation(new Name("asd"), new Password(""), new OperatingHours("11:00-14:00"));
     }
 
     public PartTimeManager() {}
@@ -73,6 +84,10 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         this.employees.setEmployees(employees);
     }
 
+    public void setShifts(List<Shift> shifts) throws DuplicateShiftException {
+        this.shifts.setShifts(shifts);
+    }
+
     public void setTags(Set<Tag> tags) {
         this.tags.setTags(tags);
     }
@@ -87,10 +102,14 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
                 .map(this::syncWithMasterTagList)
                 .collect(Collectors.toList());
 
+        List<Shift> syncedShiftList = newData.getShiftList();
         try {
             setEmployees(syncedEmployeeList);
+            setShifts(syncedShiftList);
         } catch (DuplicateEmployeeException e) {
             throw new AssertionError("PartTimeManagers should not have duplicate employees");
+        } catch (DuplicateShiftException e) {
+            throw new AssertionError("PartTimeManagers should not have duplicate shifts");
         }
     }
 
@@ -173,6 +192,20 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         }
     }
 
+    public boolean removeShift(Shift key) throws ShiftNotFoundException {
+        return shifts.remove(key);
+    }
+
+    /**
+     * Adds a shift to the address book.
+     *
+     * @throws DuplicateShiftException if a equivalent shift already exists.
+     */
+    public void addShift(Shift p) throws DuplicateShiftException {
+        outlet.addShift(p);
+        shifts.add(p);
+    }
+
     //// tag-level operations
 
     public void addTag(Tag t) throws UniqueTagList.DuplicateTagException {
@@ -246,6 +279,11 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     @Override
     public ObservableList<Employee> getEmployeeList() {
         return employees.asObservableList();
+    }
+
+    @Override
+    public ObservableList<Shift> getShiftList() {
+        return shifts.asObservableList();
     }
 
     @Override

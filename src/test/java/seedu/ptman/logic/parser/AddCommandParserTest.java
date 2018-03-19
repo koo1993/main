@@ -3,6 +3,7 @@ package seedu.ptman.logic.parser;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
+import static seedu.ptman.logic.commands.CommandTestUtil.ADMINPASSWORD_DESC_DEFAULT;
 import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT1_HASH;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
@@ -74,9 +75,11 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_AMY + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + SALARY_DESC_BOB  + TAG_DESC_FRIEND, new AddCommand(expectedEmployee));
 
-        // multiple addresses - last ptman accepted
+
+        // multiple addresses - last address accepted
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_AMY
                 + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedEmployee));
+
 
         // multiple tags - all accepted
         Employee expectedEmployeeMultipleTags =

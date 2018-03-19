@@ -1,9 +1,8 @@
 package seedu.ptman.model.outlet;
 
+import static seedu.ptman.commons.util.AppUtil.checkArgument;
 import static seedu.ptman.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.Objects;
 
 import javafx.collections.ObservableList;
@@ -11,28 +10,25 @@ import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.UniqueEmployeeList;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
-import seedu.ptman.model.outlet.exceptions.IllegalTimeException;
 
 /**
  * Represents a shift that employees can work in.
  */
 public class Shift {
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private DayOfWeek dayOfWeek;
+    public static final String MESSAGE_SHIFT_CONSTRAINTS = "Start time should be after the end time.";
+    private Time startTime;
+    private Time endTime;
+    private Day day;
     private UniqueEmployeeList uniqueEmployeeList;
-    private int capacity;
+    private Capacity capacity;
 
-    public Shift(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek, int capacity)
-            throws IllegalTimeException {
+    public Shift(Day day, Time startTime, Time endTime, Capacity capacity) {
         requireAllNonNull(startTime, endTime, capacity);
-        if (startTime.isAfter(endTime) || startTime.equals(endTime)) {
-            throw new IllegalTimeException();
-        }
+        checkArgument(endTime.isAfter(startTime), MESSAGE_SHIFT_CONSTRAINTS);
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;
-        this.dayOfWeek = dayOfWeek;
+        this.day = day;
         this.uniqueEmployeeList = new UniqueEmployeeList();
     }
 
@@ -67,23 +63,51 @@ public class Shift {
             return false;
         }
         Shift shift = (Shift) o;
-        return capacity == shift.capacity
-                && Objects.equals(startTime, shift.startTime)
+        return Objects.equals(startTime, shift.startTime)
                 && Objects.equals(endTime, shift.endTime)
-                && dayOfWeek == shift.dayOfWeek
-                && Objects.equals(uniqueEmployeeList, shift.uniqueEmployeeList);
+                && Objects.equals(day, shift.day)
+                && Objects.equals(uniqueEmployeeList, shift.uniqueEmployeeList)
+                && Objects.equals(capacity, shift.capacity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startTime, endTime, dayOfWeek, uniqueEmployeeList, capacity);
+        return Objects.hash(startTime, endTime, day, uniqueEmployeeList, capacity);
     }
 
     public ObservableList<Employee> getEmployeeList() {
         return uniqueEmployeeList.asObservableList();
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
+    public Day getDay() {
+        return day;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public Capacity getCapacity() {
+        return capacity;
+    }
+
+    /**
+     * Compares this shift to another. Returns a negative integer if the argument is a later shift,
+     * 0 if the shifts are equal, or a positive integer if the argument is a later shift.
+     * @param other
+     * @return
+     */
+    public int compareTo(Shift other) {
+        if (day.equals(other.getDay())) {
+            return startTime.compareTo(other.getStartTime());
+        } else if (day.compareTo(other.getDay()) < 0) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }

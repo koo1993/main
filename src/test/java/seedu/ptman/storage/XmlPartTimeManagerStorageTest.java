@@ -6,6 +6,9 @@ import static seedu.ptman.testutil.TypicalEmployees.ALICE;
 import static seedu.ptman.testutil.TypicalEmployees.HOON;
 import static seedu.ptman.testutil.TypicalEmployees.IDA;
 import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
+import static seedu.ptman.testutil.TypicalShifts.THURSDAY_AM;
+import static seedu.ptman.testutil.TypicalShifts.THURSDAY_PM;
+import static seedu.ptman.testutil.TypicalShifts.WEDNESDAY_AM;
 
 import java.io.IOException;
 
@@ -87,12 +90,15 @@ public class XmlPartTimeManagerStorageTest {
         //Modify data, overwrite exiting file, and read back
         original.addEmployee(HOON);
         original.removeEmployee(ALICE);
+        original.addShift(THURSDAY_PM);
+        original.removeShift(WEDNESDAY_AM);
         xmlPartTimeManagerStorage.savePartTimeManager(original, filePath);
         readBack = xmlPartTimeManagerStorage.readPartTimeManager(filePath).get();
         assertEquals(original, new PartTimeManager(readBack));
 
         //Save and read without specifying file path
         original.addEmployee(IDA);
+        original.addShift(THURSDAY_AM);
         xmlPartTimeManagerStorage.savePartTimeManager(original); //file path not specified
         readBack = xmlPartTimeManagerStorage.readPartTimeManager().get(); //file path not specified
         assertEquals(original, new PartTimeManager(readBack));

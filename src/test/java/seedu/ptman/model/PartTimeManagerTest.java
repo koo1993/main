@@ -18,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.ptman.model.employee.Employee;
+import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.testutil.EmployeeBuilder;
 import seedu.ptman.testutil.PartTimeManagerBuilder;
@@ -55,8 +56,9 @@ public class PartTimeManagerTest {
     public void resetData_withDuplicateEmployees_throwsAssertionError() {
         // Repeat ALICE twice
         List<Employee> newEmployees = Arrays.asList(ALICE, ALICE);
+        List<Shift> newShifts = new ArrayList<>();
         List<Tag> newTags = new ArrayList<>(ALICE.getTags());
-        PartTimeManagerStub newData = new PartTimeManagerStub(newEmployees, newTags);
+        PartTimeManagerStub newData = new PartTimeManagerStub(newEmployees, newTags, newShifts);
 
         thrown.expect(AssertionError.class);
         partTimeManager.resetData(newData);
@@ -101,16 +103,23 @@ public class PartTimeManagerTest {
      */
     private static class PartTimeManagerStub implements ReadOnlyPartTimeManager {
         private final ObservableList<Employee> employees = FXCollections.observableArrayList();
+        private final ObservableList<Shift> shifts = FXCollections.observableArrayList();
         private final ObservableList<Tag> tags = FXCollections.observableArrayList();
 
-        PartTimeManagerStub(Collection<Employee> employees, Collection<? extends Tag> tags) {
+        PartTimeManagerStub(Collection<Employee> employees, Collection<? extends Tag> tags, Collection<Shift> shifts) {
             this.employees.setAll(employees);
             this.tags.setAll(tags);
+            this.shifts.setAll(shifts);
         }
 
         @Override
         public ObservableList<Employee> getEmployeeList() {
             return employees;
+        }
+
+        @Override
+        public ObservableList<Shift> getShiftList() {
+            return shifts;
         }
 
         @Override

@@ -15,9 +15,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.ptman.logic.commands.AddCommand;
+import seedu.ptman.logic.commands.AddShiftCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.Command;
 import seedu.ptman.logic.commands.DeleteCommand;
+import seedu.ptman.logic.commands.DeleteShiftCommand;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.ExitCommand;
 import seedu.ptman.logic.commands.FindCommand;
@@ -68,6 +70,10 @@ public class PartTimeManagerParser {
         case AddCommand.COMMAND_ALIAS:
             return new AddCommandParser().parse(arguments);
 
+        case AddShiftCommand.COMMAND_WORD:
+        case AddShiftCommand.COMMAND_ALIAS:
+            return new AddShiftCommandParser().parse(arguments);
+
         case EditCommand.COMMAND_WORD:
         case EditCommand.COMMAND_ALIAS:
             return new EditCommandParser().parse(arguments);
@@ -79,6 +85,10 @@ public class PartTimeManagerParser {
         case DeleteCommand.COMMAND_WORD:
         case DeleteCommand.COMMAND_ALIAS:
             return new DeleteCommandParser().parse(arguments);
+
+        case DeleteShiftCommand.COMMAND_WORD:
+        case DeleteShiftCommand.COMMAND_ALIAS:
+            return new DeleteShiftCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
         case ClearCommand.COMMAND_ALIAS:
