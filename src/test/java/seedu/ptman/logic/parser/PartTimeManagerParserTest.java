@@ -28,6 +28,7 @@ import seedu.ptman.logic.commands.FindCommand;
 import seedu.ptman.logic.commands.HelpCommand;
 import seedu.ptman.logic.commands.HistoryCommand;
 import seedu.ptman.logic.commands.ListCommand;
+import seedu.ptman.logic.commands.LogOutAdminCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UndoCommand;
@@ -46,6 +47,12 @@ public class PartTimeManagerParserTest {
     public ExpectedException thrown = ExpectedException.none();
 
     private final PartTimeManagerParser parser = new PartTimeManagerParser();
+
+    @Test
+    public void parseCommand_logOut() throws Exception {
+        assertTrue(parser.parseCommand(LogOutAdminCommand.COMMAND_WORD) instanceof LogOutAdminCommand);
+        assertTrue(parser.parseCommand(LogOutAdminCommand.COMMAND_WORD + " 3") instanceof LogOutAdminCommand);
+    }
 
     @Test
     public void parseCommand_add() throws Exception {

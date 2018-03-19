@@ -1,5 +1,6 @@
 package seedu.ptman.logic.commands;
 
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 import static seedu.ptman.logic.UndoRedoStackUtil.prepareStack;
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -55,5 +56,9 @@ public class UndoCommandTest {
 
         // no command in undoStack
         assertCommandFailure(undoCommand, model, UndoCommand.MESSAGE_FAILURE);
+
+        // not in admin mode
+        model.setFalseAdminMode();
+        assertCommandFailure(undoCommand, model, MESSAGE_ACCESS_DENIED);
     }
 }

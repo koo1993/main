@@ -60,6 +60,14 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_notInAdminMode_throwsCommandExceptionAccessDenied() throws Exception {
+        model.setFalseAdminMode();
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredEmployeeList().size());
+        DeleteCommand deleteCommand = prepareCommand(outOfBoundIndex);
+        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_ACCESS_DENIED);
+    }
+
+    @Test
     public void execute_validIndexFilteredList_success() throws Exception {
         showEmployeeAtIndex(model, INDEX_FIRST_EMPLOYEE);
 

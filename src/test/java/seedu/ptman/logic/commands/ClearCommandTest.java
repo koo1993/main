@@ -1,5 +1,7 @@
 package seedu.ptman.logic.commands;
 
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
+import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
 
@@ -27,6 +29,14 @@ public class ClearCommandTest {
         Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
         model.setTrueAdminMode(defaultPassword);
         assertCommandSuccess(prepareCommand(model), model, ClearCommand.MESSAGE_SUCCESS, model);
+    }
+
+    @Test
+    public void execute_notInAdminMode_accessDenied() {
+        Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        ClearCommand clearCommand = new  ClearCommand();
+        clearCommand.setData(model, new CommandHistory(), new UndoRedoStack());
+        assertCommandFailure(clearCommand, model, MESSAGE_ACCESS_DENIED);
     }
 
     /**
