@@ -1,5 +1,6 @@
 package seedu.ptman.logic.commands;
 
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 import static seedu.ptman.commons.util.CollectionUtil.requireAllNonNull;
 
 import seedu.ptman.logic.CommandHistory;
@@ -17,13 +18,14 @@ public class UndoCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Undo success!";
     public static final String MESSAGE_FAILURE = "No more commands to undo!";
 
-    public UndoCommand() {
-        isAdminCommand = true;
-    }
 
     @Override
     public CommandResult execute() throws CommandException {
         requireAllNonNull(model, undoRedoStack);
+
+        if (!model.isAdminMode()) {
+            throw new CommandException(MESSAGE_ACCESS_DENIED);
+        }
 
         if (!undoRedoStack.canUndo()) {
             throw new CommandException(MESSAGE_FAILURE);

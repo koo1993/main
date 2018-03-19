@@ -6,10 +6,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.commons.util.StringUtil;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Name;
@@ -165,7 +167,36 @@ public class ParserUtil {
         return salary.isPresent() ? Optional.of(parseSalary(salary.get())) : Optional.empty();
     }
 
+    /**
+    * Parses a {@code String password} into an {@code Password}.
+    * Leading and trailing whitespaces will be trimmed.
+    *
+    */
+    public static Password parsePassword(String password) {
+        requireNonNull(password);
+        String trimmedPassword = password.trim();
+        Password newPassword = new Password();
+        newPassword.createPassword(trimmedPassword);
+        return newPassword;
+    }
 
+    /**
+    * Parses a {@code Optional<String> password} into an {@code Optional<Password>} if {@code password} is present.
+    * See header comment of this class regarding the use of {@code Optional} parameters.
+    */
+    public static Optional<Password> parsePassword(Optional<String> password) {
+        requireNonNull(password);
+        return password.isPresent() ? Optional.of(parsePassword(password.get())) : Optional.empty();
+    }
+
+
+    /**
+      * Returns true if none of the prefixes contains empty {@code Optional} values in the given
+      * {@code ArgumentMultimap}.
+      */
+    public static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
+    }
 
     /**
      * Parses a {@code String tag} into a {@code Tag}.

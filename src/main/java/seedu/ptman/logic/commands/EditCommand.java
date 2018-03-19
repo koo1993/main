@@ -1,6 +1,7 @@
 package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_NAME;
@@ -73,7 +74,6 @@ public class EditCommand extends UndoableCommand {
     public EditCommand(Index index, EditEmployeeDescriptor editEmployeeDescriptor) {
         requireNonNull(index);
         requireNonNull(editEmployeeDescriptor);
-        isAdminCommand = true;
         this.index = index;
         this.editEmployeeDescriptor = new EditEmployeeDescriptor(editEmployeeDescriptor);
 
@@ -81,6 +81,11 @@ public class EditCommand extends UndoableCommand {
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
+
+        if (!model.isAdminMode()) {
+            throw new CommandException(MESSAGE_ACCESS_DENIED);
+        }
+
         try {
             model.updateEmployee(employeeToEdit, editedEmployee);
         } catch (DuplicateEmployeeException dpe) {

@@ -27,6 +27,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     private final UniqueEmployeeList employees;
     private final UniqueTagList tags;
     private final Password password;
+    private boolean isAdminMode;
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -39,6 +40,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         employees = new UniqueEmployeeList();
         tags = new UniqueTagList();
         password = new Password();
+        isAdminMode = false;
     }
 
     public PartTimeManager() {}
@@ -52,8 +54,17 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     }
 
     //// authorization operations
-    public boolean isAdmin(String password) {
-        return this.password.isCorrectPassword(password);
+    public boolean isAdminMode() {
+        return this.isAdminMode;
+    }
+
+    /**
+     * Check if given password is of outlet's
+     * @param password
+     * @return true if password is the same
+     */
+    public boolean isAdminPassword(Password password) {
+        return this.password.equals(password);
     }
 
     //// list overwrite operations
@@ -169,6 +180,10 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     }
 
     //// util methods
+    public void setAdminMode(boolean isAdmin) {
+        isAdminMode = isAdmin;
+    }
+
 
     /**
      * Remove tag from Employee if the tag exist in Employee.
@@ -243,6 +258,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         return other == this // short circuit if same object
                 || (other instanceof PartTimeManager // instanceof handles nulls
                 && this.employees.equals(((PartTimeManager) other).employees)
+                && this.password.equals(((PartTimeManager) other).password)
                 && this.tags.equalsOrderInsensitive(((PartTimeManager) other).tags));
     }
 

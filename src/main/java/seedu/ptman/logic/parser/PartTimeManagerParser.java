@@ -24,6 +24,8 @@ import seedu.ptman.logic.commands.FindCommand;
 import seedu.ptman.logic.commands.HelpCommand;
 import seedu.ptman.logic.commands.HistoryCommand;
 import seedu.ptman.logic.commands.ListCommand;
+import seedu.ptman.logic.commands.LogInAdminCommand;
+import seedu.ptman.logic.commands.LogOutAdminCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UndoCommand;
@@ -55,6 +57,12 @@ public class PartTimeManagerParser {
         final String commandWord = matcher.group("commandWord");
         final String arguments = matcher.group("arguments");
         switch (commandWord) {
+
+        case LogOutAdminCommand.COMMAND_WORD:
+            return new LogOutAdminCommand();
+
+        case LogInAdminCommand.COMMAND_WORD:
+            return new LogInAdminCommandParser().parse(arguments);
 
         case AddCommand.COMMAND_WORD:
         case AddCommand.COMMAND_ALIAS:
