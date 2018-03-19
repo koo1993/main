@@ -17,5 +17,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_SALARY = new Prefix("s/");
     public static final Prefix PREFIX_PASSWORD = new Prefix("pw/");
     public static final Prefix PREFIX_TAG = new Prefix("t/");
-
+    public static final Prefix PREFIX_OUTLET_NAME = new Prefix("n/");
+    public static final Prefix PREFIX_OPERATING_HOURS = new Prefix("h/");
+    public static final Prefix PREFIX_MASTER_PASSWORD = new Prefix("pw/");
 }

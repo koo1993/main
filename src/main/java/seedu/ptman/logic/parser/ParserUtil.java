@@ -19,6 +19,8 @@ import seedu.ptman.model.employee.Phone;
 import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.outlet.Capacity;
 import seedu.ptman.model.outlet.Day;
+import seedu.ptman.model.outlet.OperatingHours;
+import seedu.ptman.model.outlet.OutletName;
 import seedu.ptman.model.outlet.Time;
 import seedu.ptman.model.tag.Tag;
 
@@ -218,6 +220,82 @@ public class ParserUtil {
         return email.isPresent() ? Optional.of(parseEmail(email.get())) : Optional.empty();
     }
 
+    /**
+     * Parses a {@code String outletName} into a {@code OutletName}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code outletName} is invalid.
+     */
+    public static OutletName parseOutletName(String outletName) throws IllegalValueException {
+        requireNonNull(outletName);
+        String trimmedName = outletName.trim();
+        if (!OutletName.isValidName(trimmedName)) {
+            throw new IllegalValueException(OutletName.MESSAGE_NAME_CONSTRAINTS);
+        }
+        return new OutletName(trimmedName);
+    }
+
+    /**
+     * Parses a {@code Optional<String> outletName} into an {@code Optional<OutletName>}
+     * if {@code outletName} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<OutletName> parseOutletName(Optional<String> outletName) throws IllegalValueException {
+        requireNonNull(outletName);
+        return outletName.isPresent() ? Optional.of(parseOutletName(outletName.get())) : Optional.empty();
+    }
+
+    /**
+     * Parses a {@code String operatingHours} into a {@code OperatingHours}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code operatingHours} is invalid.
+     */
+    public static OperatingHours parseOperatingHours(String operatingHours) throws IllegalValueException {
+        requireNonNull(operatingHours);
+        String trimmedOperatingHours = operatingHours.trim();
+        if (!OperatingHours.isValidOperatingHours(trimmedOperatingHours)) {
+            throw new IllegalValueException(OperatingHours.MESSAGE_OPERATING_HOUR_CONSTRAINTS);
+        }
+        return new OperatingHours(trimmedOperatingHours);
+    }
+
+    /**
+     * Parses a {@code Optional<String> operatingHours} into an {@code Optional<OperatingHours>}
+     * if {@code operatingHours} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<OperatingHours> parseOperatingHours(Optional<String> operatingHours)
+            throws IllegalValueException {
+        requireNonNull(operatingHours);
+        return operatingHours.isPresent() ? Optional.of(parseOperatingHours(operatingHours.get())) : Optional.empty();
+    }
+
+    /**
+     * Parses a {@code String masterPassword} into a {@code Password}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code masterPassword} is invalid.
+     */
+    public static Password parseMasterPassword(String masterPassword) throws IllegalValueException {
+        requireNonNull(masterPassword);
+        String trimmedMasterPassword = masterPassword.trim();
+        if (!Password.isValidPassword(trimmedMasterPassword)) {
+            throw new IllegalValueException(Password.MESSAGE_PASSWORD_CONSTRAINTS);
+        }
+        return new Password(trimmedMasterPassword);
+    }
+
+    /**
+     * Parses a {@code Optional<String> masterPassword} into an {@code Optional<Password>}
+     * if {@code masterPassword} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Password> parseMasterPassword(Optional<String> masterPassword)
+            throws IllegalValueException {
+        requireNonNull(masterPassword);
+        return masterPassword.isPresent() ? Optional.of(parseMasterPassword(masterPassword.get())) : Optional.empty();
+    }
 
     /**
      * Parses a {@code String salary} into an {@code Salary}.

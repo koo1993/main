@@ -14,7 +14,10 @@ import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
  */
 public class OutletInformation {
 
-    private Name name;
+    private static final String DEFAULT_OUTLET_NAME = "DefaultOutlet";
+    private static final String DEFAULT_OPERATING_HOURS = "09:00-22:00";
+
+    private OutletName name;
     private Password masterPassword;
     private OperatingHours operatingHours;
     private Timetable timetable;
@@ -26,11 +29,22 @@ public class OutletInformation {
      * @param masterPassword a valid master password
      * @param operatingHours a valid operating hours
      */
-    public OutletInformation(Name name, Password masterPassword, OperatingHours operatingHours) {
-        requireAllNonNull(name, masterPassword, operatingHours);
+    public OutletInformation(OutletName name, Password masterPassword, OperatingHours operatingHours,
+                             Timetable timetable) {
+        requireAllNonNull(name, masterPassword, operatingHours, timetable);
         this.name = name;
         this.masterPassword = masterPassword;
         this.operatingHours = operatingHours;
+        this.timetable = timetable;
+    }
+
+    /**
+     * Default constructor with default values
+     */
+    public OutletInformation() {
+        this.name = new OutletName(DEFAULT_OUTLET_NAME);
+        this.masterPassword = new Password();
+        this.operatingHours = new OperatingHours(DEFAULT_OPERATING_HOURS);
         this.timetable = new Timetable(LocalDate.now());
     }
 
@@ -38,7 +52,7 @@ public class OutletInformation {
         timetable.addShift(shift);
     }
 
-    public Name getName() {
+    public OutletName getName() {
         return name;
     }
 
@@ -50,25 +64,37 @@ public class OutletInformation {
         return operatingHours;
     }
 
+    public Timetable getTimetable() {
+        return timetable;
+    }
+
+    public void setOutletInformation(OutletName name, OperatingHours operatingHours) {
+        requireAllNonNull(name, operatingHours);
+        this.name = name;
+        this.operatingHours = operatingHours;
+    }
+
     @Override
     public boolean equals(Object other) {
         return this == other
                 || (other instanceof OutletInformation
                 && ((OutletInformation) other).getName().equals(this.getName())
                 && ((OutletInformation) other).getMasterPassword().equals(this.getMasterPassword())
-                && ((OutletInformation) other).getOperatingHours().equals(this.getOperatingHours()));
+                && ((OutletInformation) other).getOperatingHours().equals(this.getOperatingHours())
+                && ((OutletInformation) other).getTimetable().equals(this.getTimetable()));
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, masterPassword, operatingHours);
+        return Objects.hash(name, masterPassword, operatingHours, timetable);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(getName())
+        builder.append("Outlet Name: ")
+                .append(getName())
                 .append(" Operating Hour: ")
                 .append(getOperatingHours());
         return builder.toString();

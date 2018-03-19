@@ -17,12 +17,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
 import seedu.ptman.model.outlet.Capacity;
 import seedu.ptman.model.outlet.Day;
+import seedu.ptman.model.outlet.OperatingHours;
+import seedu.ptman.model.outlet.OutletName;
 import seedu.ptman.model.outlet.Time;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.testutil.Assert;
@@ -33,20 +36,24 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_OUTLET_NAME = "Awesome@Outlet";
+    private static final String INVALID_MASTER_PASSWORD = " ";
+    private static final String INVALID_OPERATING_HOURS = "09:00/18:00";
     private static final String INVALID_DAY = "tue";
     private static final String INVALID_TIME = "1pm";
     private static final String INVALID_CAPACITY = "one";
-
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_ADDRESS = "123 Main Street #0505";
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_OUTLET_NAME = "AwesomeOutlet";
+    private static final String VALID_MASTER_PASSWORD = "PASSWORD";
+    private static final String VALID_OPERATING_HOURS = "09:00-18:00";
     private static final String VALID_DAY = "tuesday";
     private static final String VALID_TIME = "1300";
     private static final String VALID_CAPACITY = "10";
-
     private static final String WHITESPACE = " \t\r\n";
 
     @Rule
@@ -347,5 +354,113 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseOutletName_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseOutletName((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseOutletName((Optional<String>) null));
+    }
+
+    @Test
+    public void parseOutletName_invalidValue_throwsIllegalValueException() {
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseOutletName(INVALID_OUTLET_NAME));
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseOutletName(
+                Optional.of(INVALID_OUTLET_NAME)));
+    }
+
+    @Test
+    public void parseOutletName_optionalEmpty_returnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseOutletName(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseOutletName_validValueWithoutWhitespace_returnsOutletName() throws Exception {
+        OutletName expectedName = new OutletName(VALID_OUTLET_NAME);
+        assertEquals(expectedName, ParserUtil.parseOutletName(VALID_OUTLET_NAME));
+        assertEquals(Optional.of(expectedName), ParserUtil.parseOutletName(Optional.of(VALID_OUTLET_NAME)));
+    }
+
+    @Test
+    public void parseOutletName_validValueWithWhitespace_returnsTrimmedOutletName() throws Exception {
+        String nameWithWhitespace = WHITESPACE + VALID_OUTLET_NAME + WHITESPACE;
+        OutletName expectedName = new OutletName(VALID_OUTLET_NAME);
+        assertEquals(expectedName, ParserUtil.parseOutletName(nameWithWhitespace));
+        assertEquals(Optional.of(expectedName), ParserUtil.parseOutletName(Optional.of(nameWithWhitespace)));
+    }
+
+    @Test
+    public void parseMasterPassword_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseMasterPassword((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseMasterPassword((Optional<String>) null));
+    }
+
+    @Test
+    public void parseMasterPassword_invalidValue_throwsIllegalValueException() {
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseMasterPassword(
+                INVALID_MASTER_PASSWORD));
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseMasterPassword(
+                Optional.of(INVALID_MASTER_PASSWORD)));
+    }
+
+    @Test
+    public void parseMasterPassword_optionalEmpty_returnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseMasterPassword(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseMasterPassword_validValueWithoutWhitespace_returnsMasterPassword() throws Exception {
+        Password expectedMasterPassword = new Password(VALID_MASTER_PASSWORD);
+        assertEquals(expectedMasterPassword, ParserUtil.parseMasterPassword(VALID_MASTER_PASSWORD));
+        assertEquals(Optional.of(expectedMasterPassword), ParserUtil.parseMasterPassword(
+                Optional.of(VALID_MASTER_PASSWORD)));
+    }
+
+    @Test
+    public void parseMasterPassword_validValueWithWhitespace_returnsTrimmedMasterPassword() throws Exception {
+        String masterPasswordWithWhitespace = WHITESPACE + VALID_MASTER_PASSWORD + WHITESPACE;
+        Password expectedMasterPassword = new Password(VALID_MASTER_PASSWORD);
+        assertEquals(expectedMasterPassword, ParserUtil.parseMasterPassword(masterPasswordWithWhitespace));
+        assertEquals(Optional.of(expectedMasterPassword), ParserUtil.parseMasterPassword(
+                Optional.of(masterPasswordWithWhitespace)));
+    }
+
+
+
+
+    @Test
+    public void parseOperatingHours_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseOperatingHours((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseOperatingHours((Optional<String>) null));
+    }
+
+    @Test
+    public void parseOperatingHours_invalidValue_throwsIllegalValueException() {
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseOperatingHours(
+                INVALID_OPERATING_HOURS));
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseOperatingHours(
+                Optional.of(INVALID_OPERATING_HOURS)));
+    }
+
+    @Test
+    public void parseOperatingHours_optionalEmpty_returnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseOperatingHours(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseOperatingHours_validValueWithoutWhitespace_returnsOperatingHours() throws Exception {
+        OperatingHours expectedOperatingHours = new OperatingHours(VALID_OPERATING_HOURS);
+        assertEquals(expectedOperatingHours, ParserUtil.parseOperatingHours(VALID_OPERATING_HOURS));
+        assertEquals(Optional.of(expectedOperatingHours), ParserUtil.parseOperatingHours(
+                Optional.of(VALID_OPERATING_HOURS)));
+    }
+
+    @Test
+    public void parseOperatingHours_validValueWithWhitespace_returnsTrimmedOperatingHours() throws Exception {
+        String operatingHoursWithWhitespace = WHITESPACE + VALID_OPERATING_HOURS + WHITESPACE;
+        OperatingHours expectedOperatingHours = new OperatingHours(VALID_OPERATING_HOURS);
+        assertEquals(expectedOperatingHours, ParserUtil.parseOperatingHours(operatingHoursWithWhitespace));
+        assertEquals(Optional.of(expectedOperatingHours), ParserUtil.parseOperatingHours(
+                Optional.of(operatingHoursWithWhitespace)));
     }
 }

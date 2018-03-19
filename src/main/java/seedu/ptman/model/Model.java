@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
+import seedu.ptman.model.outlet.OperatingHours;
+import seedu.ptman.model.outlet.OutletName;
 import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
@@ -65,6 +67,12 @@ public interface Model {
      */
     void updateEmployee(Employee target, Employee editedEmployee)
             throws DuplicateEmployeeException, EmployeeNotFoundException;
+    /**
+     * Replaces the given employee {@code target} with {@code editedEmployee}.
+     */
+    void updateOutlet(OutletName name, OperatingHours operatingHours);
+
+    String getOutletInformationMessage();
 
     /** Returns an unmodifiable view of the filtered employee list */
     ObservableList<Employee> getFilteredEmployeeList();

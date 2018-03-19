@@ -5,6 +5,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_MASTER_PASSWORD;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OPERATING_HOURS;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OUTLET_NAME;
+import static seedu.ptman.model.Password.DEFAULT_PASSWORD;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_SHIFT;
 
@@ -23,6 +27,7 @@ import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditCommand.EditEmployeeDescriptor;
+import seedu.ptman.logic.commands.EditOutletCommand;
 import seedu.ptman.logic.commands.ExitCommand;
 import seedu.ptman.logic.commands.FindCommand;
 import seedu.ptman.logic.commands.HelpCommand;
@@ -33,8 +38,11 @@ import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
+import seedu.ptman.model.outlet.OperatingHours;
+import seedu.ptman.model.outlet.OutletName;
 import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
 import seedu.ptman.testutil.EmployeeBuilder;
@@ -138,6 +146,28 @@ public class PartTimeManagerParserTest {
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_ALIAS + " "
                 + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + EmployeeUtil.getEmployeeDetails(employee));
         assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_editoutlet() throws Exception {
+        String name = "EditedOutlet";
+        String operatingHours = "10:00-17:00";
+        EditOutletCommand command = (EditOutletCommand) parser.parseCommand(EditOutletCommand.COMMAND_WORD
+                + " " + PREFIX_MASTER_PASSWORD + DEFAULT_PASSWORD + " " + PREFIX_OUTLET_NAME + name
+                + " " + PREFIX_OPERATING_HOURS + operatingHours);
+        assertEquals(new EditOutletCommand(new Password(DEFAULT_PASSWORD), new OutletName(name),
+                        new OperatingHours(operatingHours)), command);
+    }
+
+    @Test
+    public void parseCommand_editoutletAlias() throws Exception {
+        String name = "EditedOutlet";
+        String operatingHours = "10:00-17:00";
+        EditOutletCommand command = (EditOutletCommand) parser.parseCommand(EditOutletCommand.COMMAND_ALIAS
+                + " " + PREFIX_MASTER_PASSWORD + DEFAULT_PASSWORD + " " + PREFIX_OUTLET_NAME + name
+                + " " + PREFIX_OPERATING_HOURS + operatingHours);
+        assertEquals(new EditOutletCommand(new Password(DEFAULT_PASSWORD), new OutletName(name),
+                        new OperatingHours(operatingHours)), command);
     }
 
     @Test

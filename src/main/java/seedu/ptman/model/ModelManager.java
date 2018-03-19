@@ -16,6 +16,8 @@ import seedu.ptman.commons.events.model.PartTimeManagerChangedEvent;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
+import seedu.ptman.model.outlet.OperatingHours;
+import seedu.ptman.model.outlet.OutletName;
 import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
@@ -124,6 +126,17 @@ public class ModelManager extends ComponentManager implements Model {
 
         partTimeManager.updateEmployee(target, editedEmployee);
         indicatePartTimeManagerChanged();
+    }
+
+    @Override
+    public void updateOutlet(OutletName name, OperatingHours operatingHours) {
+        partTimeManager.updateOutlet(name, operatingHours);
+        indicatePartTimeManagerChanged();
+    }
+
+    @Override
+    public String getOutletInformationMessage() {
+        return partTimeManager.getOutletInformationMessage();
     }
 
     //=========== Filtered Employee List Accessors =============================================================
