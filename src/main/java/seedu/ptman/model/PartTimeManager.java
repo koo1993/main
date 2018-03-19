@@ -37,8 +37,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     private final Password password;
     private boolean isAdminMode;
     private final OutletInformation outlet;
-    private final Password password;
-
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
      * between constructors. See https://docs.oracle.com/javase/tutorial/java/javaOO/initial.html
@@ -53,7 +51,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         outlet = new OutletInformation();
         password = new Password();
         isAdminMode = false;
-        outlet = new OutletInformation(new Name("asd"), new Password(""), new OperatingHours("11:00-14:00"));
     }
 
     public PartTimeManager() {}

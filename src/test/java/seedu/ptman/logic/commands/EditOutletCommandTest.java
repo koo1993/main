@@ -52,6 +52,8 @@ public class EditOutletCommandTest {
         command.execute();
         undoRedoStack.push(command);
 
+        //set Admin Mode
+        model.setTrueAdminMode(new Password());
         // undo -> reverts parttimemanager back to previous state
         assertCommandSuccess(undoCommand, model, UndoCommand.MESSAGE_SUCCESS, expectedModel);
 
