@@ -34,7 +34,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     private final UniqueEmployeeList employees;
     private final UniqueShiftList shifts;
     private final UniqueTagList tags;
-    private final Password password;
     private boolean isAdminMode;
     private final OutletInformation outlet;
     /*
@@ -49,7 +48,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         shifts = new UniqueShiftList();
         tags = new UniqueTagList();
         outlet = new OutletInformation();
-        password = new Password();
         isAdminMode = false;
     }
 
@@ -74,7 +72,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
      * @return true if password is the same
      */
     public boolean isAdminPassword(Password password) {
-        return this.password.equals(password);
+        return outlet.getMasterPassword().equals(password);
     }
 
     //// list overwrite operations
@@ -303,7 +301,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         return other == this // short circuit if same object
                 || (other instanceof PartTimeManager // instanceof handles nulls
                 && this.employees.equals(((PartTimeManager) other).employees)
-                && this.password.equals(((PartTimeManager) other).password)
                 && this.tags.equalsOrderInsensitive(((PartTimeManager) other).tags));
     }
 
