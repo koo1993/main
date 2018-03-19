@@ -17,6 +17,7 @@ import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_SECOND_EMPLOYEE;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import seedu.ptman.commons.core.Messages;
@@ -27,6 +28,7 @@ import seedu.ptman.logic.commands.EditCommand.EditEmployeeDescriptor;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.PartTimeManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
@@ -38,6 +40,11 @@ import seedu.ptman.testutil.EmployeeBuilder;
 public class EditCommandTest {
 
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+
+    @Before
+    public void setMode_adminMode() {
+        model.setTrueAdminMode(new Password());
+    }
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() throws Exception {

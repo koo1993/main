@@ -11,6 +11,7 @@ import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.testutil.EmployeeBuilder;
@@ -25,6 +26,7 @@ public class AddCommandIntegrationTest {
     @Before
     public void setUp() {
         model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        model.setTrueAdminMode(new Password());
     }
 
     @Test

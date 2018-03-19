@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
-import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_PASSWORD;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
@@ -27,6 +27,7 @@ import static seedu.ptman.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.ptman.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.ptman.model.Model.PREDICATE_SHOW_ALL_EMPLOYEES;
 import static seedu.ptman.testutil.TypicalEmployees.AMY;
@@ -39,6 +40,7 @@ import org.junit.Test;
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.commands.EditCommand;
+import seedu.ptman.logic.commands.LogInAdminCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.model.Model;
@@ -59,27 +61,26 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
     @Test
     public void edit() throws Exception {
         Model model = getModel();
-
+        executeDefaultAdminLogin();
         /* ----------------- Performing edit operation while an unfiltered list is being shown ---------------------- */
 
         /* Case: edit all fields, command with leading spaces, trailing spaces and multiple spaces between each field
          * -> edited
          */
         Index index = INDEX_FIRST_EMPLOYEE;
-        String command = " " + EditCommand.COMMAND_WORD + "  " + index.getOneBased() + "  " + NAME_DESC_BOB + "  "
-                + PHONE_DESC_BOB + " " + EMAIL_DESC_BOB + "  " + ADDRESS_DESC_BOB + " " + TAG_DESC_HUSBAND + " "
-                + DEFAULT_DESC_ADMINPASSWORD;
+        String command = " " + EditCommand.COMMAND_WORD + "  " + index.getOneBased() + "  " + NAME_DESC_BOB
+                + PHONE_DESC_BOB + " " + EMAIL_DESC_BOB + "  " + ADDRESS_DESC_BOB + " " + TAG_DESC_HUSBAND;
         Employee editedEmployee = new EmployeeBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
                 .withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
         assertCommandSuccess(command, index, editedEmployee);
 
         /* Case: undo editing the last employee in the list -> last employee restored */
-        command = UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
+        command = UndoCommand.COMMAND_WORD;
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
 
         /* Case: redo editing the last employee in the list -> last employee edited again */
-        command = RedoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
+        command = RedoCommand.COMMAND_WORD;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         model.updateEmployee(
                 getModel().getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased()), editedEmployee);
@@ -87,20 +88,19 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
 
         /* Case: edit a employee with new values same as existing values -> edited */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND + DEFAULT_DESC_ADMINPASSWORD;
+                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
         assertCommandSuccess(command, index, BOB);
 
         /* Case: edit some fields -> edited */
         index = INDEX_FIRST_EMPLOYEE;
-        command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
+        command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + TAG_DESC_FRIEND;
         Employee employeeToEdit = getModel().getFilteredEmployeeList().get(index.getZeroBased());
         editedEmployee = new EmployeeBuilder(employeeToEdit).withTags(VALID_TAG_FRIEND).build();
         assertCommandSuccess(command, index, editedEmployee);
 
         /* Case: clear tags -> cleared */
         index = INDEX_FIRST_EMPLOYEE;
-        command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + PREFIX_TAG.getPrefix()
-                + DEFAULT_DESC_ADMINPASSWORD;
+        command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + PREFIX_TAG.getPrefix();
         editedEmployee = new EmployeeBuilder(employeeToEdit).withTags().build();
         assertCommandSuccess(command, index, editedEmployee);
 
@@ -110,8 +110,7 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         showEmployeesWithName(KEYWORD_MATCHING_MEIER);
         index = INDEX_FIRST_EMPLOYEE;
         assertTrue(index.getZeroBased() < getModel().getFilteredEmployeeList().size());
-        command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + NAME_DESC_BOB
-                + DEFAULT_DESC_ADMINPASSWORD;
+        command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + NAME_DESC_BOB;
         employeeToEdit = getModel().getFilteredEmployeeList().get(index.getZeroBased());
         editedEmployee = new EmployeeBuilder(employeeToEdit).withName(VALID_NAME_BOB).build();
         assertCommandSuccess(command, index, editedEmployee);
@@ -121,7 +120,7 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
          */
         showEmployeesWithName(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getPartTimeManager().getEmployeeList().size();
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB + DEFAULT_DESC_ADMINPASSWORD,
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB,
                 Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
 
         /* ------------------- Performing edit operation while a employee card is selected ------------------------ */
@@ -133,7 +132,7 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         index = INDEX_FIRST_EMPLOYEE;
         selectEmployee(index);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-                + ADDRESS_DESC_AMY + SALARY_DESC_AMY + TAG_DESC_FRIEND + DEFAULT_DESC_ADMINPASSWORD;
+                + ADDRESS_DESC_AMY + SALARY_DESC_AMY + TAG_DESC_FRIEND;
         // this can be misleading: card selection actually remains unchanged but the
         // browser's url is updated to reflect the new employee's name
         assertCommandSuccess(command, index, AMY, index);
@@ -141,49 +140,49 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         /* --------------------------------- Performing invalid edit operation -------------------------------------- */
 
         /* Case: invalid index (0) -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_WORD + " 0" + NAME_DESC_BOB + DEFAULT_DESC_ADMINPASSWORD,
+        assertCommandFailure(EditCommand.COMMAND_WORD + " 0" + NAME_DESC_BOB,
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
         /* Case: invalid index (-1) -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_WORD + " -1" + NAME_DESC_BOB + DEFAULT_DESC_ADMINPASSWORD,
+        assertCommandFailure(EditCommand.COMMAND_WORD + " -1" + NAME_DESC_BOB,
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
         /* Case: invalid index (size + 1) -> rejected */
         invalidIndex = getModel().getFilteredEmployeeList().size() + 1;
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB + DEFAULT_DESC_ADMINPASSWORD,
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB,
                 Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
 
         /* Case: missing index -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_WORD + NAME_DESC_BOB + DEFAULT_DESC_ADMINPASSWORD,
+        assertCommandFailure(EditCommand.COMMAND_WORD + NAME_DESC_BOB,
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
         /* Case: missing all fields -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + DEFAULT_DESC_ADMINPASSWORD, EditCommand.MESSAGE_NOT_EDITED);
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased(),
+                EditCommand.MESSAGE_NOT_EDITED);
 
         /* Case: invalid name -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + INVALID_NAME_DESC + DEFAULT_DESC_ADMINPASSWORD, Name.MESSAGE_NAME_CONSTRAINTS);
+                        + INVALID_NAME_DESC, Name.MESSAGE_NAME_CONSTRAINTS);
 
         /* Case: invalid phone -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + INVALID_PHONE_DESC + DEFAULT_DESC_ADMINPASSWORD, Phone.MESSAGE_PHONE_CONSTRAINTS);
+                        + INVALID_PHONE_DESC, Phone.MESSAGE_PHONE_CONSTRAINTS);
 
         /* Case: invalid email -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + INVALID_EMAIL_DESC + DEFAULT_DESC_ADMINPASSWORD, Email.MESSAGE_EMAIL_CONSTRAINTS);
+                        + INVALID_EMAIL_DESC, Email.MESSAGE_EMAIL_CONSTRAINTS);
 
         /* Case: invalid address -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + INVALID_ADDRESS_DESC + DEFAULT_DESC_ADMINPASSWORD, Address.MESSAGE_ADDRESS_CONSTRAINTS);
+                        + INVALID_ADDRESS_DESC, Address.MESSAGE_ADDRESS_CONSTRAINTS);
 
         /* Case: invalid salary -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + INVALID_SALARY_DESC + DEFAULT_DESC_ADMINPASSWORD, Salary.MESSAGE_SALARY_CONSTRAINTS);
+                        + INVALID_SALARY_DESC, Salary.MESSAGE_SALARY_CONSTRAINTS);
 
         /* Case: invalid tag -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                        + INVALID_TAG_DESC + DEFAULT_DESC_ADMINPASSWORD, Tag.MESSAGE_TAG_CONSTRAINTS);
+                        + INVALID_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
 
         /* Case: edit a employee with new values same as another employee's values -> rejected */
         executeCommand(EmployeeUtil.getAddCommand(BOB));
@@ -191,13 +190,13 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
         index = INDEX_FIRST_EMPLOYEE;
         assertFalse(getModel().getFilteredEmployeeList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND + DEFAULT_DESC_ADMINPASSWORD;
+                + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_EMPLOYEE);
 
         /* Case: edit a employee with new values same as another employee's values
          * but with different tags -> rejected */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_HUSBAND + DEFAULT_DESC_ADMINPASSWORD;
+                + ADDRESS_DESC_BOB + SALARY_DESC_BOB + TAG_DESC_HUSBAND;
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_EMPLOYEE);
     }
 
@@ -270,6 +269,13 @@ public class EditCommandSystemTest extends PartTimeManagerSystemTest {
             assertSelectedCardUnchanged();
         }
         assertStatusBarChangedExceptSaveLocation();
+    }
+
+    /**
+     * Perform to transform PTMan to admin mode.
+     */
+    private void executeDefaultAdminLogin() {
+        executeCommand(LogInAdminCommand.COMMAND_WORD + " " + PREFIX_PASSWORD + DEFAULT_PASSWORD);
     }
 
     /**

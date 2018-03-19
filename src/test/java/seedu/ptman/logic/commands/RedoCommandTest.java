@@ -18,6 +18,7 @@ import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 
 public class RedoCommandTest {
@@ -34,6 +35,7 @@ public class RedoCommandTest {
         deleteCommandTwo.setData(model, EMPTY_COMMAND_HISTORY, EMPTY_STACK);
         deleteCommandOne.preprocessUndoableCommand();
         deleteCommandTwo.preprocessUndoableCommand();
+        model.setTrueAdminMode(new Password());
     }
 
     @Test

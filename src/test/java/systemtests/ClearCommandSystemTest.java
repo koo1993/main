@@ -1,13 +1,15 @@
 package systemtests;
 
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
+import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_PASSWORD;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.testutil.TypicalEmployees.KEYWORD_MATCHING_MEIER;
 
 import org.junit.Test;
 
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.commands.ClearCommand;
+import seedu.ptman.logic.commands.LogInAdminCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.model.Model;
@@ -18,39 +20,39 @@ public class ClearCommandSystemTest extends PartTimeManagerSystemTest {
     @Test
     public void clear() {
         final Model defaultModel = getModel();
-
+        executeDefaultAdminLogin();
         /* Case: clear non-empty ptman book, command with leading spaces and trailing alphanumeric characters and
          * spaces -> cleared
          */
-        assertCommandSuccess("   " + ClearCommand.COMMAND_WORD + " ab12   " + DEFAULT_DESC_ADMINPASSWORD);
+        assertCommandSuccess("   " + ClearCommand.COMMAND_WORD + " ab12   ");
         assertSelectedCardUnchanged();
 
         /* Case: undo clearing ptman book -> original ptman book restored */
-        String command = UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
+        String command = UndoCommand.COMMAND_WORD;
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command,  expectedResultMessage, defaultModel);
         assertSelectedCardUnchanged();
 
         /* Case: redo clearing ptman book -> cleared */
-        command = RedoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD;
+        command = RedoCommand.COMMAND_WORD;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, expectedResultMessage, new ModelManager());
         assertSelectedCardUnchanged();
 
         /* Case: selects first card in employee list and clears ptman book -> cleared and no card selected */
-        executeCommand(UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD); // restores the original ptman book
+        executeCommand(UndoCommand.COMMAND_WORD); // restores the original ptman book
         selectEmployee(Index.fromOneBased(1));
-        assertCommandSuccess(ClearCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD);
+        assertCommandSuccess(ClearCommand.COMMAND_WORD);
         assertSelectedCardDeselected();
 
         /* Case: filters the employee list before clearing -> entire ptman book cleared */
-        executeCommand(UndoCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD); // restores the original ptman book
+        executeCommand(UndoCommand.COMMAND_WORD); // restores the original ptman book
         showEmployeesWithName(KEYWORD_MATCHING_MEIER);
-        assertCommandSuccess(ClearCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD);
+        assertCommandSuccess(ClearCommand.COMMAND_WORD);
         assertSelectedCardUnchanged();
 
         /* Case: clear empty ptman book -> cleared */
-        assertCommandSuccess(ClearCommand.COMMAND_WORD + DEFAULT_DESC_ADMINPASSWORD);
+        assertCommandSuccess(ClearCommand.COMMAND_WORD);
         assertSelectedCardUnchanged();
 
         /* Case: mixed case command word -> rejected */
@@ -80,6 +82,14 @@ public class ClearCommandSystemTest extends PartTimeManagerSystemTest {
         assertCommandBoxShowsDefaultStyle();
         assertStatusBarChangedExceptSaveLocation();
     }
+
+    /**
+     * Perform to transform PTMan to admin mode.
+     */
+    private void executeDefaultAdminLogin() {
+        executeCommand(LogInAdminCommand.COMMAND_WORD + " " + PREFIX_PASSWORD + DEFAULT_PASSWORD);
+    }
+
 
     /**
      * Executes {@code command} and verifies that the command box displays {@code command}, the result display

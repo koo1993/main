@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
+import static seedu.ptman.testutil.EmployeeUtil.DEFAULT_PASSWORD;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.ui.testutil.GuiTestAssert.assertListMatching;
 
@@ -14,6 +15,7 @@ import guitests.GuiRobot;
 import guitests.guihandles.HelpWindowHandle;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.HelpCommand;
+import seedu.ptman.logic.commands.LogInAdminCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.ui.BrowserPanel;
 import seedu.ptman.ui.StatusBarFooter;
@@ -32,6 +34,7 @@ public class HelpCommandSystemTest extends PartTimeManagerSystemTest {
     @Test
     public void openHelpWindow() {
         //use accelerator
+        executeDefaultAdminLogin();
         getCommandBox().click();
         getMainMenu().openHelpWindowUsingAccelerator();
         assertHelpWindowOpen();
@@ -70,8 +73,7 @@ public class HelpCommandSystemTest extends PartTimeManagerSystemTest {
 
         // assert that the status bar too is updated correctly while the help window is open
         // note: the select command tested above does not update the status bar
-        executeCommand(DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
-                + DEFAULT_DESC_ADMINPASSWORD);
+        executeCommand(DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased());
         assertNotEquals(StatusBarFooter.SYNC_STATUS_INITIAL, getStatusBarFooter().getSyncStatus());
     }
 
@@ -84,6 +86,13 @@ public class HelpCommandSystemTest extends PartTimeManagerSystemTest {
 
         new HelpWindowHandle(guiRobot.getStage(HelpWindowHandle.HELP_WINDOW_TITLE)).close();
         getMainWindowHandle().focus();
+    }
+
+    /**
+     * Perform to transform PTMan to admin mode.
+     */
+    private void executeDefaultAdminLogin() {
+        executeCommand(LogInAdminCommand.COMMAND_WORD + " " + PREFIX_PASSWORD + DEFAULT_PASSWORD);
     }
 
     /**

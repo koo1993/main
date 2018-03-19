@@ -3,7 +3,6 @@ package seedu.ptman.testutil;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_SALARY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
@@ -43,7 +42,6 @@ public class EmployeeUtil {
         employee.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
         );
-        sb.append(PREFIX_PASSWORD + DEFAULT_PASSWORD + " ");
         return sb.toString();
     }
 }

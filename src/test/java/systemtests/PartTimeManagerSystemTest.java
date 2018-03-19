@@ -4,7 +4,6 @@ import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_DESC_ADMINPASSWORD;
 import static seedu.ptman.ui.BrowserPanel.DEFAULT_PAGE;
 import static seedu.ptman.ui.StatusBarFooter.NUM_EMPLOYEES_STATUS;
 import static seedu.ptman.ui.StatusBarFooter.SYNC_STATUS_INITIAL;
@@ -176,7 +175,7 @@ public abstract class PartTimeManagerSystemTest {
      * Deletes all employees in PTMan.
      */
     protected void deleteAllEmployees() {
-        executeCommand(ClearCommand.COMMAND_WORD + " " + DEFAULT_DESC_ADMINPASSWORD);
+        executeCommand(ClearCommand.COMMAND_WORD + " ");
         assertEquals(0, getModel().getPartTimeManager().getEmployeeList().size());
     }
 

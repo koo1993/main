@@ -20,6 +20,7 @@ import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.PartTimeManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
@@ -103,9 +104,20 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean isAdmin(String password) {
+        public boolean isAdminMode() {
             fail("This method should not be called.");
-            return true;
+            return false;
+        }
+
+        @Override
+        public boolean setTrueAdminMode(Password password) {
+            fail("This method should not be called.");
+            return false;
+        }
+
+        @Override
+        public void setFalseAdminMode() {
+            fail("This method should not be called.");
         }
 
         @Override
@@ -157,6 +169,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean isAdminMode() {
+            return true;
+        }
+
+        @Override
         public ReadOnlyPartTimeManager getPartTimeManager() {
             return new PartTimeManager();
         }
@@ -172,6 +189,11 @@ public class AddCommandTest {
         public void addEmployee(Employee employee) throws DuplicateEmployeeException {
             requireNonNull(employee);
             employeesAdded.add(employee);
+        }
+
+        @Override
+        public boolean isAdminMode()  {
+            return true;
         }
 
         @Override
