@@ -135,16 +135,26 @@ Exits the app. +
 *Format:* `exit`
 
 === Employer Features
-These commands are privileged, and can only be executed by the employer. These commands requires the employer's admin password.
+These commands are privileged, and can only be executed by the employer. These commands requires logging in to admin mode.
+
+==== Adding an employee: `login`
+This command allow employer to be in admin mode to use all the employer features
+
+*format:* `login pw/AdminPassword`
 
 [CAUTION]
-Admin password must always be entered as the *last* parameter of a command.
+Remeber to log out after editing the data.
+
+==== Adding an employee: `logout`
+This command log out from admin mode.
+
+*format:* `logout`
 
 ==== Adding an employee: `add`
 
 Adds an employee to PTMan. +
-*Format:* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]... pw/ADMIN_PASSWORD` +
-*Shorthand:* `a n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]... pw/ADMIN_PASSWORD`
+*Format:* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]...` +
+*Shorthand:* `a n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]...`
 
 [TIP]
 An employee can have any number of tags (including 0)
@@ -160,8 +170,8 @@ Adds an employee named `Betsy Crowe` with email `betsycrowe@example.com`, addres
 ==== Editing an employee: `edit`
 
 Edits an existing employee in PTMan. +
-*Format:* `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]... pw/ADMIN_PASSWORD` +
-*Shorthand:* `e INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]... pw/ADMIN_PASSWORD`
+*Format:* `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...` +
+*Shorthand:* `e INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...`
 
 [NOTE]
 An employer password can't be edited. [refer to `rp` (reset password)]
@@ -186,8 +196,8 @@ Edits the name of the 2nd employee to be `Betsy Crower` and clears all existing 
 ==== Deleting an employee : `delete`
 
 Deletes the specified employee from PTMan. +
-*Format:* `delete INDEX pw/ADMIN_PASSWORD` +
-*Shorthand:* `d INDEX pw/ADMIN_PASSWORD`
+*Format:* `delete INDEX` +
+*Shorthand:* `d INDEX`
 
 ****
 * The employee will be deleted at the specified INDEX.
@@ -198,16 +208,16 @@ Deletes the specified employee from PTMan. +
 Examples:
 
 * `list` +
-`delete 2 pw/ADMIN_PASSWORD` +
+`delete 2` +
 Deletes the 2nd employee in PTMan.
 * `find Betsy` +
-`delete 1 pw/ADMIN_PASSWORD` +
+`delete 1` +
 Deletes the 1st employee in the results of the `find` command.
 
 ==== Resetting Password for an employee : `rp`
 
 Reset the password for employee from PTMan. +
-*Format:* `rp INDEX pw/ADMIN_PASSWORD` +
+*Format:* `rp INDEX` +
 
 ****
 * The password will reset for employee at the specified INDEX.
@@ -218,18 +228,18 @@ Reset the password for employee from PTMan. +
 Examples:
 
 * `list` +
-`rp 2 pw/ADMIN_PASSWORD` +
+`rp 2` +
 Reset password for the 2nd employee in PTMan.
 * `find Betsy` +
-`rp 1 pw/ADMIN_PASSWORD` +
+`rp 1` +
 Reset password for the 1st employee in the results of the `find` command.
 
 // tag::undoredo[]
 ==== Undoing previous command : `undo`
 
 Restores PTMan to the state before the previous _undoable_ command was executed. +
-*Format:* `undo pw/ADMIN_PASSWORD` +
-*Shorthand:* `u pw/ADMIN_PASSWORD`
+*Format:* `undo` +
+*Shorthand:* `u`
 
 [NOTE]
 ====
@@ -238,56 +248,56 @@ Undoable commands: Commands that modify PTMan's data (`add`, `delete`, `edit` an
 
 Examples:
 
-* `delete 1 pw/ADMIN_PASSWORD` +
+* `delete 1 +
 `list` +
-`undo pw/ADMIN_PASSWORD` (reverses the `delete 1` command) +
+`undo` (reverses the `delete 1` command) +
 
 * `list` +
-`undo pw/ADMIN_PASSWORD` +
+`undo` +
 The `undo` command fails as there are no undoable commands executed previously.
 
-* `delete 1 pw/ADMIN_PASSWORD` +
-`clear pw/ADMIN_PASSWORD` +
-`undo pw/ADMIN_PASSWORD` (reverses the `clear` command) +
-`undo pw/ADMIN_PASSWORD` (reverses the `delete 1` command) +
+* `delete 1` +
+`clear` +
+`undo` (reverses the `clear` command) +
+`undo` (reverses the `delete 1` command) +
 
 ==== Redoing the previously undone command: `redo`
 
 Reverses the most recent `undo` command. +
-*Format:* `redo pw/ADMIN_PASSWORD` +
-*Shorthand:* `r pw/ADMIN_PASSWORD`
+*Format:* `redo` +
+*Shorthand:* `r`
 
 Examples:
 
-* `delete 1 pw/ADMIN_PASSWORD` +
-`undo pw/ADMIN_PASSWORD` (reverses the `delete 1` command) +
-`redo pw/ADMIN_PASSWORD` (reapplies the `delete 1` command) +
+* `delete 1` +
+`undo` (reverses the `delete 1` command) +
+`redo` (reapplies the `delete 1` command) +
 
-* `delete 1 pw/ADMIN_PASSWORD` +
-`redo pw/ADMIN_PASSWORD` +
+* `delete 1` +
+`redo` +
 The `redo` command fails as there are no `undo` commands executed previously.
 
 * `delete 1 pw/ADMIN_PASSWORD` +
-`clear pw/ADMIN_PASSWORD` +
-`undo pw/ADMIN_PASSWORD` (reverses the `clear` command) +
-`undo pw/ADMIN_PASSWORD` (reverses the `delete 1` command) +
-`redo pw/ADMIN_PASSWORD` (reapplies the `delete 1` command) +
-`redo pw/ADMIN_PASSWORD` (reapplies the `clear` command) +
+`clear` +
+`undo` (reverses the `clear` command) +
+`undo` (reverses the `delete 1` command) +
+`redo` (reapplies the `delete 1` command) +
+`redo` (reapplies the `clear` command) +
 // end::undoredo[]
 
 ==== Clearing all entries : `clear`
 
 Clears all employees from PTMan. +
-*Format:* `clear pw/ADMIN_PASSWORD` +
-*Shorthand:* `c pw/ADMIN_PASSWORD`
+*Format:* `clear` +
+*Shorthand:* `c`
 
 ==== View all details of employee: `viewall`
 PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allows employer to view all the details for all the employee. +
-*Format:* `viewall pw/ADMIN_PASSWORD`
+*Format:* `viewall`
 
 ==== Edit outlet information: `editoutlet` [coming in v1.3]
 PTman outlet information can be modified anytime by the admin. +
-*Format:* `editoutlet n/NAME h/OPERATING_HOURS pw/ADMIN_PASSWORD` +
+*Format:* `editoutlet n/NAME h/OPERATING_HOURS` +
 
 [NOTE]
 ====
@@ -311,15 +321,15 @@ PTman outlets should be able to add a shift to the timetable indicating with how
 
 ==== Add employee to shift: `addto` [coming in v1.4]
 PTman outlets should be able to add an employee to a shift in the timetable. +
-*Format:* `addto d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME pw/ADMIN_PASSWORD` +
+*Format:* `addto d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME +
 
 ==== Delete employee from shift: `delfrom` [coming in v1.4]
 PTman outlets should be able to delete an employee from a shift in the timetable. +
-*Format:* `delfrom d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME pw/ADMIN_PASSWORD` +
+*Format:* `delfrom d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME` +
 
 ==== Reset to default shift: `resetshift` [coming in v1.4]
 PTman outlets should be able to reset a shift from the timetable to its default value. +
-*Format:* `resetshift d/DATE ts/START_TIME te/END_TIME pw/ADMIN_PASSWORD` +
+*Format:* `resetshift d/DATE ts/START_TIME te/END_TIME` +
 
 
 === Employee Features
