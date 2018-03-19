@@ -12,10 +12,10 @@ import seedu.ptman.model.Password;
  */
 public class LogInAdminCommandParser implements Parser<LogInAdminCommand> {
     /**
-     * Parses the given {@code String} of arguments in the context of the ClearCommand
-     * and returns an ClearCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the LogInAdminCommand
+     * and returns an LogInAdminCommand object for execution.
      *
-     * @throws ParseException if the user input does not conform the expected format
+     * @throws ParseException if the user input does not conform the expected format.
      */
     public LogInAdminCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PASSWORD);

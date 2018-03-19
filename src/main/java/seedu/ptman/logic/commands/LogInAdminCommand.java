@@ -1,5 +1,7 @@
 package seedu.ptman.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
@@ -25,6 +27,7 @@ public class LogInAdminCommand extends Command {
     private final Password toCheck;
 
     public LogInAdminCommand(Password password) {
+        requireNonNull(password);
         toCheck = password;
     }
 
