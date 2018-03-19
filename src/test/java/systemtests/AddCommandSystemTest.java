@@ -80,7 +80,6 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
 
         /* Case: undo adding Amy to the list -> Amy deleted */
         command = UndoCommand.COMMAND_WORD + " ";
-      
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
 

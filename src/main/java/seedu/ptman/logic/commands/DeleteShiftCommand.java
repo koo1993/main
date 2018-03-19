@@ -1,6 +1,7 @@
 package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +33,17 @@ public class DeleteShiftCommand extends UndoableCommand {
 
     public DeleteShiftCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
-        isAdminCommand = true;
     }
 
 
     @Override
-    public CommandResult executeUndoableCommand() {
+    public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(shiftToDelete);
+
+        if (!model.isAdminMode()) {
+            throw new CommandException(MESSAGE_ACCESS_DENIED);
+        }
+
         try {
             model.deleteShift(shiftToDelete);
         } catch (ShiftNotFoundException pnfe) {

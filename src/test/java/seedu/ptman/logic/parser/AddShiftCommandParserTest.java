@@ -1,12 +1,10 @@
 package seedu.ptman.logic.parser;
 
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.ptman.logic.commands.CommandTestUtil.ADMINPASSWORD_DESC_DEFAULT;
 import static seedu.ptman.logic.commands.CommandTestUtil.CAPACITY_DESC_1;
 import static seedu.ptman.logic.commands.CommandTestUtil.CAPACITY_DESC_2;
 import static seedu.ptman.logic.commands.CommandTestUtil.DAY_DESC_MONDAY;
 import static seedu.ptman.logic.commands.CommandTestUtil.DAY_DESC_TUESDAY;
-import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT_PASSWORD;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_CAPACITY_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_DAY_DESC;
 import static seedu.ptman.logic.commands.CommandTestUtil.INVALID_TIME_END_DESC;
@@ -43,23 +41,23 @@ public class AddShiftCommandParserTest {
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + DAY_DESC_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, new AddShiftCommand(expectedShift));
+                + CAPACITY_DESC_1, new AddShiftCommand(expectedShift));
 
         // multiple days - last day accepted
         assertParseSuccess(parser, DAY_DESC_TUESDAY + DAY_DESC_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, new AddShiftCommand(expectedShift));
+                + CAPACITY_DESC_1, new AddShiftCommand(expectedShift));
 
         // multiple start times - last start time accepted
         assertParseSuccess(parser, DAY_DESC_MONDAY + TIME_START_DESC_12PM + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, new AddShiftCommand(expectedShift));
+                + CAPACITY_DESC_1, new AddShiftCommand(expectedShift));
 
         // multiple end times - last end time accepted
         assertParseSuccess(parser, DAY_DESC_MONDAY + TIME_START_DESC_10AM +  TIME_END_DESC_10PM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, new AddShiftCommand(expectedShift));
+                + CAPACITY_DESC_1, new AddShiftCommand(expectedShift));
 
         // multiple capacities - last capacity accepted
         assertParseSuccess(parser, DAY_DESC_MONDAY + TIME_START_DESC_10AM +  TIME_END_DESC_8PM
-                + CAPACITY_DESC_2 + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, new AddShiftCommand(expectedShift));
+                + CAPACITY_DESC_2 + CAPACITY_DESC_1, new AddShiftCommand(expectedShift));
 
     }
 
@@ -69,56 +67,48 @@ public class AddShiftCommandParserTest {
 
         // missing day prefix
         assertParseFailure(parser,  VALID_DAY_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, expectedMessage);
+                + CAPACITY_DESC_1, expectedMessage);
 
         // missing start time prefix
         assertParseFailure(parser,  DAY_DESC_MONDAY + VALID_TIME_START_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, expectedMessage);
+                + CAPACITY_DESC_1, expectedMessage);
         // missing end time prefix
         assertParseFailure(parser,  DAY_DESC_MONDAY + TIME_START_DESC_10AM + VALID_TIME_END_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT, expectedMessage);
+                + CAPACITY_DESC_1, expectedMessage);
         // missing capacity prefix
         assertParseFailure(parser,  DAY_DESC_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + VALID_CAPACITY_1 + ADMINPASSWORD_DESC_DEFAULT, expectedMessage);
-        // missing password prefix
-        assertParseFailure(parser,  DAY_DESC_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + DEFAULT_PASSWORD, expectedMessage);
+                + VALID_CAPACITY_1, expectedMessage);
 
         // all prefixes missing
-        assertParseFailure(parser, VALID_DAY_MONDAY + VALID_TIME_START_10AM + VALID_TIME_END_8PM + VALID_CAPACITY_1
-                        + DEFAULT_PASSWORD, expectedMessage);
+        assertParseFailure(parser, VALID_DAY_MONDAY + VALID_TIME_START_10AM + VALID_TIME_END_8PM + VALID_CAPACITY_1,
+                expectedMessage);
     }
 
     @Test
     public void parse_invalidValue_failure() {
         // invalid day
         assertParseFailure(parser, INVALID_DAY_DESC + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT,
-                Day.MESSAGE_DAY_CONSTRAINTS);
+                + CAPACITY_DESC_1, Day.MESSAGE_DAY_CONSTRAINTS);
 
         // invalid start time
         assertParseFailure(parser, DAY_DESC_MONDAY + INVALID_TIME_START_DESC + TIME_END_DESC_8PM
-                        + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT,
-                Time.MESSAGE_TIME_CONSTRAINTS);
+                        + CAPACITY_DESC_1, Time.MESSAGE_TIME_CONSTRAINTS);
 
         // invalid end time
         assertParseFailure(parser, DAY_DESC_MONDAY + TIME_START_DESC_10AM + INVALID_TIME_END_DESC
-                        + CAPACITY_DESC_1 + ADMINPASSWORD_DESC_DEFAULT,
-                Time.MESSAGE_TIME_CONSTRAINTS);
+                        + CAPACITY_DESC_1, Time.MESSAGE_TIME_CONSTRAINTS);
 
         // invalid capacity
         assertParseFailure(parser, DAY_DESC_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                        + INVALID_CAPACITY_DESC + ADMINPASSWORD_DESC_DEFAULT,
-                Capacity.MESSAGE_CAPACITY_CONSTRAINTS);
+                        + INVALID_CAPACITY_DESC, Capacity.MESSAGE_CAPACITY_CONSTRAINTS);
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, DAY_DESC_MONDAY + TIME_START_DESC_10AM + INVALID_TIME_END_DESC
-                        + INVALID_CAPACITY_DESC + ADMINPASSWORD_DESC_DEFAULT,
-                Time.MESSAGE_TIME_CONSTRAINTS);
+                        + INVALID_CAPACITY_DESC, Time.MESSAGE_TIME_CONSTRAINTS);
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + DAY_DESC_MONDAY + TIME_START_DESC_10AM + TIME_END_DESC_8PM
-                        + INVALID_CAPACITY_DESC + ADMINPASSWORD_DESC_DEFAULT,
+                        + INVALID_CAPACITY_DESC,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddShiftCommand.MESSAGE_USAGE));
     }
 }

@@ -2,7 +2,6 @@ package seedu.ptman.testutil;
 
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_CAPACITY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DAY;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
@@ -37,7 +36,6 @@ public class ShiftUtil {
         sb.append(PREFIX_TIME_START + shift.getStartTime().toString() + " ");
         sb.append(PREFIX_TIME_END + shift.getEndTime().toString() + " ");
         sb.append(PREFIX_CAPACITY + shift.getCapacity().toString() + " ");
-        sb.append(PREFIX_PASSWORD + DEFAULT_PASSWORD + " ");
         return sb.toString();
     }
 }

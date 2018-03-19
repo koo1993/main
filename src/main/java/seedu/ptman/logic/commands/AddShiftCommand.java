@@ -1,9 +1,9 @@
 package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_CAPACITY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DAY;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
@@ -25,13 +25,11 @@ public class AddShiftCommand extends UndoableCommand {
             + PREFIX_TIME_START + "START_TIME "
             + PREFIX_TIME_END + "END_TIME "
             + PREFIX_CAPACITY + "CAPACITY "
-            + PREFIX_PASSWORD + "ADMINPASSWORD "
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_DAY + "Monday "
             + PREFIX_TIME_START + "0900 "
             + PREFIX_TIME_END + "1600 "
-            + PREFIX_CAPACITY + "5 "
-            + PREFIX_PASSWORD + "AdminPassword ";
+            + PREFIX_CAPACITY + "5 ";
 
     public static final String MESSAGE_SUCCESS = "New shift added: %1$s";
     public static final String MESSAGE_DUPLICATE_SHIFT = "This shift already exists in PTMan";
@@ -44,12 +42,16 @@ public class AddShiftCommand extends UndoableCommand {
     public AddShiftCommand(Shift shift) {
         requireNonNull(shift);
         toAdd = shift;
-        isAdminCommand = true;
     }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(model);
+
+        if (!model.isAdminMode()) {
+            throw new CommandException(MESSAGE_ACCESS_DENIED);
+        }
+
         try {
             model.addShift(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));

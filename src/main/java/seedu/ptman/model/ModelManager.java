@@ -98,11 +98,8 @@ public class ModelManager extends ComponentManager implements Model {
     public synchronized void setFalseAdminMode() {
         partTimeManager.setAdminMode(false);
     }
-  
-    public synchronized boolean isAdmin(String password) {
-        return partTimeManager.isAdmin(password);
-    }
-  
+
+    @Override
     public void addShift(Shift shift) throws DuplicateShiftException {
         partTimeManager.addShift(shift);
         indicatePartTimeManagerChanged();

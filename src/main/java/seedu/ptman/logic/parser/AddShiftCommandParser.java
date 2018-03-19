@@ -3,7 +3,6 @@ package seedu.ptman.logic.parser;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_CAPACITY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DAY;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
@@ -30,10 +29,10 @@ public class AddShiftCommandParser implements Parser<AddShiftCommand> {
     public AddShiftCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_DAY, PREFIX_TIME_START,
-                        PREFIX_TIME_END, PREFIX_CAPACITY, PREFIX_PASSWORD);
+                        PREFIX_TIME_END, PREFIX_CAPACITY);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_DAY, PREFIX_TIME_START,
-                PREFIX_TIME_END, PREFIX_CAPACITY, PREFIX_PASSWORD)
+                PREFIX_TIME_END, PREFIX_CAPACITY)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddShiftCommand.MESSAGE_USAGE));
         }

@@ -3,7 +3,6 @@ package seedu.ptman.logic.parser;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
-import static seedu.ptman.logic.commands.CommandTestUtil.ADMINPASSWORD_DESC_DEFAULT;
 import static seedu.ptman.logic.commands.CommandTestUtil.DEFAULT1_HASH;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.ptman.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;

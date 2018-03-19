@@ -12,6 +12,7 @@ import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_SHIFT;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_OUT_OF_BOUNDS_SHIFT;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_SECOND_SHIFT;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import seedu.ptman.commons.core.Messages;
@@ -20,6 +21,7 @@ import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.outlet.Shift;
 
@@ -30,6 +32,11 @@ import seedu.ptman.model.outlet.Shift;
 public class DeleteShiftCommandTest {
 
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+
+    @Before
+    public void setupAdminMode() {
+        model.setTrueAdminMode(new Password());
+    }
 
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {

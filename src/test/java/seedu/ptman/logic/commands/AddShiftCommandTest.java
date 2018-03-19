@@ -22,6 +22,7 @@ import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.PartTimeManager;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
@@ -46,8 +47,9 @@ public class AddShiftCommandTest {
     @Test
     public void execute_shiftAcceptedByModel_addSuccessful() throws Exception {
         ModelStubAcceptingShiftAdded modelStub = new ModelStubAcceptingShiftAdded();
-        Shift validShift = new ShiftBuilder().build();
+        modelStub.setTrueAdminMode(new Password());
 
+        Shift validShift = new ShiftBuilder().build();
         CommandResult commandResult = getAddShiftCommandForShift(validShift, modelStub).execute();
 
         assertEquals(String.format(AddShiftCommand.MESSAGE_SUCCESS, validShift), commandResult.feedbackToUser);
@@ -57,6 +59,7 @@ public class AddShiftCommandTest {
     @Test
     public void execute_duplicateShift_throwsCommandException() throws Exception {
         ModelStub modelStub = new ModelStubThrowingDuplicateShiftException();
+        modelStub.setTrueAdminMode(new Password());
         Shift validShift = new ShiftBuilder().build();
 
         thrown.expect(CommandException.class);
@@ -109,11 +112,24 @@ public class AddShiftCommandTest {
         public void addShift(Shift shift) throws DuplicateShiftException {
             fail("This method should not be called.");
         }
-
-        public boolean isAdmin(String password) {
+        @Override
+        public boolean isAdminMode() {
             fail("This method should not be called.");
-            return true;
+            return false;
         }
+
+        @Override
+        public boolean setTrueAdminMode(Password password) {
+            fail("This method should not be called.");
+
+            return false;
+        }
+
+        @Override
+        public void setFalseAdminMode() {
+            fail("This method should not be called.");
+        }
+
 
         @Override
         public void deleteTagFromAllEmployee(Tag tag) {
@@ -175,6 +191,17 @@ public class AddShiftCommandTest {
         }
 
         @Override
+        public boolean isAdminMode() {
+            return true;
+        }
+
+        @Override
+        public boolean setTrueAdminMode(Password password) {
+            requireNonNull(password);
+            return true;
+        }
+
+        @Override
         public ReadOnlyPartTimeManager getPartTimeManager() {
             return new PartTimeManager();
         }
@@ -190,6 +217,17 @@ public class AddShiftCommandTest {
         public void addShift(Shift shift) throws DuplicateShiftException {
             requireNonNull(shift);
             shiftsAdded.add(shift);
+        }
+
+        @Override
+        public boolean setTrueAdminMode(Password password) {
+            requireNonNull(password);
+            return true;
+        }
+
+        @Override
+        public boolean isAdminMode() {
+            return true;
         }
 
         @Override
