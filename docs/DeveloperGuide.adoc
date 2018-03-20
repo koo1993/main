@@ -500,6 +500,56 @@ All outlet information is stored in a separate file with data encryption to ensu
 Outlet information is displayed in the outlet panel above the time table.
 Any change in the outlet information will be reflected immediately after the command.
 
+
+=== Password Class
+
+==== Reason for implementation
+As PTMan is currently designed to use locally on a system, both employer and employee must go through the same system to allocate their preferred slot or to edit the data in PTMan. A Password class is given to both employer and employee to ensure that they are the authorized person that is using the system.
+
+==== How it is implemented
+A Password class is created with two constructors.
+----
+new Password();
+new Password(String hashCode);
+----
+`new Password()` produce hash code converted by https://en.wikipedia.org/wiki/SHA-2[SHA-256] using the default password "DEFAULT1" and store it within the class. +
+
+`new Password(String hashCode)` allows storage to directly insert the generated hash code to create the password class upon loading. +
+
+[NOTE]
+To create a password with desired password String, one can invoke the method below.
+----
+createPassword(String password)
+----
+
+==== Reasons for how it is implemented
+The reason of converting password string to hashCode is to protect user’s password from being seen in the storage file.  Anyone who get hold of the data are not able to convert the hashCode back to the original password string as SHA-256 is a https://en.wikipedia.org/wiki/Collision_resistance[collision resistant] hash.
+
+=== Feature Admin Mode
+
+==== Reason for implementation
+Initial stage of PTMan require huge amount of manual input by admin. To promote hassle-free command, employers can log in to admin mode and use the command provided without the need to enter the password for every command.
+
+==== How it is implemented
+Model component now implement three new API for logic component to use.
+----
+boolean isAdminMode();
+boolean setTrueAdminMode(Password password);
+
+/** guarantee to break out from adminMode */
+setFalseAdminMode();
+----
+
+`setTrueAdminMode(Password password)` requires a password that will check against the outlet password and set admin mode accordingly. Failing to give the correct password will result in returning false.
+
+[NOTE]
+In order to enable the command to be usable only in command mode the code below must be added to the execution() of the command *first*.
+----
+if (!model.isAdminMode()) {
+    throw new CommandException(MESSAGE_ACCESS_DENIED);
+}
+----
+
 // tag::dataencryption[]
 === [Proposed] Data Encryption
 
