@@ -10,27 +10,27 @@ import java.util.stream.Stream;
 
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.exceptions.IllegalValueException;
-import seedu.ptman.logic.commands.ChangeEmployeePasswordCommand;
+import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
 
 /**
- * Parses input arguments and creates a new ChangeEmployeePasswordCommand object
+ * Parses input arguments and creates a new ChangePasswordCommand object
  */
-public class ChangeEmployeePasswordCommandParser implements Parser<ChangeEmployeePasswordCommand> {
+public class ChangePasswordCommandParser implements Parser<ChangePasswordCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the AddCommand
-     * and returns an AddCommand object for execution.
+     * and returns an ChangePasswordCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
-    public ChangeEmployeePasswordCommand parse(String args) throws ParseException {
+    public ChangePasswordCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_PASSWORD);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_PASSWORD)){
+        if (!arePrefixesPresent(argMultimap, PREFIX_PASSWORD)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    ChangeEmployeePasswordCommand.MESSAGE_USAGE));
+                    ChangePasswordCommand.MESSAGE_USAGE));
         }
 
         Index index;
@@ -41,12 +41,12 @@ public class ChangeEmployeePasswordCommandParser implements Parser<ChangeEmploye
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    ChangeEmployeePasswordCommand.MESSAGE_USAGE));
+                    ChangePasswordCommand.MESSAGE_USAGE));
         }
 
         checkPasswordValidity(passwords.get(1));
 
-        return new ChangeEmployeePasswordCommand(index, passwords);
+        return new ChangePasswordCommand(index, passwords);
     }
 
     /**
@@ -74,12 +74,12 @@ public class ChangeEmployeePasswordCommandParser implements Parser<ChangeEmploye
     public static ArrayList<String> parsePasswords(Collection<String> passwords) throws ParseException {
         requireNonNull(passwords);
         final ArrayList<String> passwordSet = new ArrayList<>();
-           for (String password : passwords) {
+        for (String password : passwords) {
             passwordSet.add(password);
         }
 
         if (passwordSet.size() != 3) {
-            throw new ParseException("Incorrect number of passwords");
+            throw new ParseException("Incorrect number of passwords provided");
         }
 
         return passwordSet;

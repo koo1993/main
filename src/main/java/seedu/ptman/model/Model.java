@@ -41,7 +41,6 @@ public interface Model {
     boolean isAdminMode();
 
     /**
-     * Replaces the given employee {@code target}
      * check if given password {@code password}
      * is authorized and set to admin mode
      *
@@ -54,8 +53,14 @@ public interface Model {
      */
     void setFalseAdminMode();
 
+    /**
+     * Store and map employee temporarily password with the given employee and password.
+     */
     void storeResetPassword(Employee employee, Password tempPassword);
 
+    /**
+     * check if the {@code tempPassword} given is the temporarily password for the {@code employee}
+     */
     boolean isCorrectTempPwd(Employee employee, Password tempPassword);
 
     /**

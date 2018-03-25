@@ -25,7 +25,7 @@ import seedu.ptman.model.tag.Tag;
 /**
  * Change password of an existing employee in PTMan.
  */
-public class ChangeEmployeePasswordCommand extends Command {
+public class ChangePasswordCommand extends Command {
 
     public static final String COMMAND_WORD = "changepw";
 
@@ -45,10 +45,10 @@ public class ChangeEmployeePasswordCommand extends Command {
 
     /**
      * @param index of the employee in the filtered employee list to edit
-     * @param passwords should contain 3 password in the sequence of:
+     * @param passwords should contain 3 password String in the sequence of:
      *                 confirmed password, new password, confirmed new password
      */
-    public ChangeEmployeePasswordCommand(Index index, ArrayList<String> passwords) {
+    public ChangePasswordCommand(Index index, ArrayList<String> passwords) {
         requireNonNull(index);
         requireNonNull(passwords);
         this.index = index;
@@ -58,7 +58,7 @@ public class ChangeEmployeePasswordCommand extends Command {
     @Override
     public CommandResult execute() throws CommandException {
 
-        checkConfirmedPassword(passwords);
+        checkConfirmedPassword(passwords.get(1), passwords.get(2));
 
         List<Employee> lastShownList = model.getFilteredEmployeeList();
         if (index.getZeroBased() >= lastShownList.size()) {
@@ -68,7 +68,7 @@ public class ChangeEmployeePasswordCommand extends Command {
         Password currentPassword = parsePassword(passwords.get(0));
         employeeToEdit = lastShownList.get(index.getZeroBased());
 
-        checkCurrentPassword(currentPassword, employeeToEdit);
+        checkAuthenticity(currentPassword, employeeToEdit);
 
         editedEmployee = createNewPasswordEmployee(employeeToEdit, parsePassword(passwords.get(1)));
 
@@ -84,11 +84,12 @@ public class ChangeEmployeePasswordCommand extends Command {
     }
 
     /**
-     * Function to check password given
+     * Check password given is employee's or it's temp password.
      * @param currentPassword
      * @throws InvalidPasswordException if password is invalid
      */
-    private void checkCurrentPassword(Password currentPassword, Employee employeeToEdit) throws InvalidPasswordException {
+    private void checkAuthenticity(Password currentPassword, Employee employeeToEdit)
+            throws InvalidPasswordException {
         if (!employeeToEdit.isCorrectPassword(currentPassword)
                 && !model.isCorrectTempPwd(employeeToEdit, currentPassword)) {
             throw new InvalidPasswordException();
@@ -99,8 +100,8 @@ public class ChangeEmployeePasswordCommand extends Command {
      * Check confirmed new password with new password
      * @throws CommandException if both password are not the same
      */
-    private void checkConfirmedPassword(ArrayList<String> passwords) throws CommandException {
-        if (!passwords.get(2).equals(passwords.get(1))) {
+    private void checkConfirmedPassword(String newPassword, String confirmedPassword) throws CommandException {
+        if (!newPassword.equals(confirmedPassword)) {
             throw new CommandException(MESSAGE_INVALID_CONFIMREDPASSWORD);
         }
     }
@@ -132,12 +133,12 @@ public class ChangeEmployeePasswordCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof ChangeEmployeePasswordCommand)) {
+        if (!(other instanceof ChangePasswordCommand)) {
             return false;
         }
 
         // state check
-        ChangeEmployeePasswordCommand e = (ChangeEmployeePasswordCommand) other;
+        ChangePasswordCommand e = (ChangePasswordCommand) other;
         return index.equals(e.index)
                 && passwords.equals(e.passwords)
                 && Objects.equals(employeeToEdit, e.employeeToEdit);

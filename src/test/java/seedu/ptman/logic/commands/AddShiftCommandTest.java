@@ -123,7 +123,6 @@ public class AddShiftCommandTest {
         @Override
         public boolean setTrueAdminMode(Password password) {
             fail("This method should not be called.");
-
             return false;
         }
 
@@ -132,6 +131,16 @@ public class AddShiftCommandTest {
             fail("This method should not be called.");
         }
 
+        @Override
+        public void storeResetPassword(Employee employee, Password tempPassword) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public boolean isCorrectTempPwd(Employee employee, Password tempPassword) {
+            fail("This method should not be called.");
+            return false;
+        }
 
         @Override
         public void deleteTagFromAllEmployee(Tag tag) {

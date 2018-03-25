@@ -18,10 +18,7 @@ import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_SECOND_EMPLOYEE;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-
-import org.junit.rules.ExpectedException;
 
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
@@ -41,9 +38,6 @@ import seedu.ptman.testutil.EmployeeBuilder;
  * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for EditCommand.
  */
 public class EditCommandTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
 
     @Before

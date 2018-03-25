@@ -26,6 +26,7 @@ public class PasswordTest {
         assertEquals(password, expectPassword);
     }
 
+
     @Test
     public void isValidPassword() {
         // null password
@@ -79,8 +80,6 @@ public class PasswordTest {
         Password password = new Password(encodedHash);
 
         assertFalse(password.isCorrectPassword("newPassword"));
-
-
         assertTrue(password.isCorrectPassword("DEFAULT1"));
     }
 

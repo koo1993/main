@@ -106,7 +106,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public void storeResetPassword(Employee employee, Password tempPassword) {
-            tempPasswordMap.put(employee, tempPassword);
+        tempPasswordMap.put(employee, tempPassword);
     }
 
     @Override
