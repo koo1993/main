@@ -2,38 +2,17 @@ package seedu.ptman.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.ptman.commons.util.AppUtil.checkArgument;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_SALARY;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.exceptions.IllegalValueException;
-import seedu.ptman.logic.commands.AddCommand;
 import seedu.ptman.logic.commands.ChangeEmployeePasswordCommand;
-import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
-import seedu.ptman.model.employee.Address;
-import seedu.ptman.model.employee.Email;
-import seedu.ptman.model.employee.Employee;
-import seedu.ptman.model.employee.Name;
-import seedu.ptman.model.employee.Phone;
-import seedu.ptman.model.employee.Salary;
-import seedu.ptman.model.tag.Tag;
 
 /**
  * Parses input arguments and creates a new ChangeEmployeePasswordCommand object
@@ -65,13 +44,20 @@ public class ChangeEmployeePasswordCommandParser implements Parser<ChangeEmploye
                     ChangeEmployeePasswordCommand.MESSAGE_USAGE));
         }
 
-        if (!Password.isValidPassword(passwords.get(1))) {
-            throw new ParseException(Password.MESSAGE_PASSWORD_CONSTRAINTS);
-        }
+        checkPasswordValidity(passwords.get(1));
 
         return new ChangeEmployeePasswordCommand(index, passwords);
+    }
 
-
+    /**
+     * Check validity of the password string given
+     * @param passwords
+     * @throws ParseException if it does not satisfy the password 8 length restriction.
+     */
+    private void checkPasswordValidity(String passwords) throws ParseException {
+        if (!Password.isValidPassword(passwords)) {
+            throw new ParseException(Password.MESSAGE_PASSWORD_CONSTRAINTS);
+        }
     }
 
     /**

@@ -118,8 +118,7 @@ public class Password {
      */
     public static String generateRandomPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        String randomPwd = RandomStringUtils.random( 8, characters );
-        System.out.println(randomPwd);
+        String randomPwd = RandomStringUtils.random(8, characters);
         return randomPwd;
     }
 
