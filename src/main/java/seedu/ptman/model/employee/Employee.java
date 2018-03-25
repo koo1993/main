@@ -65,6 +65,10 @@ public class Employee {
         return password;
     }
 
+    public boolean isCorrectPassword(Password password) {
+        return this.password.equals(password);
+    }
+
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.

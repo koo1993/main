@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import seedu.ptman.logic.commands.AddCommand;
 import seedu.ptman.logic.commands.AddShiftCommand;
+import seedu.ptman.logic.commands.ChangeEmployeePasswordCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.Command;
 import seedu.ptman.logic.commands.DeleteCommand;
@@ -67,6 +68,9 @@ public class PartTimeManagerParser {
 
         case LogInAdminCommand.COMMAND_WORD:
             return new LogInAdminCommandParser().parse(arguments);
+
+        case ChangeEmployeePasswordCommand.COMMAND_WORD:
+            return new ChangeEmployeePasswordCommandParser().parse(arguments);
 
         case AddCommand.COMMAND_WORD:
         case AddCommand.COMMAND_ALIAS:
