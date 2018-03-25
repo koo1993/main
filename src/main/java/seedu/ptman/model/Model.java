@@ -54,6 +54,10 @@ public interface Model {
      */
     void setFalseAdminMode();
 
+    void storeResetPassword(Employee employee, Password tempPassword);
+
+    boolean isCorrectTempPwd(Employee employee, Password tempPassword);
+
     /**
      * Delete tag from all employees
      */

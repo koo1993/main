@@ -7,6 +7,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 /**
  * Represents a Password in PartTimeManger
  * Store password as hashCode
@@ -108,6 +110,17 @@ public class Password {
             System.out.println("cannot generate hash: MessageDigest.getInstance");
         }
         return encodedHash;
+    }
+
+    /**
+     *
+     * @return random 8 alphaNumeric password.
+     */
+    public static String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String randomPwd = RandomStringUtils.random( 8, characters );
+        System.out.println(randomPwd);
+        return randomPwd;
     }
 
     @Override
