@@ -13,6 +13,7 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_SHIFT;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,8 @@ import seedu.ptman.logic.commands.AddCommand;
 import seedu.ptman.logic.commands.AddShiftCommand;
 import seedu.ptman.logic.commands.AnnouncementCommand;
 import seedu.ptman.logic.commands.ApplyCommand;
+import seedu.ptman.logic.commands.ChangeMasterPasswordCommand;
+import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
@@ -168,6 +171,56 @@ public class PartTimeManagerParserTest {
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_ALIAS + " "
                 + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + EmployeeUtil.getEmployeeDetails(employee));
         assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor), command);
+    }
+
+    @Test
+    public void parseCommand_changePassword() throws Exception {
+        ArrayList<String> passwords = new ArrayList<>();
+        passwords.add("DEFAULT1");
+        passwords.add("DEFAULT2");
+        passwords.add("DEFAULT2");
+        ChangePasswordCommand command =
+                (ChangePasswordCommand) parser.parseCommand(ChangePasswordCommand.COMMAND_WORD
+                        + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + " pw/DEFAULT1 " + " pw/DEFAULT2 "
+                        + " pw/DEFAULT2 ");
+        assertEquals(new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, passwords), command);
+    }
+
+    @Test
+    public void parseCommand_changePasswordAlias() throws Exception {
+        ArrayList<String> passwords = new ArrayList<>();
+        passwords.add("DEFAULT1");
+        passwords.add("DEFAULT2");
+        passwords.add("DEFAULT2");
+        ChangePasswordCommand command =
+                (ChangePasswordCommand) parser.parseCommand(ChangePasswordCommand.COMMAND_ALIAS
+                        + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + " pw/DEFAULT1 " + " pw/DEFAULT2 "
+                        + " pw/DEFAULT2 ");
+        assertEquals(new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, passwords), command);
+    }
+
+    @Test
+    public void parseCommand_changeMasterPassword() throws Exception {
+        ArrayList<String> passwords = new ArrayList<>();
+        passwords.add("DEFAULT1");
+        passwords.add("DEFAULT2");
+        passwords.add("DEFAULT2");
+        ChangeMasterPasswordCommand command =
+                (ChangeMasterPasswordCommand) parser.parseCommand(ChangeMasterPasswordCommand.COMMAND_WORD
+                        + " pw/DEFAULT1 " + " pw/DEFAULT2 " + " pw/DEFAULT2 ");
+        assertEquals(new ChangeMasterPasswordCommand(passwords), command);
+    }
+
+    @Test
+    public void parseCommand_changeMasterPasswordAlias() throws Exception {
+        ArrayList<String> passwords = new ArrayList<>();
+        passwords.add("DEFAULT1");
+        passwords.add("DEFAULT2");
+        passwords.add("DEFAULT2");
+        ChangeMasterPasswordCommand command =
+                (ChangeMasterPasswordCommand) parser.parseCommand(ChangeMasterPasswordCommand.COMMAND_ALIAS
+                        + " pw/DEFAULT1 " + " pw/DEFAULT2 " + " pw/DEFAULT2 ");
+        assertEquals(new ChangeMasterPasswordCommand(passwords), command);
     }
 
     @Test
