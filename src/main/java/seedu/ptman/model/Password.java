@@ -111,23 +111,7 @@ public class Password {
         }
         return encodedHash;
     }
-
-    /**
-     *
-     * @return random 8 alphaNumeric password.
-     */
-    public static String generateRandomPassword() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        String randomPwd = RandomStringUtils.random(8, characters);
-        return randomPwd;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof Password // instanceof handles nulls
-                && this.passwordHash.equals(((Password) other).passwordHash)); // state check
-    }
+    
 
     @Override
     public int hashCode() {
