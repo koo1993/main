@@ -14,7 +14,8 @@ import seedu.ptman.model.Password;
 
 /**
  * As we are only doing white-box testing, our test cases do not cover path variations
- * outside of the DeleteCommand code. For example, inputs "1" and "1 abc" take the
+ * outside of the ChangePasswordCommand code. For example, inputs "1 pw/default1 pw/default2 pw/default2"
+ * and ""1 pw/default1 pw/default2 abc pw/default2" take the
  * same path through the ChangePasswordCommandParser, and therefore we test only one of them.
  * The path variation for those two cases occur inside the ParserUtil, and
  * therefore should be covered by the ParserUtilTest.
@@ -42,9 +43,10 @@ public class ChangePasswordCommandParserTest {
                 ChangePasswordCommand.MESSAGE_USAGE));
 
         // new password that fulfill the 8 characters
-        assertParseFailure(parser, "1 pw/default pw/newnot8 pw/newnot8", Password.MESSAGE_PASSWORD_CONSTRAINTS);
+        assertParseFailure(parser, "1 pw/default1 pw/newnot8 pw/newnot8", Password.MESSAGE_PASSWORD_CONSTRAINTS);
 
-
+        // random character inbetween prefix
+        assertParseFailure(parser, "1 pw/default1 pw/default2 ab1 pw/default2", Password.MESSAGE_PASSWORD_CONSTRAINTS);
     }
 
     @Test

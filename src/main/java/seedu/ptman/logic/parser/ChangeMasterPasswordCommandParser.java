@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.logic.commands.ChangeMasterPasswordCommand;
-import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
 
@@ -30,7 +29,7 @@ public class ChangeMasterPasswordCommandParser implements Parser<ChangeMasterPas
 
         if (!arePrefixesPresent(argMultimap, PREFIX_PASSWORD) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    ChangePasswordCommand.MESSAGE_USAGE));
+                    ChangeMasterPasswordCommand.MESSAGE_USAGE));
         }
 
         ArrayList<String> passwords;

@@ -100,7 +100,6 @@ public class OutletInformation {
         return timetable;
     }
 
-<<<<<<< HEAD
     /**
      * Set the outlet password.
      * only set after checking against outlet password.
@@ -109,10 +108,10 @@ public class OutletInformation {
     public void setOutletPassword (Password password) {
         requireNonNull(password);
         this.masterPassword = password;
-=======
+
+    }
     public Announcement getAnnouncement() {
         return announcement;
->>>>>>> 74547c581f0510723133d30337b4679c7c1efa42
     }
 
     public void setOutletInformation(OutletName name, OperatingHours operatingHours, OutletContact outletContact,
