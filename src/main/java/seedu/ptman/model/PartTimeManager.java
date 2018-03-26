@@ -76,6 +76,22 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         return outlet.getMasterPassword().equals(password);
     }
 
+    /**
+     * set admin mode only after check against adminPassword
+     * @param isAdmin
+     */
+    public void setAdminMode(boolean isAdmin) {
+        isAdminMode = isAdmin;
+    }
+
+    /**
+     * set password for outlet
+     * @param password
+     */
+    public void setAdminPassword(Password password) {
+        outlet.setOutletPassword(password);
+    }
+
     //// list overwrite operations
 
     public void setEmployees(List<Employee> employees) throws DuplicateEmployeeException {
@@ -228,10 +244,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     }
 
     //// util methods
-    public void setAdminMode(boolean isAdmin) {
-        isAdminMode = isAdmin;
-    }
-
 
     /**
      * Remove tag from Employee if the tag exist in Employee.

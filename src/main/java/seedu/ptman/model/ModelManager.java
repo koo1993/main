@@ -105,6 +105,16 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
+    public boolean isAdminPassword(Password password) {
+        return partTimeManager.isAdminPassword(password);
+    }
+
+    @Override
+    public void setAdminPassword(Password password) {
+        partTimeManager.setAdminPassword(password);
+    }
+
+    @Override
     public void storeResetPassword(Employee employee, Password tempPassword) {
         tempPasswordMap.put(employee, tempPassword);
     }

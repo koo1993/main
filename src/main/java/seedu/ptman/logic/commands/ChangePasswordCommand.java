@@ -31,6 +31,7 @@ import seedu.ptman.model.tag.Tag;
 public class ChangePasswordCommand extends Command {
 
     public static final String COMMAND_WORD = "changepw";
+    public static final String COMMAND_ALIAS = "cp";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " INDEX" + " pw/currentPassword "
             + "pw/NewPassword "  + "pw/ConfirmNewPassword ";

@@ -36,8 +36,6 @@ public interface Model {
     /** Adds the given shift */
     void addShift(Shift shift) throws DuplicateShiftException;
 
-
-
     boolean isAdminMode();
 
     /**
@@ -52,6 +50,10 @@ public interface Model {
      * guarantee to set false
      */
     void setFalseAdminMode();
+
+    boolean isAdminPassword(Password password);
+
+    void setAdminPassword(Password password);
 
     /**
      * Store and map employee temporarily password with the given employee and password.

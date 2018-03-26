@@ -109,6 +109,18 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean isAdminPassword(Password password) {
+            fail("This method should not be called.");
+            return false;
+        }
+
+        @Override
+        public void setAdminPassword(Password password) {
+            fail("This method should not be called.");
+
+        }
+
+        @Override
         public boolean isAdminMode() {
             fail("This method should not be called.");
             return false;
