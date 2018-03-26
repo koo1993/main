@@ -12,7 +12,7 @@ import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 
 /**
- * Adds a employee to PTMan.
+ * Adds a shift to PTMan.
  */
 public class AddShiftCommand extends UndoableCommand {
 

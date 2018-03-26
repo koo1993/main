@@ -9,7 +9,7 @@ import seedu.ptman.logic.commands.DeleteShiftCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 
 /**
- * Parses input arguments and creates a new DeleteCommand object
+ * Parses input arguments and creates a new DeleteShiftCommand object
  */
 public class DeleteShiftCommandParser implements Parser<DeleteShiftCommand> {
 

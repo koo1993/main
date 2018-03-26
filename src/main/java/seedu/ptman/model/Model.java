@@ -98,5 +98,9 @@ public interface Model {
 
     void deleteShift(Shift shiftToDelete) throws ShiftNotFoundException;
 
+    void updateShift(Shift shiftToApply, Shift editedShift) throws ShiftNotFoundException, DuplicateShiftException;
+
+    void updateFilteredShiftList(Predicate<Shift> predicate);
+
     OutletInformation getOutletInformation();
 }

@@ -13,7 +13,7 @@ import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
 
 /**
- * Deletes a employee identified using it's last displayed index from PTMan.
+ * Deletes a shift identified using it's last displayed index in the timetable.
  */
 public class DeleteShiftCommand extends UndoableCommand {
 

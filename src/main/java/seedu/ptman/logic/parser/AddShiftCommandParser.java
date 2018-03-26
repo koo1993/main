@@ -17,7 +17,7 @@ import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.Time;
 
 /**
- * Parses input arguments and creates a new AddCommand object
+ * Parses input arguments and creates a new AddShiftCommand object
  */
 public class AddShiftCommandParser implements Parser<AddShiftCommand> {
 

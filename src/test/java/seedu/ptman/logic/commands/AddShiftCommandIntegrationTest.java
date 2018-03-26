@@ -2,7 +2,7 @@ package seedu.ptman.logic.commands;
 
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
+import static seedu.ptman.testutil.TypicalShifts.getTypicalPartTimeManagerWithShifts;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class AddShiftCommandIntegrationTest {
 
     @Before
     public void setUp() {
-        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
+        model = new ModelManager(getTypicalPartTimeManagerWithShifts(), new UserPrefs(), new OutletInformation());
         model.setTrueAdminMode(new Password());
     }
 

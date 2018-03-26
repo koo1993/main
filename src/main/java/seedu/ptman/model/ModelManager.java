@@ -155,6 +155,18 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
+    public void updateShift(Shift target, Shift editedShift) throws ShiftNotFoundException, DuplicateShiftException {
+        partTimeManager.updateShift(target, editedShift);
+        indicatePartTimeManagerChanged();
+    }
+
+    @Override
+    public void updateFilteredShiftList(Predicate<Shift> predicate) {
+        requireNonNull(predicate);
+        filteredShifts.setPredicate(predicate);
+    }
+
+    @Override
     public void updateEmployee(Employee target, Employee editedEmployee)
             throws DuplicateEmployeeException, EmployeeNotFoundException {
         requireAllNonNull(target, editedEmployee);
@@ -215,7 +227,8 @@ public class ModelManager extends ComponentManager implements Model {
         // state check
         ModelManager other = (ModelManager) obj;
         return partTimeManager.equals(other.partTimeManager)
-                && filteredEmployees.equals(other.filteredEmployees);
+                && filteredEmployees.equals(other.filteredEmployees)
+                && filteredShifts.equals(other.filteredShifts);
     }
 
 }

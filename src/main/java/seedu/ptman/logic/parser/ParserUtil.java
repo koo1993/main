@@ -54,6 +54,34 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a string containing 2 {@code oneBasedIndex} separated by a space
+     * and returns the first {@code Index}. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws IllegalValueException if the specified index is invalid (not non-zero unsigned integer).
+     */
+    public static Index parseFirstIndex(String oneBasedIndex) throws IllegalValueException {
+        String trimmedIndex = oneBasedIndex.trim().split(" ")[0];
+        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+            throw new IllegalValueException(MESSAGE_INVALID_INDEX);
+        }
+        return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+    }
+
+    /**
+     * Parses a string containing 2 {@code oneBasedIndex} separated by a space
+     * and returns the second {@code Index}. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws IllegalValueException if the specified index is invalid (not non-zero unsigned integer).
+     */
+    public static Index parseSecondIndex(String oneBasedIndex) throws IllegalValueException {
+        String trimmedIndex = oneBasedIndex.trim().split(" ")[1];
+        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+            throw new IllegalValueException(MESSAGE_INVALID_INDEX);
+        }
+        return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+    }
+
+    /**
      * Parses a {@code String name} into a {@code Name}.
      * Leading and trailing whitespaces will be trimmed.
      *

@@ -98,6 +98,16 @@ public class Employee {
                 && otherEmployee.getPassword().equals(this.getPassword());
     }
 
+    /**
+     * Checks if the provided password matches the employee's password
+     * and returns true if they match, false otherwise.
+     * @param password
+     * @return
+     */
+    public boolean isCorrectPassword(Password password) {
+        return this.password.equals(password);
+    }
+
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own

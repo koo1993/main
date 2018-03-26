@@ -463,4 +463,10 @@ public class ParserUtilTest {
         assertEquals(Optional.of(expectedOperatingHours), ParserUtil.parseOperatingHours(
                 Optional.of(operatingHoursWithWhitespace)));
     }
+
+    @Test
+    public void parseSecondIndex_invalidValue_throwsIllegalValueException() {
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseSecondIndex("1 a"));
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseSecondIndex("1 -1"));
+    }
 }

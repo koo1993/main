@@ -15,7 +15,6 @@ import com.calendarfx.model.Interval;
 import com.calendarfx.view.CalendarView;
 import com.calendarfx.view.DayViewBase;
 import com.calendarfx.view.DetailedWeekView;
-
 import com.google.common.eventbus.Subscribe;
 
 import javafx.application.Platform;

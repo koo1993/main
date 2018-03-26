@@ -9,6 +9,7 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OPERATING_HOURS;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OUTLET_CONTACT;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OUTLET_EMAIL;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OUTLET_NAME;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_SHIFT;
 
@@ -23,6 +24,7 @@ import org.junit.rules.ExpectedException;
 import seedu.ptman.logic.commands.AddCommand;
 import seedu.ptman.logic.commands.AddShiftCommand;
 import seedu.ptman.logic.commands.AnnouncementCommand;
+import seedu.ptman.logic.commands.ApplyCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
@@ -39,6 +41,7 @@ import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
 import seedu.ptman.model.outlet.Announcement;
@@ -103,6 +106,22 @@ public class PartTimeManagerParserTest {
     public void parseCommand_clearAlias() throws Exception {
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_ALIAS) instanceof ClearCommand);
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_ALIAS + " 3") instanceof ClearCommand);
+    }
+
+    @Test
+    public void parseCommand_apply() throws Exception {
+        ApplyCommand command = (ApplyCommand) parser.parseCommand(
+                ApplyCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
+                        + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
+        assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, new Password()), command);
+    }
+
+    @Test
+    public void parseCommand_applyAlias() throws Exception {
+        ApplyCommand command = (ApplyCommand) parser.parseCommand(
+                ApplyCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
+                        + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
+        assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, new Password()), command);
     }
 
     @Test
