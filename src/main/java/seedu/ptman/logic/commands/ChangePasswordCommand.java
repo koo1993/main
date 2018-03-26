@@ -141,7 +141,8 @@ public class ChangePasswordCommand extends Command {
         ChangePasswordCommand e = (ChangePasswordCommand) other;
         return index.equals(e.index)
                 && passwords.equals(e.passwords)
-                && Objects.equals(employeeToEdit, e.employeeToEdit);
+                && Objects.equals(employeeToEdit, e.employeeToEdit)
+                && Objects.equals(editedEmployee, e.editedEmployee);
     }
 
     /**
