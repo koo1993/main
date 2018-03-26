@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import seedu.ptman.commons.core.LogsCenter;
@@ -26,6 +27,7 @@ public class CommandBox extends UiPart<Region> {
     private final Logger logger = LogsCenter.getLogger(CommandBox.class);
     private final Logic logic;
     private ListElementPointer historySnapshot;
+    private final Tooltip tooltip = new Tooltip();
 
     @FXML
     private TextField commandTextField;
@@ -36,6 +38,8 @@ public class CommandBox extends UiPart<Region> {
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         historySnapshot = logic.getHistorySnapshot();
+        tooltip.setText("Tip: Enter \"help\" when you get stuck");
+        commandTextField.setTooltip(tooltip);
     }
 
     /**

@@ -23,6 +23,7 @@ import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.outlet.Shift;
 
 /**
@@ -31,7 +32,7 @@ import seedu.ptman.model.outlet.Shift;
  */
 public class DeleteShiftCommandTest {
 
-    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
     @Before
     public void setupAdminMode() {
@@ -45,7 +46,8 @@ public class DeleteShiftCommandTest {
 
         String expectedMessage = String.format(DeleteShiftCommand.MESSAGE_DELETE_SHIFT_SUCCESS, shiftToDelete);
 
-        ModelManager expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(),
+                new OutletInformation());
         expectedModel.deleteShift(shiftToDelete);
 
         assertCommandSuccess(deleteShiftCommand, model, expectedMessage, expectedModel);
@@ -66,7 +68,7 @@ public class DeleteShiftCommandTest {
 
         String expectedMessage = String.format(DeleteShiftCommand.MESSAGE_DELETE_SHIFT_SUCCESS, shiftToDelete);
 
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
         expectedModel.deleteShift(shiftToDelete);
         assertNotEquals(shiftToDelete, expectedModel.getFilteredShiftList().get(INDEX_FIRST_SHIFT.getZeroBased()));
 
@@ -89,7 +91,7 @@ public class DeleteShiftCommandTest {
         RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
         Shift shiftToDelete = model.getFilteredShiftList().get(INDEX_FIRST_SHIFT.getZeroBased());
         DeleteShiftCommand deleteShiftCommand = prepareCommand(INDEX_FIRST_SHIFT);
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
 
         // delete -> first employee deleted
         deleteShiftCommand.execute();

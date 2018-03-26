@@ -21,12 +21,14 @@ import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 
 public class RedoCommandTest {
     private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
     private static final UndoRedoStack EMPTY_STACK = new UndoRedoStack();
 
-    private final Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(),
+            new OutletInformation());
     private final DeleteCommand deleteCommandOne = new DeleteCommand(INDEX_FIRST_EMPLOYEE);
     private final DeleteCommand deleteCommandTwo = new DeleteCommand(INDEX_SECOND_EMPLOYEE);
 
@@ -46,7 +48,7 @@ public class RedoCommandTest {
                 Collections.emptyList(), Arrays.asList(deleteCommandTwo, deleteCommandOne));
         RedoCommand redoCommand = new RedoCommand();
         redoCommand.setData(model, EMPTY_COMMAND_HISTORY, undoRedoStack);
-        Model expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
         // multiple commands in redoStack
         deleteFirstEmployee(expectedModel);

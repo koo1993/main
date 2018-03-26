@@ -67,7 +67,10 @@ public class EditOutletCommand extends UndoableCommand {
             OutletInformation editedOutlet = new OutletInformation(model.getOutletInformation());
             editedOutlet.setOutletInformation(name, operatingHours, outletContact, outletEmail);
             model.updateOutlet(editedOutlet);
-            EventsCenter.getInstance().post(new OutletInformationChangedEvent(editedOutlet.toString()));
+            EventsCenter.getInstance().post(new OutletInformationChangedEvent(
+                    editedOutlet.getOperatingHours().toString(),
+                    editedOutlet.getOutletContact().toString(),
+                    editedOutlet.getOutletEmail().toString()));
             EventsCenter.getInstance().post(new OutletNameChangedEvent(editedOutlet.getName().toString()));
         } catch (NoOutletInformationFieldChangeException e) {
             throw new CommandException(MESSAGE_EDIT_OUTLET_FAILURE);

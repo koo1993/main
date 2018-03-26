@@ -14,6 +14,7 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.testutil.EmployeeBuilder;
 
 /**
@@ -25,7 +26,7 @@ public class AddCommandIntegrationTest {
 
     @Before
     public void setUp() {
-        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
         model.setTrueAdminMode(new Password());
     }
 
@@ -33,7 +34,7 @@ public class AddCommandIntegrationTest {
     public void execute_newEmployee_success() throws Exception {
         Employee validEmployee = new EmployeeBuilder().build();
 
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
         expectedModel.addEmployee(validEmployee);
 
         assertCommandSuccess(prepareCommand(validEmployee, model), model,

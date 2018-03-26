@@ -19,12 +19,15 @@ public class OutletInformation {
     public static final String DEFAULT_OPERATING_HOURS = "09:00-22:00";
     public static final String DEFAULT_OUTLET_CONTACT = "91234567";
     public static final String DEFAULT_OUTLET_EMAIL = "DefaultOutlet@gmail.com";
+    public static final String DEFAULT_ANNOUNCEMENT_MESSAGE = "No announcement. "
+            + "Please add new announcement with announcement command.";
 
     private OutletName name;
     private Password masterPassword;
     private OperatingHours operatingHours;
     private OutletContact outletContact;
     private OutletEmail outletEmail;
+    private Announcement announcement;
     private Timetable timetable;
 
     /**
@@ -34,15 +37,15 @@ public class OutletInformation {
      * @param operatingHours a valid operating hours
      */
     public OutletInformation(OutletName name, OperatingHours operatingHours, OutletContact outletContact,
-                             OutletEmail outletEmail) {
-        requireAllNonNull(name, operatingHours, outletContact, outletEmail);
+                             OutletEmail outletEmail, Password masterPassword, Announcement announcement) {
+        requireAllNonNull(name, operatingHours, outletContact, outletEmail, masterPassword, announcement);
         this.name = name;
         this.operatingHours = operatingHours;
         this.outletContact = outletContact;
         this.outletEmail = outletEmail;
-        //default values
+        this.masterPassword = masterPassword;
+        this.announcement = announcement;
         this.timetable = new Timetable(LocalDate.now());
-        this.masterPassword = new Password();
     }
 
     public OutletInformation(OutletInformation outlet) {
@@ -52,6 +55,7 @@ public class OutletInformation {
         this.timetable = new Timetable(outlet.getTimetable());
         this.operatingHours = new OperatingHours(outlet.getOperatingHours().toString());
         this.outletEmail = new OutletEmail(outlet.getOutletEmail().toString());
+        this.announcement = new Announcement(outlet.getAnnouncement().toString());
     }
 
     /**
@@ -63,6 +67,7 @@ public class OutletInformation {
         this.operatingHours = new OperatingHours(DEFAULT_OPERATING_HOURS);
         this.outletContact = new OutletContact(DEFAULT_OUTLET_CONTACT);
         this.outletEmail = new OutletEmail(DEFAULT_OUTLET_EMAIL);
+        this.announcement = new Announcement(DEFAULT_ANNOUNCEMENT_MESSAGE);
         this.timetable = new Timetable(LocalDate.now());
     }
 
@@ -94,6 +99,10 @@ public class OutletInformation {
         return timetable;
     }
 
+    public Announcement getAnnouncement() {
+        return announcement;
+    }
+
     public void setOutletInformation(OutletName name, OperatingHours operatingHours, OutletContact outletContact,
                                      OutletEmail outletEmail)
             throws NoOutletInformationFieldChangeException {
@@ -117,7 +126,8 @@ public class OutletInformation {
     public void setOutletInformation(OutletInformation outlet) throws NoOutletInformationFieldChangeException {
         try {
             requireAllNonNull(outlet.getName(), outlet.getOperatingHours(), outlet.getMasterPassword(),
-                    outlet.getTimetable(), outlet.getOutletEmail(), outlet.getOutletContact());
+                    outlet.getTimetable(), outlet.getOutletEmail(), outlet.getOutletContact(),
+                    outlet.getAnnouncement());
         } catch (NullPointerException e) {
             throw new NoOutletInformationFieldChangeException();
         }
@@ -127,6 +137,11 @@ public class OutletInformation {
         this.outletEmail = outlet.getOutletEmail();
         this.timetable = outlet.getTimetable();
         this.masterPassword = outlet.getMasterPassword();
+        this.announcement = outlet.getAnnouncement();
+    }
+
+    public void setAnnouncement(Announcement announcement) {
+        this.announcement = announcement;
     }
 
     @Override
@@ -137,19 +152,20 @@ public class OutletInformation {
                 && ((OutletInformation) other).getMasterPassword().equals(this.getMasterPassword())
                 && ((OutletInformation) other).getOperatingHours().equals(this.getOperatingHours())
                 && ((OutletInformation) other).getOutletContact().equals(this.getOutletContact())
-                && ((OutletInformation) other).getOutletEmail().equals(this.getOutletEmail()));
+                && ((OutletInformation) other).getOutletEmail().equals(this.getOutletEmail())
+                && ((OutletInformation) other).getAnnouncement().equals(this.getAnnouncement()));
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, masterPassword, operatingHours, outletContact, outletEmail);
+        return Objects.hash(name, masterPassword, operatingHours, outletContact, outletEmail, announcement);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Operating Hour: ")
+        builder.append("Operating Hours: ")
                 .append(getOperatingHours())
                 .append(" Contact: ")
                 .append(getOutletContact())

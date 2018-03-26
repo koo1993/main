@@ -309,16 +309,23 @@ The timetable GUI is created with the help of the https://github.com/dlemmermann
 
 A `TimetablePanel` is created with its constructor:
 ----
-TimetablePanel(ObservableList<Shift> shiftObservableList)`
+TimetablePanel(ObservableList<Shift> shiftObservableList, OutletInformation outletInformation)
 ----
 
 The `TimetablePanel` is initialised in the `MainWindow` class in the following way:
 ----
-TimetablePanel timetablePanel = new TimetablePanel(logic.getFilteredShiftList());
+TimetablePanel timetablePanel = new TimetablePanel(logic.getFilteredShiftList(), logic.getOutletInformation());
 ----
 
-`TimetablePanel` takes in an `ObservableList<Shift>` object, which is an unmodifiable sorted view of the filtered shifts.
- `TimetablePanel` then uses these `Shift` objects to set the Entries in the timetable view, in the method `setShifts()`.+
+`TimetablePanel` takes in:
+
+ * An `ObservableList<Shift>` object, which is an unmodifiable sorted view of the filtered shifts.
+ * An `OutletInformation` object, which contains information of the outlet that is required to build the timetable.
+  In particular, the operating hours of the outlet.
+
+`TimetablePanel` then uses these `Shift` objects to set the Entries in the timetable view, in the method `setShifts()`.
+The operating hours acquired from `OutletInformation` is then used in `updateTimetableView()` to ensure that the timetable
+displays all the time slots within this time range. +
 
 The timetable GUI automatically refreshes to update the timetable view by calling the `updateTimetableView()` method whenever
 there is a `PartTimeManagerChangedEvent`. This ensures the timetable is always updated when a shift is added, removed, or altered.
@@ -496,35 +503,34 @@ Currently, the `OutletInformation` object initialized in the `PartTimeManager` i
 ----
 OutletInformation()
 ----
-This default constructor initializes the five fields of `OutletInformation` to respective default values:
-----
-    public OutletInformation() {
-        this.name = new OutletName(DEFAULT_OUTLET_NAME);
-        this.masterPassword = new Password();
-        this.operatingHours = new OperatingHours(DEFAULT_OPERATING_HOURS);
-        this.outletContact = new OutletContact(DEFAULT_OUTLET_CONTACT);
-        this.timetable = new Timetable(LocalDate.now());
-    }
-----
+This default constructor initializes the seven fields of `OutletInformation` to respective default values:
+
+* Outlet name +
+* Operating hours +
+* Contact number +
+* Email +
+* Master password +
+* Announcement +
+* Timetable +
+
 This saves the time of any employer new to PTMan because the creation of an outlet has already been done with default values.
 Employers can edit those values by entering an `editoutlet` command.
 However, there is an alternative way to create an `OutletInformation` object:
 ----
-OutletInformation(OutletName outletName, OperatingHours operatingHours, OutletContact outletContact, Timetable timetable)
+OutletInformation(OutletName outletName, OperatingHours operatingHours, OutletContact outletContact, OutletEmail outletEmail, Announcement announcement)
 ----
-This constructor allows flexity in storing outlet information, but master password must be set to the default value.
-It is because this default password is used for employer's first login and any employer cannot change his password without the first login.
-stored in a separate file and managed by the `OutletInformation` class. +
+This constructor allows flexibility in storing outlet information, but master password must be set to the default value.
+It is because this default password is used for employer's first login and any employer cannot change his password without the first login. +
 
 ===== Logic component
 
-Currently, there are two commands that allows employers to change fields of the `OutletInformation` object. +
+Currently, there are three commands that allows employers to change fields of the `OutletInformation` object. +
 
 *Edit outlet command*
 
 After login with correct master password, using the `editoutlet` command, employers should be able to edit the outlet information including
-outlet name, operating hours and contact numbers. Master password can only be changed using changemasterpassword command,
-while timetable can only be set with relevant commands.
+outlet name, operating hours, contact numbers and email. Master password can only be changed using changemasterpassword command,
+while timetable can only be set with relevant `shift` commands.
 [NOTE]
 Editing with some fields not specified is allowed.
 For example, editoutlet n/OUTLETNAME is allowed. This enables employers to edit only the information required for change.
@@ -534,6 +540,12 @@ For example, editoutlet n/OUTLETNAME is allowed. This enables employers to edit 
 After login with correct master password, using the `changemasterpassword` command, employers should be able to change the master password as well.
 However, due to the possibility that previous employer forgot to log out, changemasterpassword command requires
 the old password for further verification. This reduces the risk of password getting stolen.
+
+*Announcement command*
+
+After login with correct master password, using the "announcement" command, employers should be able to create an announcement.
+This allows employers to broadcast important messages to employees. For example, when there is an urgent need of manpower in a specific time slot,
+employers can create an announcement to inform the employees who can sign up for the corresponding time slot upon receving the announcement.
 
 ===== Storage component
 

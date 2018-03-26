@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1">
+<StackPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <VBox>
-        <Label fx:id="outletNamePanelHeader" styleClass="panel_large_label"/>
+        <Label fx:id="outletNamePanelHeader" styleClass="panel_large_label" />
+        <HBox fx:id="outletInformation">
+            <Label fx:id="operatingHours" styleClass="outlet-information">><graphic><FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" /></graphic></Label>
+            <Label fx:id="outletContact" styleClass="outlet-information">><graphic><FontAwesomeIconView fill="WHITE" glyphName="PHONE" /></graphic></Label>
+            <Label fx:id="outletEmail" styleClass="outlet-information">><graphic><FontAwesomeIconView fill="WHITE" glyphName="ENVELOPE" /></graphic></Label>
+        </HBox>
+        <Label fx:id="announcement" styleClass="announcement"><graphic><FontAwesomeIconView fill="WHITE" glyphName="BULLHORN" /></graphic></Label>
         <padding>
-            <Insets top="20" right="15" bottom="15" left="15" />
+            <Insets bottom="15" left="15" right="15" top="20" />
         </padding>
-        <StackPane fx:id="placeHolder" xmlns="http://javafx.com/javafx/8"
-                   xmlns:fx="http://javafx.com/fxml/1">
-            <Label fx:id="outletInformation" styleClass="outlet-information"/>
-        </StackPane>
     </VBox>
 </StackPane>

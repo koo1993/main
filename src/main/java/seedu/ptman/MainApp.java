@@ -25,12 +25,15 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.util.SampleDataUtil;
 import seedu.ptman.storage.JsonUserPrefsStorage;
+import seedu.ptman.storage.OutletInformationStorage;
 import seedu.ptman.storage.PartTimeManagerStorage;
 import seedu.ptman.storage.Storage;
 import seedu.ptman.storage.StorageManager;
 import seedu.ptman.storage.UserPrefsStorage;
+import seedu.ptman.storage.XmlOutletInformationStorage;
 import seedu.ptman.storage.XmlPartTimeManagerStorage;
 import seedu.ptman.ui.Ui;
 import seedu.ptman.ui.UiManager;
@@ -63,7 +66,9 @@ public class MainApp extends Application {
         userPrefs = initPrefs(userPrefsStorage);
         PartTimeManagerStorage partTimeManagerStorage =
                 new XmlPartTimeManagerStorage(userPrefs.getPartTimeManagerFilePath());
-        storage = new StorageManager(partTimeManagerStorage, userPrefsStorage);
+        OutletInformationStorage outletInformationStorage =
+                new XmlOutletInformationStorage(userPrefs.getOutletInformationFilePath());
+        storage = new StorageManager(partTimeManagerStorage, userPrefsStorage, outletInformationStorage);
 
         initLogging(config);
 
@@ -88,7 +93,9 @@ public class MainApp extends Application {
      */
     private Model initModelManager(Storage storage, UserPrefs userPrefs) {
         Optional<ReadOnlyPartTimeManager> partTimeManagerOptional;
+        Optional<OutletInformation> outletInformationOptional;
         ReadOnlyPartTimeManager initialData;
+        OutletInformation outletInformation;
         try {
             partTimeManagerOptional = storage.readPartTimeManager();
             if (!partTimeManagerOptional.isPresent()) {
@@ -103,7 +110,23 @@ public class MainApp extends Application {
             initialData = new PartTimeManager();
         }
 
-        return new ModelManager(initialData, userPrefs);
+        try {
+            outletInformationOptional = storage.readOutletInformation();
+            outletInformation = outletInformationOptional.orElseGet(OutletInformation::new);
+            if (!outletInformationOptional.isPresent()) {
+                logger.info("Data file not found. Will be starting with a sample OutletInformation");
+            }
+        } catch (DataConversionException e) {
+            logger.warning("Data file not in the correct format. "
+                    + "Will be starting with an dafault OutletInformation\"");
+            outletInformation = new OutletInformation();
+        } catch (IOException e) {
+            logger.warning("Problem while reading from the file. "
+                    + "Will be starting with an dafault OutletInformation\"");
+            outletInformation = new OutletInformation();
+        }
+
+        return new ModelManager(initialData, userPrefs, outletInformation);
     }
 
     private void initLogging(Config config) {

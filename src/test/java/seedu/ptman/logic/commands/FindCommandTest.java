@@ -23,12 +23,13 @@ import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
+import seedu.ptman.model.outlet.OutletInformation;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
  */
 public class FindCommandTest {
-    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
     @Test
     public void equals() {

@@ -16,6 +16,7 @@ import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 
 
 public class LogicManagerTest {
@@ -82,7 +83,7 @@ public class LogicManagerTest {
      * @see #assertCommandBehavior(Class, String, String, Model)
      */
     private void assertCommandFailure(String inputCommand, Class<?> expectedException, String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
         assertCommandBehavior(expectedException, inputCommand, expectedMessage, expectedModel);
     }
 

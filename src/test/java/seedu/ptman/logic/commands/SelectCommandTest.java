@@ -23,6 +23,7 @@ import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.ui.testutil.EventsCollectorRule;
 
 /**
@@ -36,7 +37,7 @@ public class SelectCommandTest {
 
     @Before
     public void setUp() {
-        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
     }
 
     @Test

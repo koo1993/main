@@ -13,6 +13,7 @@ import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListCommand.
@@ -25,8 +26,8 @@ public class ListCommandTest {
 
     @Before
     public void setUp() {
-        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
-        expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
+        expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
 
         listCommand = new ListCommand();
         listCommand.setData(model, new CommandHistory(), new UndoRedoStack());

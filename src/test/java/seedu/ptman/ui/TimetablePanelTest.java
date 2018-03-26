@@ -15,7 +15,8 @@ public class TimetablePanelTest extends GuiUnitTest {
 
     @Before
     public void setUp() {
-        timetablePanel = new TimetablePanel(TypicalEmployees.getTypicalPartTimeManager().getShiftList());
+        timetablePanel = new TimetablePanel(TypicalEmployees.getTypicalPartTimeManager().getShiftList(),
+                TypicalEmployees.getTypicalPartTimeManager().getOutletInformation());
         uiPartRule.setUiPart(timetablePanel);
     }
 

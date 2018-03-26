@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
+import seedu.ptman.model.outlet.Announcement;
 import seedu.ptman.model.outlet.OperatingHours;
 import seedu.ptman.model.outlet.OutletContact;
 import seedu.ptman.model.outlet.OutletEmail;
@@ -41,10 +42,11 @@ public class ModelManagerTest {
         UserPrefs userPrefs = new UserPrefs();
 
         OutletInformation outlet = new OutletInformation(new OutletName("test"), new OperatingHours("10:00-15:00"),
-                new OutletContact("123"), new OutletEmail("test@test.com"));
+                new OutletContact("123"), new OutletEmail("test@test.com"),
+                new Password(), new Announcement("New Announcement."));
 
-        ModelManager modelManager = new ModelManager(differentPartTimeManager, userPrefs);
-        ModelManager differentModelManager = new ModelManager(partTimeManager, userPrefs);
+        ModelManager modelManager = new ModelManager(differentPartTimeManager, userPrefs, new OutletInformation());
+        ModelManager differentModelManager = new ModelManager(partTimeManager, userPrefs, new OutletInformation());
 
         assertEquals(modelManager, differentModelManager);
         modelManager.updateOutlet(outlet);
@@ -56,10 +58,11 @@ public class ModelManagerTest {
         PartTimeManager partTimeManager = new PartTimeManagerBuilder().withEmployee(ALICE).withEmployee(BENSON).build();
         PartTimeManager differentPartTimeManager = new PartTimeManager();
         UserPrefs userPrefs = new UserPrefs();
+        OutletInformation outlet = new OutletInformation();
 
         // same values -> returns true
-        ModelManager modelManager = new ModelManager(partTimeManager, userPrefs);
-        ModelManager modelManagerCopy = new ModelManager(partTimeManager, userPrefs);
+        ModelManager modelManager = new ModelManager(partTimeManager, userPrefs, outlet);
+        ModelManager modelManagerCopy = new ModelManager(partTimeManager, userPrefs, outlet);
         assertTrue(modelManager.equals(modelManagerCopy));
 
         // same object -> returns true
@@ -72,12 +75,12 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(5));
 
         // different partTimeManager -> returns false
-        assertFalse(modelManager.equals(new ModelManager(differentPartTimeManager, userPrefs)));
+        assertFalse(modelManager.equals(new ModelManager(differentPartTimeManager, userPrefs, outlet)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");
         modelManager.updateFilteredEmployeeList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
-        assertFalse(modelManager.equals(new ModelManager(partTimeManager, userPrefs)));
+        assertFalse(modelManager.equals(new ModelManager(partTimeManager, userPrefs, outlet)));
 
         // resets modelManager to initial state for upcoming tests
         modelManager.updateFilteredEmployeeList(PREDICATE_SHOW_ALL_EMPLOYEES);
@@ -85,6 +88,6 @@ public class ModelManagerTest {
         // different userPrefs -> returns true
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setPartTimeManagerName("differentName");
-        assertTrue(modelManager.equals(new ModelManager(partTimeManager, differentUserPrefs)));
+        assertTrue(modelManager.equals(new ModelManager(partTimeManager, differentUserPrefs, outlet)));
     }
 }

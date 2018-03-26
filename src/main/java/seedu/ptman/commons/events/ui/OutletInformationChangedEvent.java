@@ -7,10 +7,14 @@ import seedu.ptman.commons.events.BaseEvent;
  */
 public class OutletInformationChangedEvent extends BaseEvent {
 
-    public final String information;
+    public final String operatingHours;
+    public final String outletContact;
+    public final String outletEmail;
 
-    public OutletInformationChangedEvent(String information) {
-        this.information = information;
+    public OutletInformationChangedEvent(String operatingHours, String outletContact, String outletEmail) {
+        this.operatingHours = operatingHours;
+        this.outletContact = outletContact;
+        this.outletEmail = outletEmail;
     }
 
     @Override

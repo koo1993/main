@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<outletinformation>
+    <!-- outlet with invalid outlet name field -->
+    <outletName>Edited@Outlet</outletName>
+    <operatingHours>09:00-22:00</operatingHours>
+    <outletContact>91234567</outletContact>
+    <outletEmail>DefaultOutlet@gmail.com</outletEmail>
+    <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
+    <announcement>exit</announcement>
+</outletinformation>

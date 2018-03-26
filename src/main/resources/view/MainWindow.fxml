@@ -61,7 +61,7 @@
             </StackPane>
           </VBox>
 
-          <VBox fx:id="employeeList" minWidth="340" prefWidth="340" SplitPane.resizableWithParent="false">
+          <VBox fx:id="employeeList" minWidth="300" SplitPane.resizableWithParent="false">
             <StackPane fx:id="employeeListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
           </VBox>
 

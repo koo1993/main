@@ -13,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import seedu.ptman.commons.core.ComponentManager;
 import seedu.ptman.commons.core.LogsCenter;
+import seedu.ptman.commons.events.model.OutletDataChangedEvent;
 import seedu.ptman.commons.events.model.PartTimeManagerChangedEvent;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
@@ -39,20 +40,26 @@ public class ModelManager extends ComponentManager implements Model {
     /**
      * Initializes a ModelManager with the given partTimeManager and userPrefs.
      */
-    public ModelManager(ReadOnlyPartTimeManager partTimeManager, UserPrefs userPrefs) {
+    public ModelManager(ReadOnlyPartTimeManager partTimeManager, UserPrefs userPrefs,
+                        OutletInformation outletInformation) {
         super();
-        requireAllNonNull(partTimeManager, userPrefs);
+        requireAllNonNull(partTimeManager, userPrefs, outletInformation);
 
         logger.fine("Initializing with address book: " + partTimeManager + " and user prefs " + userPrefs);
 
         this.partTimeManager = new PartTimeManager(partTimeManager);
+        try {
+            this.partTimeManager.updateOutlet(outletInformation);
+        } catch (NoOutletInformationFieldChangeException e) {
+            logger.warning("Outlet data should not be empty.");
+        }
         filteredEmployees = new FilteredList<>(this.partTimeManager.getEmployeeList());
         filteredShifts = new FilteredList<>(this.partTimeManager.getShiftList());
         tempPasswordMap = new HashMap<>();
     }
 
     public ModelManager() {
-        this(new PartTimeManager(), new UserPrefs());
+        this(new PartTimeManager(), new UserPrefs(), new OutletInformation());
     }
 
     @Override
@@ -69,6 +76,7 @@ public class ModelManager extends ComponentManager implements Model {
     /** Raises an event to indicate the model has changed */
     private void indicatePartTimeManagerChanged() {
         raise(new PartTimeManagerChangedEvent(partTimeManager));
+        raise(new OutletDataChangedEvent(partTimeManager.getOutletInformation()));
     }
 
     @Override

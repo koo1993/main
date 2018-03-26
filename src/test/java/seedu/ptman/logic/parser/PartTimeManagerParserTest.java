@@ -22,6 +22,7 @@ import org.junit.rules.ExpectedException;
 
 import seedu.ptman.logic.commands.AddCommand;
 import seedu.ptman.logic.commands.AddShiftCommand;
+import seedu.ptman.logic.commands.AnnouncementCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
@@ -40,6 +41,7 @@ import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
+import seedu.ptman.model.outlet.Announcement;
 import seedu.ptman.model.outlet.OperatingHours;
 import seedu.ptman.model.outlet.OutletContact;
 import seedu.ptman.model.outlet.OutletEmail;
@@ -177,6 +179,22 @@ public class PartTimeManagerParserTest {
                 + " " + PREFIX_OUTLET_EMAIL + outletEmail);
         assertEquals(new EditOutletCommand(new OutletName(name), new OperatingHours(operatingHours),
                 new OutletContact(outletContact), new OutletEmail(outletEmail)), command);
+    }
+
+    @Test
+    public void parseCommand_announcement() throws Exception {
+        String announcement = "new announcement.";
+        AnnouncementCommand command = (AnnouncementCommand) parser.parseCommand(AnnouncementCommand.COMMAND_WORD
+                + " " + announcement);
+        assertEquals(new AnnouncementCommand(new Announcement(announcement)), command);
+    }
+
+    @Test
+    public void parseCommand_announcementAlias() throws Exception {
+        String announcement = "new announcement.";
+        AnnouncementCommand command = (AnnouncementCommand) parser.parseCommand(AnnouncementCommand.COMMAND_ALIAS
+                + " " + announcement);
+        assertEquals(new AnnouncementCommand(new Announcement(announcement)), command);
     }
 
     @Test
