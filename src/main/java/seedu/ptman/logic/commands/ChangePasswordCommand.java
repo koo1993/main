@@ -9,7 +9,10 @@ import java.util.Set;
 
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
+import seedu.ptman.logic.CommandHistory;
+import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
+import seedu.ptman.model.Model;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
@@ -123,6 +126,12 @@ public class ChangePasswordCommand extends Command {
         Set<Tag> tags = employeeToEdit.getTags();
         Password updatedPassword = password;
         return new Employee(name, phone, email, address, salary, updatedPassword, tags);
+    }
+
+    @Override
+    public void setData(Model model, CommandHistory history, UndoRedoStack undoRedoStack) {
+        super.setData(model, history, undoRedoStack);
+        undoRedoStack.resetRedoUndoStack();
     }
 
     @Override

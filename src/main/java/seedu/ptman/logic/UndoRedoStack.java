@@ -55,6 +55,14 @@ public class UndoRedoStack {
     }
 
     /**
+     * clear undo and redo stack to avoid funny behaviour for some commands
+     */
+    public void resetRedoUndoStack() {
+        redoStack.clear();
+        undoStack.clear();
+    }
+
+    /**
      * Returns true if there are more commands that can be undone.
      */
     public boolean canUndo() {
