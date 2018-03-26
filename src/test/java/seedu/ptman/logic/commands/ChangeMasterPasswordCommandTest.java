@@ -12,18 +12,17 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.rules.ExpectedException;
 
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
+import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.model.outlet.OutletInformation;
 
 /**

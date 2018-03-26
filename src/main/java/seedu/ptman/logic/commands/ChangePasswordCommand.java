@@ -12,6 +12,7 @@ import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
+import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
@@ -22,7 +23,6 @@ import seedu.ptman.model.employee.Phone;
 import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.model.tag.Tag;
 
 /**

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
 import seedu.ptman.logic.commands.exceptions.CommandException;
+import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.Password;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 
 /**
  * Change password of the outlet in PTMan.

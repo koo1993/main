@@ -1,6 +1,5 @@
-package seedu.ptman.model.employee.exceptions;
+package seedu.ptman.logic.commands.exceptions;
 
-import seedu.ptman.logic.commands.exceptions.CommandException;
 
 /**
  * Signals that the operation will result in incorrect Password objects.

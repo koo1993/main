@@ -18,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
+import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.logic.parser.ParserUtil;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
@@ -29,7 +30,6 @@ import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
 import seedu.ptman.model.employee.Salary;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.tag.Tag;
 

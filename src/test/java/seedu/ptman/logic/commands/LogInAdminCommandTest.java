@@ -11,8 +11,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import javafx.collections.ObservableList;
+
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
+import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.Password;
@@ -20,13 +22,13 @@ import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
-import seedu.ptman.model.employee.exceptions.InvalidPasswordException;
 import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeException;
 import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
 import seedu.ptman.model.tag.Tag;
+
 
 
 public class LogInAdminCommandTest {
@@ -50,6 +52,7 @@ public class LogInAdminCommandTest {
     }
 
     @Test
+
     public void execute_correctPassword_alreadyLoggedIn() throws Exception {
         ModelStubAcceptingAllPassword modelStub = new ModelStubAcceptingAllPassword();
         modelStub.setIsAdminMode(true); // already in adminMode
