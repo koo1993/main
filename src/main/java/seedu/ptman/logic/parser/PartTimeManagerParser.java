@@ -79,7 +79,7 @@ public class PartTimeManagerParser {
         case ChangeMasterPasswordCommand.COMMAND_WORD:
         case ChangeMasterPasswordCommand.COMMAND_ALIAS:
             return new ChangeMasterPasswordCommandParser().parse(arguments);
-            
+
         case ApplyCommand.COMMAND_WORD:
         case ApplyCommand.COMMAND_ALIAS:
             return new ApplyCommandParser().parse(arguments);
