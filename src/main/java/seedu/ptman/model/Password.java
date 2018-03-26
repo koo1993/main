@@ -7,14 +7,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-import org.apache.commons.lang.RandomStringUtils;
-
 /**
  * Represents a Password in PartTimeManger
  * Store password as hashCode
  */
 public class Password {
-
 
     public static final String MESSAGE_PASSWORD_CONSTRAINTS =
             "Password should be at least 8 character and no spaces.";
@@ -111,7 +108,13 @@ public class Password {
         }
         return encodedHash;
     }
-    
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof Password // instanceof handles nulls
+                && this.passwordHash.equals(((Password) other).passwordHash)); // state check
+    }
 
     @Override
     public int hashCode() {
