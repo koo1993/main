@@ -73,12 +73,6 @@ public class Employee {
         return Collections.unmodifiableSet(tags.toSet());
     }
 
-
-    public boolean isCorrectPassword(Password password) {
-        return this.password.equals(password);
-    }
-
-
     @Override
     public boolean equals(Object other) {
         if (other == this) {
