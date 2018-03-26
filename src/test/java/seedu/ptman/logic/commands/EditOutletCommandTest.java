@@ -28,7 +28,7 @@ import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeExcepti
 
 public class EditOutletCommandTest {
 
-    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
     @Test
     public void execute_nonAdminMode_failure() {
@@ -55,7 +55,8 @@ public class EditOutletCommandTest {
         } catch (NoOutletInformationFieldChangeException e) {
             fail("This should not fail because all outlet information fields are specified.");
         }
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                expectedOutlet);
         try {
             expectedModel.updateOutlet(expectedOutlet);
         } catch (NoOutletInformationFieldChangeException e) {
@@ -90,13 +91,14 @@ public class EditOutletCommandTest {
         OutletContact outletContact = new OutletContact("912345678");
         OutletEmail outletEmail = new OutletEmail("EditedOutlet@gmail.com");
         EditOutletCommand command = prepareCommand(outletName, operatingHours, outletContact, outletEmail);
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
         OutletInformation expectedOutlet = new OutletInformation();
         try {
             expectedOutlet.setOutletInformation(outletName, operatingHours, outletContact, outletEmail);
         } catch (NoOutletInformationFieldChangeException e) {
             fail("This should not fail because all outlet information fields are specified.");
         }
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
         // edit -> outlet edited
         command.execute();
         undoRedoStack.push(command);

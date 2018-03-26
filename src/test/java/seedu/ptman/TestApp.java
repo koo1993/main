@@ -16,6 +16,7 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.storage.UserPrefsStorage;
 import seedu.ptman.storage.XmlSerializablePartTimeManager;
 import seedu.ptman.testutil.TestUtil;
@@ -94,7 +95,7 @@ public class TestApp extends MainApp {
      * Returns a defensive copy of the model.
      */
     public Model getModel() {
-        Model copy = new ModelManager((model.getPartTimeManager()), new UserPrefs());
+        Model copy = new ModelManager((model.getPartTimeManager()), new UserPrefs(), new OutletInformation());
         ModelHelper.setFilteredList(copy, model.getFilteredEmployeeList());
         return copy;
     }

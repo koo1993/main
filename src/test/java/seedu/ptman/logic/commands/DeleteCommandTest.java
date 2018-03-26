@@ -24,6 +24,7 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
+import seedu.ptman.model.outlet.OutletInformation;
 
 /**
  * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for
@@ -31,7 +32,7 @@ import seedu.ptman.model.employee.Employee;
  */
 public class DeleteCommandTest {
 
-    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
     @Before
     public void setMode_adminMode() {
@@ -45,7 +46,8 @@ public class DeleteCommandTest {
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_EMPLOYEE_SUCCESS, employeeToDelete);
 
-        ModelManager expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(),
+                new OutletInformation());
         expectedModel.deleteEmployee(employeeToDelete);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
@@ -76,7 +78,7 @@ public class DeleteCommandTest {
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_EMPLOYEE_SUCCESS, employeeToDelete);
 
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
         expectedModel.deleteEmployee(employeeToDelete);
         showNoEmployee(expectedModel);
 
@@ -103,7 +105,7 @@ public class DeleteCommandTest {
         RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
         Employee employeeToDelete = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());
         DeleteCommand deleteCommand = prepareCommand(INDEX_FIRST_EMPLOYEE);
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
 
         // delete -> first employee deleted
         deleteCommand.execute();
@@ -146,7 +148,7 @@ public class DeleteCommandTest {
         UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack);
         RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
         DeleteCommand deleteCommand = prepareCommand(INDEX_FIRST_EMPLOYEE);
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
 
         showEmployeeAtIndex(model, INDEX_SECOND_EMPLOYEE);
         Employee employeeToDelete = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());

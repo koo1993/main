@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<outletinformation>
+    <outletName>DefaultOutlet</outletName>
+    <operatingHours>09:00-22:00</operatingHours>
+    <outletContact>91234567</outletContact>
+    <outletEmail>DefaultOutlet@gmail.com</outletEmail>
+    <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
+    <announcement>No announcement. Please add new announcement with announcement command.</announcement>
+</outletinformation>

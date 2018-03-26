@@ -15,12 +15,15 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
+import seedu.ptman.model.outlet.OutletInformation;
 
 public class UndoableCommandTest {
-    private final Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(),
+            new OutletInformation());
     private final DummyCommand dummyCommand = new DummyCommand(model);
 
-    private Model expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    private Model expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(),
+            new OutletInformation());
 
     @Test
     public void executeUndo() throws Exception {
@@ -32,7 +35,7 @@ public class UndoableCommandTest {
 
         // undo() should cause the model's filtered list to show all employees
         dummyCommand.undo();
-        expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
         assertEquals(expectedModel, model);
     }
 

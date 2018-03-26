@@ -31,6 +31,7 @@ import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
 import seedu.ptman.testutil.EmployeeBuilder;
 
@@ -38,7 +39,10 @@ import seedu.ptman.testutil.EmployeeBuilder;
  * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for EditCommand.
  */
 public class EditCommandTest {
-    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+  
+    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
     @Before
     public void setMode_adminMode() {
@@ -53,7 +57,8 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_EMPLOYEE_SUCCESS, editedEmployee);
 
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
         expectedModel.updateEmployee(model.getFilteredEmployeeList().get(0), editedEmployee);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -74,7 +79,8 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_EMPLOYEE_SUCCESS, editedEmployee);
 
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
         expectedModel.updateEmployee(lastEmployee, editedEmployee);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -87,7 +93,8 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_EMPLOYEE_SUCCESS, editedEmployee);
 
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -103,7 +110,8 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_EMPLOYEE_SUCCESS, editedEmployee);
 
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
         expectedModel.updateEmployee(model.getFilteredEmployeeList().get(0), editedEmployee);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -176,7 +184,8 @@ public class EditCommandTest {
         Employee employeeToEdit = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());
         EditEmployeeDescriptor descriptor = new EditEmployeeDescriptorBuilder(editedEmployee).build();
         EditCommand editCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, descriptor);
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
 
         // edit -> first employee edited
         editCommand.execute();
@@ -222,7 +231,8 @@ public class EditCommandTest {
         Employee editedEmployee = new EmployeeBuilder().build();
         EditEmployeeDescriptor descriptor = new EditEmployeeDescriptorBuilder(editedEmployee).build();
         EditCommand editCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, descriptor);
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs());
+        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
+                new OutletInformation());
 
         showEmployeeAtIndex(model, INDEX_SECOND_EMPLOYEE);
         Employee employeeToEdit = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());

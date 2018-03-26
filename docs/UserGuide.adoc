@@ -112,11 +112,40 @@ Returns `john` and `John Doe`.
 * `find Betsy Tim John` +
 Returns any employee having names `Betsy`, `Tim`, or `John`.
 
-==== Listing all employees : `list`
+==== Listing all employees: `list`
 
 Shows a list of all employees in PTMan. +
 *Format:* `list` +
 *Shorthand:* `l`
+
+==== Show employee shifts: `select`
+
+Displays the shifts of the selected employee on the timetable view. +
+*Format:* `select INDEX` +
+*Shorthand:* `s INDEX`
+
+Examples:
+
+* `list` +
+`select 2` +
+Selects the 2nd employee in PTMan and displays his/her shifts in the timetable view.
+* `find Betsy` +
+`select 1` +
+Selects the 1st employee in the results of the `find` command and displays his/her shifts in the timetable view.
+
+==== Export timetable as image: `export`
+
+Exports the current timetable displayed as an image and saves it locally. +
+*Format:* `export` +
+*Shorthand:* `exp`
+
+Examples:
+
+* `export` +
+Exports the current timetable in PTMan.
+* `select 1` +
+`export` +
+Exports the timetable with the shifts of the 1st employee in PTMan.
 
 ==== Listing entered commands: `history`
 
@@ -295,9 +324,9 @@ Clears all employees from PTMan. +
 PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allows employer to view all the details for all the employee. +
 *Format:* `viewall`
 
-==== Edit outlet information: `editoutlet` [coming in v1.3]
+==== Edit outlet information: `editoutlet`
 PTman outlet information can be modified anytime by the admin. +
-*Format:* `editoutlet n/NAME h/OPERATING_HOURS` +
+*Format:* `editoutlet n/NAME h/OPERATING_HOURS c/CONTACT_NUMBERS e/EMAIL`  +
 
 [NOTE]
 ====
@@ -305,9 +334,13 @@ PTman outlet information can be modified anytime by the admin. +
 For example, `h/0900-2200` +
 ====
 
-==== Change admin password: `cap` [coming in v1.3]
+==== Change admin password: `cap` [coming in v1.4]
 PTman should be able to allow employers to change admin password. +
 *Format:* `cap old/CURRENT_ADMIN_PASSWORD new/NEW_ADMIN_PASSWORD` +
+
+==== Announcement: `announcement`
+PTman should be able to allow employers to create a new announcement. +
+*Format:* `announcement ANNOUNCEMENT_MESSAGE` +
 
 ==== Add shift to outlet: `addshift` [coming in v1.4]
 PTman outlets should be able to add a shift to the timetable indicating with how many people the shift needs. +
@@ -321,7 +354,7 @@ PTman outlets should be able to add a shift to the timetable indicating with how
 
 ==== Add employee to shift: `addto` [coming in v1.4]
 PTman outlets should be able to add an employee to a shift in the timetable. +
-*Format:* `addto d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME +
+*Format:* `addto d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME` +
 
 ==== Delete employee from shift: `delfrom` [coming in v1.4]
 PTman outlets should be able to delete an employee from a shift in the timetable. +

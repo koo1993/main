@@ -168,11 +168,13 @@
      -fx-border-top-width: 1px;
 }
 
-.outlet-information .content {
-    -fx-background-color: derive(#1d1d1d, 20%);
+.outlet-information {
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
 }
 
-.outlet-information {
+.announcement {
     -fx-font-family: "Segoe UI Light";
     -fx-font-size: 14px;
     -fx-text-fill: white;

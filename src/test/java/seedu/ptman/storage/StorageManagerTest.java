@@ -12,11 +12,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import seedu.ptman.commons.events.model.OutletDataChangedEvent;
 import seedu.ptman.commons.events.model.PartTimeManagerChangedEvent;
 import seedu.ptman.commons.events.storage.DataSavingExceptionEvent;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.ui.testutil.EventsCollectorRule;
 
 public class StorageManagerTest {
@@ -32,13 +34,14 @@ public class StorageManagerTest {
     public void setUp() {
         XmlPartTimeManagerStorage partTimeManagerStorage = new XmlPartTimeManagerStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        storageManager = new StorageManager(partTimeManagerStorage, userPrefsStorage);
+        XmlOutletInformationStorage outletInformationStorage =
+                new XmlOutletInformationStorage(getTempFilePath("outlet"));
+        storageManager = new StorageManager(partTimeManagerStorage, userPrefsStorage, outletInformationStorage);
     }
 
     private String getTempFilePath(String fileName) {
         return testFolder.getRoot().getPath() + fileName;
     }
-
 
     @Test
     public void prefsReadSave() throws Exception {
@@ -73,11 +76,32 @@ public class StorageManagerTest {
     }
 
     @Test
+    public void getOutletInformationFilePath() {
+        assertNotNull(storageManager.getOutletInformationFilePath());
+    }
+
+    @Test
+    public void getUserOrefsFilePath() {
+        assertNotNull(storageManager.getUserPrefsFilePath());
+    }
+
+    @Test
     public void handlePartTimeManagerChangedEvent_exceptionThrown_eventRaised() {
         // Create a StorageManager while injecting a stub that  throws an exception when the save method is called
         Storage storage = new StorageManager(new XmlPartTimeManagerStorageExceptionThrowingStub("dummy"),
-                                             new JsonUserPrefsStorage("dummy"));
+                                             new JsonUserPrefsStorage("dummy"),
+                new XmlOutletInformationStorage("dummy"));
         storage.handlePartTimeManagerChangedEvent(new PartTimeManagerChangedEvent(new PartTimeManager()));
+        assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof DataSavingExceptionEvent);
+    }
+
+    @Test
+    public void handleOutletDataChangedEvent_exceptionThrown_eventRaised() {
+        // Create a StorageManager while injecting a stub that throws an exception when the save method is called
+        Storage storage = new StorageManager(new XmlPartTimeManagerStorage("dummy"),
+                new JsonUserPrefsStorage("dummy"),
+                new XmlOutletInformationStorageExceptionThrowingStub("dummy"));
+        storage.handleOutletDataChangedEvent(new OutletDataChangedEvent(new OutletInformation()));
         assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof DataSavingExceptionEvent);
     }
 
@@ -93,6 +117,21 @@ public class StorageManagerTest {
 
         @Override
         public void savePartTimeManager(ReadOnlyPartTimeManager partTimeManager, String filePath) throws IOException {
+            throw new IOException("dummy exception");
+        }
+    }
+
+    /**
+     * A Stub class to throw an exception when the save method is called
+     */
+    class XmlOutletInformationStorageExceptionThrowingStub extends XmlOutletInformationStorage {
+
+        public XmlOutletInformationStorageExceptionThrowingStub(String filePath) {
+            super(filePath);
+        }
+
+        @Override
+        public void saveOutletInformation(OutletInformation outletInformation, String filePath) throws IOException {
             throw new IOException("dummy exception");
         }
     }

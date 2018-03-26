@@ -198,6 +198,7 @@ public abstract class PartTimeManagerSystemTest {
      */
     private void rememberStates() {
         OutletDetailsPanelHandle outletDetailsPanelHandle = getOutletDetailsPanel();
+        outletDetailsPanelHandle.rememberOutletAnnouncement();
         outletDetailsPanelHandle.rememberOutletInformation();
         outletDetailsPanelHandle.rememberOutletName();
         StatusBarFooterHandle statusBarFooterHandle = getStatusBarFooter();
@@ -264,6 +265,7 @@ public abstract class PartTimeManagerSystemTest {
      */
     protected void assertOutletDetailsPanelUnchanged() {
         OutletDetailsPanelHandle handle = getOutletDetailsPanel();
+        assertFalse(handle.isOutletAnnouncementChanged());
         assertFalse(handle.isOutletInformationChanged());
         assertFalse(handle.isOutletNameChanged());
     }

@@ -18,8 +18,10 @@ public class OperatingHours {
     public static final String TIME24HOURS_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
     public static final String OPERATING_HOUR_VALIDATION_REGEX = TIME24HOURS_PATTERN + "-"
             + TIME24HOURS_PATTERN;
-    public final LocalTime startTime;
-    public final LocalTime endTime;
+
+    public final String value;
+    private final LocalTime startTime;
+    private final LocalTime endTime;
 
     /**
      * Constructs an {@code OperatingHours}.
@@ -32,6 +34,7 @@ public class OperatingHours {
         String[] splitedTime = operatingHours.split("-");
         this.startTime = convertStringToLocalTime(splitedTime[0]);
         this.endTime = convertStringToLocalTime(splitedTime[1]);
+        this.value = operatingHours;
     }
 
     /**

@@ -13,6 +13,7 @@ import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
+import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.outlet.Shift;
 import seedu.ptman.testutil.ShiftBuilder;
 
@@ -25,7 +26,7 @@ public class AddShiftCommandIntegrationTest {
 
     @Before
     public void setUp() {
-        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs());
+        model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
         model.setTrueAdminMode(new Password());
     }
 
@@ -33,7 +34,7 @@ public class AddShiftCommandIntegrationTest {
     public void execute_newShift_success() throws Exception {
         Shift validShift = new ShiftBuilder().build();
 
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
         expectedModel.addShift(validShift);
 
         assertCommandSuccess(prepareCommand(validShift, model), model,
