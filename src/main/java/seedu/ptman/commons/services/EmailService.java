@@ -17,15 +17,15 @@ import javax.mail.internet.MimeMessage;
 public class EmailService {
     private static EmailService singleInstance = new EmailService();
 
-    final String senderEmail = "ptmanager.reset@gmail.com";
-    final String password = "DEFAULT!1";
+    private final String senderEmail = "ptmanager.reset@gmail.com";
+    private final String password = "DEFAULT!1";
 
-    private Properties props;
+
     private Session session;
 
 
     private EmailService() {
-        props = new Properties();
+        Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
