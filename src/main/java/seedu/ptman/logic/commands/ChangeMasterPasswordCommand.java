@@ -1,7 +1,6 @@
 package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 
 import java.util.ArrayList;
 

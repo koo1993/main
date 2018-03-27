@@ -13,8 +13,8 @@ public class ResetMasterPasswordCommandParser implements Parser<ResetMasterPassw
      * and returns an ResetMasterPasswordCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
-    public ResetMasterPasswordCommand parse(String args) throws ParseException {
-            return new ResetMasterPasswordCommand();
+    public ResetMasterPasswordCommand parse(String args) {
+        return new ResetMasterPasswordCommand();
     }
 
 }

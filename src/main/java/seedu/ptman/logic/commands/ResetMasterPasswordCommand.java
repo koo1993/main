@@ -2,17 +2,12 @@ package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
-import seedu.ptman.commons.core.Messages;
-import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.commons.services.EmailService;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Password;
-import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.outlet.OutletInformation;
 
 /**

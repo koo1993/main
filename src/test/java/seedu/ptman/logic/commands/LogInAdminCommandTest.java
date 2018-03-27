@@ -116,6 +116,12 @@ public class LogInAdminCommandTest {
             fail("This method should not be called.");
         }
 
+
+        @Override
+        public void storeResetPassword(OutletInformation outlet, Password tempPassword) {
+            fail("This method should not be called.");
+        }
+
         @Override
         public void storeResetPassword(Employee employee, Password tempPassword) {
             fail("This method should not be called.");
@@ -123,6 +129,12 @@ public class LogInAdminCommandTest {
 
         @Override
         public boolean isCorrectTempPwd(Employee employee, Password tempPassword) {
+            fail("This method should not be called.");
+            return false;
+        }
+
+        @Override
+        public boolean isCorrectTempPwd(OutletInformation outlet, Password tempPassword) {
             fail("This method should not be called.");
             return false;
         }

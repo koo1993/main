@@ -16,7 +16,6 @@ import org.junit.rules.ExpectedException;
 
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
-import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
@@ -34,11 +33,6 @@ public class ChangeMasterPasswordCommandTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
-
-    @Before
-    public void setUpAdminMode() {
-        model.setTrueAdminMode(new Password());
-    }
 
     @Test
     public void execute_validInputs_success() throws Exception {
@@ -86,17 +80,6 @@ public class ChangeMasterPasswordCommandTest {
         assertCommandFailure(changePwCommand, model, ChangeMasterPasswordCommand.MESSAGE_INVALID_CONFIMREDPASSWORD);
     }
 
-    @Test
-    public void execute_notAdminMode_throwsCommandException() throws Exception {
-        model.setFalseAdminMode();
-
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
-        thrown.expect(CommandException.class);
-        prepareCommand(passwords).execute();
-    }
 
     @Test
     public void equals() throws Exception {
