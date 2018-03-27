@@ -63,10 +63,7 @@ public class ResetMasterPasswordCommand extends Command {
     @Override
     public boolean equals(Object other) {
         // instanceof handles nulls
-        if ((other instanceof ResetMasterPasswordCommand)) {
-            return true;
-        }
-        return false;
+        return (other instanceof ResetMasterPasswordCommand);
     }
 
     /**
