@@ -43,16 +43,13 @@ public class ChangeMasterPasswordCommand extends Command {
     @Override
     public CommandResult execute() throws CommandException {
 
-        if (!model.isAdminMode()) {
-            throw new CommandException(MESSAGE_ACCESS_DENIED);
-        }
-
         checkConfirmedPassword(passwords.get(1), passwords.get(2));
 
         Password enteredPassword = parsePassword(passwords.get(0));
         Password newPassword = parsePassword(passwords.get(1));
 
-        if (!model.isAdminPassword(enteredPassword)) {
+        if (!model.isAdminPassword(enteredPassword)
+                && !model.isCorrectTempPwd(model.getOutletInformation(), enteredPassword)) {
             throw new InvalidPasswordException();
         }
 

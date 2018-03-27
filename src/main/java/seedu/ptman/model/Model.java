@@ -61,9 +61,19 @@ public interface Model {
     void storeResetPassword(Employee employee, Password tempPassword);
 
     /**
+     * Store and map employer temporarily password with the given employee and password.
+     */
+    void storeResetPassword(OutletInformation outlet, Password tempPassword);
+
+    /**
      * check if the {@code tempPassword} given is the temporarily password for the {@code employee}
      */
     boolean isCorrectTempPwd(Employee employee, Password tempPassword);
+
+    /**
+     * check if the {@code tempPassword} given is the temporarily password for the {@code outlet}
+     */
+    boolean isCorrectTempPwd(OutletInformation outlet, Password tempPassword);
 
     /**
      * Delete tag from all employees
