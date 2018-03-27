@@ -33,7 +33,7 @@ import seedu.ptman.testutil.Assert;
 import seedu.ptman.testutil.EmployeeBuilder;
 
 /**
- * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for EditCommand.
+ * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for ApplyCommand.
  */
 public class ApplyCommandTest {
     @Rule

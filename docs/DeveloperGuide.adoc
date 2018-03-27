@@ -215,7 +215,7 @@ The `Model`,
 
 * stores a `UserPref` object that represents the user's preferences.
 * stores the Address Book data.
-* exposes an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* exposes an unmodifiable `ObservableList<Employee>` and `ObservableList<Shift>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the lists change.
 * does not depend on any of the other three components.
 
 [[Design-Storage]]
@@ -241,24 +241,30 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 This section describes some noteworthy details on how certain features are implemented.
 
 === Shifts feature
-*Reason for implementation*
+==== Reason for implementation
 
 PTMan is designed to give employees the freedom and flexibility to choose the shifts they want to work in.
 By allowing employers to add or delete shifts, employees can then apply for shifts that are available.
 
-*How it is implemented*
+==== How it is implemented
 
-A `Shift` object is created using its constructor:
+In order to create a shift, the date, starting time, ending time, and capacity of the shift must be specified.
+Figure 11 is a class diagram that displays the association between `Shift` and other components in the `Model`.
+
+.Overview of the Shift class in the Model
+image::ShiftClassDiagram.png[width="800"]
+
+A `Shift` object is created using it's constructor:
 ----
-Shift(Day day, Time startTime, Time endTime, Capacity capacity)
+Shift(Date date, Time startTime, Time endTime, Capacity capacity)
 ----
 
 Explanation for arguments:
 
-. `Day`: A class that wraps Java's `DayOfWeek` enum. It indicates the day that the shift is on. +
-Example: `new Day("monday")` creates a `Day` object representing Monday.
+. `Date`: A class that wraps Java's `LocalDate` class. It indicates the date that the shift is on. +
+Example: `new Date("12-03-18")` creates a `Date` object representing 12 March 2018.
 [NOTE]
-The string argument is not case-sensitive, but should be a valid day of week spelt in full.
+The string argument should represent a date in the DD-MM-YY format.
 
 . `Time`: A class that wraps Java's `LocalTime` class. It indicates the either the starting time or ending time of the shift. +
 Example: `new Time("1030")` creates a `Time` object representing 10:30am.
@@ -273,19 +279,18 @@ This is used to store employees that have applied for this shift.
 
 To store a list of shifts, we may use a `UniqueShiftList` to ensure there are no duplicate shifts.
 
-The following commands directly interact with the `Shift` class:
+The following are commands that directly interact with the `Shift` class:
 
-. `AddShiftCommand`: Creates a `Shift` and adds it to the `UniqueShiftList` in `OutletInformation`.
-. `DeleteShiftCommand`: Deletes a `Shift` from the `UniqueShiftList` in `OutletInformation`.
+. `AddShiftCommand`: Creates a `Shift` and adds it to the `UniqueShiftList` in `PartTimeManager`.
+. `DeleteShiftCommand`: Deletes a `Shift` from the `UniqueShiftList` in `PartTimeManager`.
 . `ApplyCommand`: Adds an `Employee` to the `UniqueEmployeeList` in the `Shift`.
 . `UnapplyCommand`: Removes an `Employee` from the `UniqueEmployeeList` in the `Shift`.
 
-
-*Reasons for how it is implemented*
+==== Reasons for how it is implemented
 
 * We wrap the arguments in the classes above so that we may carry out validity checks in those classes.
 
-* `Time` uses Java's well-documented `LocalTime` class for easy integration with the GUI timetable.
+* `Time` and `Date` uses Java's well-documented `LocalTime` and `LocalDate` classes for easy integration with the GUI timetable.
 
 * `UniqueEmployeeList` is used to ensure there are no duplicate employees in the shift.
 

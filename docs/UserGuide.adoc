@@ -164,20 +164,22 @@ Exits the app. +
 *Format:* `exit`
 
 === Employer Features
-These commands are privileged, and can only be executed by the employer. These commands requires logging in to admin mode.
+If you are an employer, you are able to access these commands in addition to the shared commands.
+These commands require logging in to admin mode as shown in <<Logging in to admin mode: `login`>>.
 
-==== Adding an employee: `login`
-This command allow employer to be in admin mode to use all the employer features
+==== Logging in to admin mode: `login`
+Logs in to admin mode, allowing you to use all the employer features.
 
-*format:* `login pw/AdminPassword`
+*Format:* `login pw/AdminPassword`
 
 [CAUTION]
-Remeber to log out after editing the data.
+For security purposes, do remember to log out after you are done. +
+<<Logging out of admin mode: `logout`>>
 
-==== Adding an employee: `logout`
-This command log out from admin mode.
+==== Logging out of admin mode: `logout`
+Logs out of admin mode, preventing the use of employer features.
 
-*format:* `logout`
+*Format:* `logout`
 
 ==== Adding an employee: `add`
 
@@ -243,9 +245,9 @@ Deletes the 2nd employee in PTMan.
 `delete 1` +
 Deletes the 1st employee in the results of the `find` command.
 
-==== Resetting Password for an employee : `rp`
+==== Resetting an employee's password: `rp`
 
-Reset the password for employee from PTMan. +
+Resets the password of the specified employee. +
 *Format:* `rp INDEX` +
 
 ****
@@ -272,7 +274,7 @@ Restores PTMan to the state before the previous _undoable_ command was executed.
 
 [NOTE]
 ====
-Undoable commands: Commands that modify PTMan's data (`add`, `delete`, `edit` and `clear`).
+Undoable commands: Commands that modify PTMan's data (`add`, `delete`, `edit`, `clear`, `addshift`, `deleteshift`, `apply` and `unapply`).
 ====
 
 Examples:
@@ -320,12 +322,12 @@ Clears all employees from PTMan. +
 *Format:* `clear` +
 *Shorthand:* `c`
 
-==== View all details of employee: `viewall`
-PTMan do not only allow user to view who is working in the outlet, details of address and phone numbers are not shown hence this command allows employer to view all the details for all the employee. +
+==== Viewing all details of employees: `viewall`
+Displays all the details of the employees. These include their addresses and phone numbers. +
 *Format:* `viewall`
 
-==== Edit outlet information: `editoutlet`
-PTman outlet information can be modified anytime by the admin. +
+==== Editing outlet information: `editoutlet`
+Edits the outlet information. +
 *Format:* `editoutlet n/NAME h/OPERATING_HOURS c/CONTACT_NUMBERS e/EMAIL`  +
 
 [NOTE]
@@ -334,57 +336,72 @@ PTman outlet information can be modified anytime by the admin. +
 For example, `h/0900-2200` +
 ====
 
-==== Change admin password: `cap` [coming in v1.4]
-PTman should be able to allow employers to change admin password. +
+==== Changing admin password: `cap` [coming in v1.4]
+Changes the admin password. +
 *Format:* `cap old/CURRENT_ADMIN_PASSWORD new/NEW_ADMIN_PASSWORD` +
 
-==== Announcement: `announcement`
+==== Creating an announcement: `announcement`
 PTman should be able to allow employers to create a new announcement. +
 *Format:* `announcement ANNOUNCEMENT_MESSAGE` +
 
-==== Add shift to outlet: `addshift` [coming in v1.4]
-PTman outlets should be able to add a shift to the timetable indicating with how many people the shift needs. +
-*Format:* `addshift d/DATE ts/START_TIME te/END_TIME c/CAPACITY_OF_SHIFT` +
+==== Adding a shift: `addshift`
+Adds a shift to the timetable to indicate that you require employees at that period. +
+*Format:* `addshift d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_CAPACITY` +
+*Shorthand:* `as`
 
 [NOTE]
 ====
-`date` in DDMMYY format. +
-`starttime` `endtime` in HHMM format
+`DATE` should be in DD-MM-YY format. +
+`START_TIME` and `END_TIME` are in HHMM format. +
+`CAPACITY` should be a positive integer.
 ====
 
-==== Add employee to shift: `addto` [coming in v1.4]
-PTman outlets should be able to add an employee to a shift in the timetable. +
-*Format:* `addto d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME` +
+==== Deleting a shift: `deleteshift`
+Deletes a shift from the timetable.
+*Format:* `deleteshift SHIFT_INDEX`
+*Shorthand:* `ds`
 
-==== Delete employee from shift: `delfrom` [coming in v1.4]
-PTman outlets should be able to delete an employee from a shift in the timetable. +
-*Format:* `delfrom d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_NAME` +
+==== Adding an employee to a shift: `addto` [coming in v1.4]
+Adds an employee to a shift.
+*Format:* `addto EMPLOYEE_INDEX SHIFT_INDEX` +
+*Shorthand:* `at`
 
-==== Reset to default shift: `resetshift` [coming in v1.4]
-PTman outlets should be able to reset a shift from the timetable to its default value. +
-*Format:* `resetshift d/DATE ts/START_TIME te/END_TIME` +
-
+==== Removing an employee from a shift: `unapply`
+Removes an employee from a shift. +
+*Format:* `unapply EMPLOYEE_INDEX SHIFT_INDEX` +
+*Shorthand:* `uap`
 
 === Employee Features
-These commands can only be executed by employees and require the employee's password.
+If you are an employee, you are able to access these commands in addition to the shared commands.
+These employee commands require the use of your employee password.
 
-==== Choose shift: `take`
-Employee are able to choose the time slot they want from the timetable. +
-*Format:* `take n/NAME pw/PASSWORD i/SLOT_INDEX... `
+==== Applying for a shift: `apply`
+Applies for a shift. +
+*Format:* `apply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD`
+*Shorthand:* `ap`
 
 Examples:
 
-* `take n/John Doe pw/PASSWORD i/1 i/3 i/6`
-* `take n/Jane pw/PASSWORD i/5`
+* If your index in the employee list is `2` and you want to apply for shift `1`: `apply 2 1 pw/YOUR_PASSWORD`
+* If your index in the employee list is `6` and you want to apply for shift `5`: `apply 6 5 pw/YOUR_PASSWORD`
 
-==== Change password: `cp`
-Each employee is given a default password when their entry is created by their employer.
-They are required to change their password the moment their account is created. +
+[NOTE]
+If you have accidentally applied for the wrong shift, you may use the `unapply` command. +
+View <<Removing yourself from a shift: `unapply`>> for more information.
+
+==== Removing yourself from a shift: `unapply`
+Removes youreself from a shift. +
+*Format:* `unapply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD` +
+*Shorthand:* `uap`
+
+==== Changing your password: `cp`
+You should be given a default password when your entry is created by your employer.
+For security purposes, you are required to change your password the moment your account is created. +
 *Format:* `cp n/NAME` `pw/CURRENT_PASSWORD pw/NEW_PASSWORD`
 
 [NOTE]
 ====
-Employee should change their password the moment they are in PTMan.
+You should change your password the moment you are in PTMan.
 ====
 
 === Saving the data

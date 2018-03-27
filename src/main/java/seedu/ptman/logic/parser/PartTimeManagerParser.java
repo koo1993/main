@@ -27,6 +27,7 @@ import seedu.ptman.logic.commands.DeleteShiftCommand;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditOutletCommand;
 import seedu.ptman.logic.commands.ExitCommand;
+import seedu.ptman.logic.commands.ExportCommand;
 import seedu.ptman.logic.commands.FindCommand;
 import seedu.ptman.logic.commands.HelpCommand;
 import seedu.ptman.logic.commands.HistoryCommand;
@@ -37,6 +38,7 @@ import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.ResetMasterPasswordCommand;
 import seedu.ptman.logic.commands.ResetPasswordCommand;
 import seedu.ptman.logic.commands.SelectCommand;
+import seedu.ptman.logic.commands.UnapplyCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.logic.commands.ViewOutletCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
@@ -93,6 +95,10 @@ public class PartTimeManagerParser {
         case ApplyCommand.COMMAND_WORD:
         case ApplyCommand.COMMAND_ALIAS:
             return new ApplyCommandParser().parse(arguments);
+
+        case UnapplyCommand.COMMAND_WORD:
+        case UnapplyCommand.COMMAND_ALIAS:
+            return new UnapplyCommandParser().parse(arguments);
 
         case AddCommand.COMMAND_WORD:
         case AddCommand.COMMAND_ALIAS:
@@ -159,6 +165,10 @@ public class PartTimeManagerParser {
         case AnnouncementCommand.COMMAND_WORD:
         case AnnouncementCommand.COMMAND_ALIAS:
             return new AnnouncementCommandParser().parse(arguments);
+
+        case ExportCommand.COMMAND_WORD:
+        case ExportCommand.COMMAND_ALIAS:
+            return new ExportCommandParser().parse(arguments);
 
         default:
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

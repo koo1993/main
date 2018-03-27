@@ -61,7 +61,7 @@ public class Shift {
      * @param employee
      * @throws EmployeeNotFoundException
      */
-    protected void removeEmployee(Employee employee) throws EmployeeNotFoundException {
+    public void removeEmployee(Employee employee) throws EmployeeNotFoundException {
         uniqueEmployeeList.remove(employee);
     }
 

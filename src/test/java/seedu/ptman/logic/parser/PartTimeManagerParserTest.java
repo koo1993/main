@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OPERATING_HOURS;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OUTLET_CONTACT;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_OUTLET_EMAIL;
@@ -16,6 +17,7 @@ import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_SHIFT;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.Rule;
@@ -35,6 +37,7 @@ import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditCommand.EditEmployeeDescriptor;
 import seedu.ptman.logic.commands.EditOutletCommand;
 import seedu.ptman.logic.commands.ExitCommand;
+import seedu.ptman.logic.commands.ExportCommand;
 import seedu.ptman.logic.commands.FindCommand;
 import seedu.ptman.logic.commands.HelpCommand;
 import seedu.ptman.logic.commands.HistoryCommand;
@@ -42,9 +45,11 @@ import seedu.ptman.logic.commands.ListCommand;
 import seedu.ptman.logic.commands.LogOutAdminCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
+import seedu.ptman.logic.commands.UnapplyCommand;
 import seedu.ptman.logic.commands.UndoCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
+import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
 import seedu.ptman.model.outlet.Announcement;
@@ -125,6 +130,22 @@ public class PartTimeManagerParserTest {
                 ApplyCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
                         + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
         assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, new Password()), command);
+    }
+
+    @Test
+    public void parseCommand_unapply() throws Exception {
+        UnapplyCommand command = (UnapplyCommand) parser.parseCommand(
+                UnapplyCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
+                        + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
+        assertEquals(new UnapplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, Optional.of(new Password())), command);
+    }
+
+    @Test
+    public void parseCommand_unapplyAlias() throws Exception {
+        UnapplyCommand command = (UnapplyCommand) parser.parseCommand(
+                UnapplyCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
+                        + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
+        assertEquals(new UnapplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, Optional.of(new Password())), command);
     }
 
     @Test
@@ -268,6 +289,25 @@ public class PartTimeManagerParserTest {
                 + " " + announcement);
         assertEquals(new AnnouncementCommand(new Announcement(announcement)), command);
     }
+
+    @Test
+    public void parseCommand_export() throws Exception {
+        String email = "example@gmail.com";
+        ExportCommand command = (ExportCommand) parser.parseCommand(ExportCommand.COMMAND_WORD + " "
+                + PREFIX_EMAIL + email);
+        assertTrue(parser.parseCommand(ExportCommand.COMMAND_WORD) instanceof ExportCommand);
+        assertEquals(new ExportCommand(new Email(email)), command);
+    }
+
+    @Test
+    public void parseCommand_exportAlias() throws Exception {
+        String email = "example@gmail.com";
+        ExportCommand command = (ExportCommand) parser.parseCommand(ExportCommand.COMMAND_ALIAS + " "
+                + PREFIX_EMAIL + email);
+        assertTrue(parser.parseCommand(ExportCommand.COMMAND_WORD) instanceof ExportCommand);
+        assertEquals(new ExportCommand(new Email(email)), command);
+    }
+
 
     @Test
     public void parseCommand_exit() throws Exception {
