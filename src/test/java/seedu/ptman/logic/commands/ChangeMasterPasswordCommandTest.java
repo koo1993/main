@@ -9,7 +9,6 @@ import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

@@ -28,10 +28,9 @@ public class ResetMasterPasswordCommand extends Command {
     @Override
     public CommandResult execute() throws CommandException {
 
-
-
-        Password newPassword = null;
+        Password newPassword;
         OutletInformation outletRequested = model.getOutletInformation();
+
         try {
             newPassword = createAndSendRandomPassword(outletRequested);
         } catch (AddressException ae) {
@@ -73,15 +72,12 @@ public class ResetMasterPasswordCommand extends Command {
             return false;
         }
 
-        // state check
-        ResetMasterPasswordCommand e = (ResetMasterPasswordCommand) other;
         return true;
     }
 
     /**
      * Parses a {@code String password} into an {@code Password}.
      * Leading and trailing whitespaces will be trimmed.
-     *
      */
     public static Password parsePassword(String password) {
         requireNonNull(password);
