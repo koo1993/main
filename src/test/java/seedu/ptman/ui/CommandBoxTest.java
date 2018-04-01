@@ -32,6 +32,7 @@ public class CommandBoxTest extends GuiUnitTest {
     private ArrayList<String> errorStyleOfCommandBox;
 
     private CommandBoxHandle commandBoxHandle;
+    private CommandBoxHandle commandBoxHandleOutput;
 
     @Before
     public void setUp() {
@@ -41,6 +42,8 @@ public class CommandBoxTest extends GuiUnitTest {
         CommandBox commandBox = new CommandBox(logic);
         commandBoxHandle = new CommandBoxHandle(getChildNode(commandBox.getRoot(),
                 CommandBoxHandle.COMMAND_INPUT_FIELD_ID));
+        commandBoxHandleOutput = new CommandBoxHandle(getChildNode(commandBox.getRoot(),
+                CommandBoxHandle.COMMAND_OUTPUT_FIELD_ID));
         uiPartRule.setUiPart(commandBox);
 
         defaultStyleOfCommandBox = new ArrayList<>(commandBoxHandle.getStyleClass());
@@ -69,12 +72,12 @@ public class CommandBoxTest extends GuiUnitTest {
     @Test
     public void commandBox_handleKeyPress() {
         commandBoxHandle.run(COMMAND_THAT_FAILS);
-        assertEquals(errorStyleOfCommandBox, commandBoxHandle.getStyleClass());
+        assertEquals(errorStyleOfCommandBox, commandBoxHandleOutput.getStyleClass());
         guiRobot.push(KeyCode.ESCAPE);
-        assertEquals(errorStyleOfCommandBox, commandBoxHandle.getStyleClass());
+        assertEquals(errorStyleOfCommandBox, commandBoxHandleOutput.getStyleClass());
 
         guiRobot.push(KeyCode.A);
-        assertEquals(defaultStyleOfCommandBox, commandBoxHandle.getStyleClass());
+        assertEquals(defaultStyleOfCommandBox, commandBoxHandleOutput.getStyleClass());
     }
 
     @Test
@@ -146,7 +149,7 @@ public class CommandBoxTest extends GuiUnitTest {
         eventsCollectorRule.eventsCollector.reset();
 
         assertEquals(COMMAND_THAT_FAILS, commandBoxHandle.getInput());
-        assertEquals(errorStyleOfCommandBox, commandBoxHandle.getStyleClass());
+        assertEquals(errorStyleOfCommandBox, commandBoxHandleOutput.getStyleClass());
     }
 
     /**
@@ -161,8 +164,8 @@ public class CommandBoxTest extends GuiUnitTest {
         assertTrue(eventsCollectorRule.eventsCollector.getSize() == 1);
         eventsCollectorRule.eventsCollector.reset();
 
-        assertEquals("", commandBoxHandle.getInput());
-        assertEquals(defaultStyleOfCommandBox, commandBoxHandle.getStyleClass());
+        assertEquals("", commandBoxHandleOutput.getInput());
+        assertEquals(defaultStyleOfCommandBox, commandBoxHandleOutput.getStyleClass());
     }
 
     /**

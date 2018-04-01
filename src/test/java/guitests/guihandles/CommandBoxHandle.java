@@ -10,7 +10,8 @@ import seedu.ptman.ui.CommandBox;
  */
 public class CommandBoxHandle extends NodeHandle<TextField> {
 
-    public static final String COMMAND_INPUT_FIELD_ID = "#commandTextField";
+    public static final String COMMAND_INPUT_FIELD_ID = "#commandTextFieldInput";
+    public static final String COMMAND_OUTPUT_FIELD_ID = "#commandTextFieldOutput";
 
     public CommandBoxHandle(TextField commandBoxNode) {
         super(commandBoxNode);
