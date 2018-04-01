@@ -1,5 +1,7 @@
 package seedu.ptman.logic.commands;
 
+import seedu.ptman.commons.core.EventsCenter;
+import seedu.ptman.commons.events.model.UserModeChangedEvent;
 
 /**
  * Lists all employees in PTMan to the user.
@@ -19,6 +21,7 @@ public class LogOutAdminCommand extends Command {
             return new CommandResult(MESSAGE_LOGGEDOUT);
         }
         model.setFalseAdminMode();
+        EventsCenter.getInstance().post(new UserModeChangedEvent(false));
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

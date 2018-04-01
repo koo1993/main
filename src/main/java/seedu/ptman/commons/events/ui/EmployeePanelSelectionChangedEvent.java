@@ -8,10 +8,11 @@ import seedu.ptman.ui.EmployeeCard;
  */
 public class EmployeePanelSelectionChangedEvent extends BaseEvent {
 
-
+    private final boolean hasNewSelection;
     private final EmployeeCard newSelection;
 
     public EmployeePanelSelectionChangedEvent(EmployeeCard newSelection) {
+        hasNewSelection = (newSelection != null) ? true : false;
         this.newSelection = newSelection;
     }
 
@@ -22,5 +23,9 @@ public class EmployeePanelSelectionChangedEvent extends BaseEvent {
 
     public EmployeeCard getNewSelection() {
         return newSelection;
+    }
+
+    public boolean hasNewSelection() {
+        return hasNewSelection;
     }
 }

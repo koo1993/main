@@ -31,4 +31,7 @@ public interface Logic {
     ListElementPointer getHistorySnapshot();
 
     OutletInformation getOutletInformation();
+
+    /** Returns if the user is currently in admin mode */
+    boolean isAdminMode();
 }

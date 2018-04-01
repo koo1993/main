@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.ptman.ui.TimetablePanel.TIMETABLE_IMAGE_FILE_NAME_DEFAULT;
 
+import java.time.LocalDateTime;
+
 import seedu.ptman.commons.core.EventsCenter;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageAndEmailRequestEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageRequestEvent;
@@ -50,7 +52,7 @@ public class ExportCommand extends Command {
     public CommandResult execute() {
         if (emailToSendImageTo != null) {
             EventsCenter.getInstance().post(new ExportTimetableAsImageAndEmailRequestEvent(
-                    TIMETABLE_IMAGE_FILE_NAME_DEFAULT, emailToSendImageTo));
+                    TIMETABLE_IMAGE_FILE_NAME_DEFAULT + LocalDateTime.now().toString(), emailToSendImageTo));
             return new CommandResult(MESSAGE_EMAIL_SUCCESS);
         } else {
             EventsCenter.getInstance().post(new ExportTimetableAsImageRequestEvent(TIMETABLE_IMAGE_FILE_NAME_DEFAULT));

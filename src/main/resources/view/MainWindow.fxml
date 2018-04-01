@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -33,13 +34,21 @@
           </Menu>
         </MenuBar>
 
-        <StackPane VBox.vgrow="NEVER" fx:id="commandBoxPlaceholder" styleClass="pane-with-border">
-          <padding>
-            <Insets top="5" right="10" bottom="5" left="10" />
-          </padding>
-        </StackPane>
+        <HBox>
+          <StackPane VBox.vgrow="NEVER" HBox.hgrow="ALWAYS" fx:id="commandBoxPlaceholder" styleClass="pane-with-border">
+            <padding>
+              <Insets top="5" right="10" bottom="5" left="10" />
+            </padding>
+          </StackPane>
+          <StackPane VBox.vgrow="NEVER" HBox.hgrow="NEVER" fx:id="adminModeDisplayPlaceholder" styleClass="pane-with-border"
+                      minWidth="105" prefWidth="105" maxWidth="105">
+            <padding>
+              <Insets top="5" right="10" bottom="5" left="10" />
+            </padding>
+          </StackPane>
+        </HBox>
 
-        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.3" VBox.vgrow="ALWAYS">
+        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.8" VBox.vgrow="ALWAYS">
           <VBox>
             <StackPane VBox.vgrow="NEVER" fx:id="resultDisplayPlaceholder" styleClass="pane-with-dark-background"
                        minHeight="100" prefHeight="100" maxHeight="100">

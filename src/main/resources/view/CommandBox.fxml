@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane styleClass="anchor-pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-  <TextField fx:id="commandTextFieldOutput"  promptText="Enter command here..."/>
+  <TextField HBox.hgrow="ALWAYS" fx:id="commandTextFieldOutput"  promptText="Enter command here..."/>
   <TextField fx:id="commandTextFieldInput" onMouseClicked="#handleClick" onAction="#handleCommandInputChanged" onKeyPressed="#handleKeyPress" promptText="Enter command here..."/>
 </StackPane>
 

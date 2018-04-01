@@ -133,6 +133,12 @@ Selects the 2nd employee in PTMan and displays his/her shifts in the timetable v
 `select 1` +
 Selects the 1st employee in the results of the `find` command and displays his/her shifts in the timetable view.
 
+==== Show main timetable view: `main`
+
+Displays the main timetable view (of the current week). Useful for users to navigate back to main timetable view
+after using the `select` command. +
+*Format:* `main`
+
 ==== Export timetable as image: `export`
 
 Exports the current timetable displayed as an image and saves it locally. +

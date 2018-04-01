@@ -180,6 +180,7 @@ public class DeleteCommandSystemTest extends PartTimeManagerSystemTest {
         }
 
         assertCommandBoxShowsDefaultStyle();
+        assertAdminModeDisplayShowsLoginStyle();
         assertStatusBarChangedExceptSaveLocation();
     }
 

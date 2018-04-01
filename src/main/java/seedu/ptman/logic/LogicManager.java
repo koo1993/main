@@ -66,4 +66,9 @@ public class LogicManager extends ComponentManager implements Logic {
     public OutletInformation getOutletInformation() {
         return model.getOutletInformation();
     }
+
+    @Override
+    public boolean isAdminMode() {
+        return model.isAdminMode();
+    }
 }

@@ -43,6 +43,7 @@ import seedu.ptman.logic.commands.HelpCommand;
 import seedu.ptman.logic.commands.HistoryCommand;
 import seedu.ptman.logic.commands.ListCommand;
 import seedu.ptman.logic.commands.LogOutAdminCommand;
+import seedu.ptman.logic.commands.MainCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UnapplyCommand;
@@ -335,6 +336,12 @@ public class PartTimeManagerParserTest {
     public void parseCommand_help() throws Exception {
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD) instanceof HelpCommand);
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD + " 3") instanceof HelpCommand);
+    }
+
+    @Test
+    public void parseCommand_main() throws Exception {
+        assertTrue(parser.parseCommand(MainCommand.COMMAND_WORD) instanceof MainCommand);
+        assertTrue(parser.parseCommand(MainCommand.COMMAND_WORD + " 3") instanceof MainCommand);
     }
 
     @Test

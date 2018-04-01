@@ -80,6 +80,7 @@ public class ClearCommandSystemTest extends PartTimeManagerSystemTest {
         executeCommand(command);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
+        assertAdminModeDisplayShowsLoginStyle();
         assertStatusBarChangedExceptSaveLocation();
     }
 
