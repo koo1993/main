@@ -41,7 +41,7 @@ public class CommandBox extends UiPart<Region> {
     @FXML
     private TextField commandTextFieldInput;
 
-
+    //@@author koo1993
     public CommandBox(Logic logic) {
         super(FXML);
         this.logic = logic;
@@ -49,7 +49,8 @@ public class CommandBox extends UiPart<Region> {
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandTextFieldOutput.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         commandTextFieldOutput.setEditable(false);
-        commandTextFieldInput.getCaretPosition();
+
+        // copying text from input to output textfield
         commandTextFieldInput.textProperty()
                 .addListener((observable, oldText, newText) -> commandTextFieldOutput.setText(processInput(newText)));
 
@@ -60,7 +61,6 @@ public class CommandBox extends UiPart<Region> {
 
     }
 
-    //@@author koo1993
     /**
      * obscure sensitive information like password by replacing it with "_"
      * @param input
@@ -100,6 +100,7 @@ public class CommandBox extends UiPart<Region> {
             commandTextFieldInput.setOpacity(0);
         }
     }
+
     //@@author
     /**
      * Handles the key press event, {@code keyEvent}.
