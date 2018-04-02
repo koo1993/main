@@ -58,7 +58,7 @@ import seedu.ptman.model.outlet.OperatingHours;
 import seedu.ptman.model.outlet.OutletContact;
 import seedu.ptman.model.outlet.OutletEmail;
 import seedu.ptman.model.outlet.OutletName;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
 import seedu.ptman.testutil.EmployeeBuilder;
 import seedu.ptman.testutil.EmployeeUtil;
@@ -91,6 +91,7 @@ public class PartTimeManagerParserTest {
         assertEquals(new AddCommand(employee), command);
     }
 
+    //@@author shanwpf
     @Test
     public void parseCommand_addShift() throws Exception {
         Shift shift = new ShiftBuilder().build();
@@ -106,23 +107,11 @@ public class PartTimeManagerParserTest {
     }
 
     @Test
-    public void parseCommand_clear() throws Exception {
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
-    }
-
-    @Test
-    public void parseCommand_clearAlias() throws Exception {
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_ALIAS) instanceof ClearCommand);
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_ALIAS + " 3") instanceof ClearCommand);
-    }
-
-    @Test
     public void parseCommand_apply() throws Exception {
         ApplyCommand command = (ApplyCommand) parser.parseCommand(
                 ApplyCommand.COMMAND_WORD + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
                         + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
-        assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, new Password()), command);
+        assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, Optional.of(new Password())), command);
     }
 
     @Test
@@ -130,7 +119,21 @@ public class PartTimeManagerParserTest {
         ApplyCommand command = (ApplyCommand) parser.parseCommand(
                 ApplyCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased()
                         + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
-        assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, new Password()), command);
+        assertEquals(new ApplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, Optional.of(new Password())), command);
+    }
+
+    @Test
+    public void parseCommand_deleteShift() throws Exception {
+        DeleteShiftCommand command = (DeleteShiftCommand) parser.parseCommand(
+                DeleteShiftCommand.COMMAND_WORD + " " + INDEX_FIRST_SHIFT.getOneBased());
+        assertEquals(new DeleteShiftCommand(INDEX_FIRST_EMPLOYEE), command);
+    }
+
+    @Test
+    public void parseCommand_deleteShiftAlias() throws Exception {
+        DeleteShiftCommand command = (DeleteShiftCommand) parser.parseCommand(
+                DeleteShiftCommand.COMMAND_ALIAS + " " + INDEX_FIRST_SHIFT.getOneBased());
+        assertEquals(new DeleteShiftCommand(INDEX_FIRST_EMPLOYEE), command);
     }
 
     @Test
@@ -148,6 +151,19 @@ public class PartTimeManagerParserTest {
                         + " " + INDEX_FIRST_SHIFT.getOneBased() + " " + PREFIX_PASSWORD + "DEFAULT1");
         assertEquals(new UnapplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, Optional.of(new Password())), command);
     }
+    //@@author
+
+    @Test
+    public void parseCommand_clear() throws Exception {
+        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
+        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+    }
+
+    @Test
+    public void parseCommand_clearAlias() throws Exception {
+        assertTrue(parser.parseCommand(ClearCommand.COMMAND_ALIAS) instanceof ClearCommand);
+        assertTrue(parser.parseCommand(ClearCommand.COMMAND_ALIAS + " 3") instanceof ClearCommand);
+    }
 
     @Test
     public void parseCommand_delete() throws Exception {
@@ -161,20 +177,6 @@ public class PartTimeManagerParserTest {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
                 DeleteCommand.COMMAND_ALIAS + " " + INDEX_FIRST_EMPLOYEE.getOneBased());
         assertEquals(new DeleteCommand(INDEX_FIRST_EMPLOYEE), command);
-    }
-
-    @Test
-    public void parseCommand_deleteShift() throws Exception {
-        DeleteShiftCommand command = (DeleteShiftCommand) parser.parseCommand(
-                DeleteShiftCommand.COMMAND_WORD + " " + INDEX_FIRST_SHIFT.getOneBased());
-        assertEquals(new DeleteShiftCommand(INDEX_FIRST_EMPLOYEE), command);
-    }
-
-    @Test
-    public void parseCommand_deleteShiftAlias() throws Exception {
-        DeleteShiftCommand command = (DeleteShiftCommand) parser.parseCommand(
-                DeleteShiftCommand.COMMAND_ALIAS + " " + INDEX_FIRST_SHIFT.getOneBased());
-        assertEquals(new DeleteShiftCommand(INDEX_FIRST_EMPLOYEE), command);
     }
 
     @Test

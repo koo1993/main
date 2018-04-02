@@ -68,8 +68,8 @@ public class CommandTestUtil {
     public static final String VALID_CAPACITY_1 = "1";
     public static final String VALID_CAPACITY_2 = "2";
 
-    public static final String DATE_DESC_MONDAY = " " + PREFIX_DATE + VALID_DATE_12MAR;
-    public static final String DATE_DESC_TUESDAY = " " + PREFIX_DATE + VALID_DAY_13MAR;
+    public static final String DATE_DESC_12MAR = " " + PREFIX_DATE + VALID_DATE_12MAR;
+    public static final String DATE_DESC_13MAR = " " + PREFIX_DATE + VALID_DAY_13MAR;
     public static final String TIME_START_DESC_10AM = " " + PREFIX_TIME_START + VALID_TIME_START_10AM;
     public static final String TIME_START_DESC_12PM = " " + PREFIX_TIME_START + VALID_TIME_START_12PM;
     public static final String TIME_END_DESC_8PM = " " + PREFIX_TIME_END + VALID_TIME_END_8PM;

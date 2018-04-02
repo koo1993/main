@@ -62,12 +62,12 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
-     * obscure sensitive information like password by replacing it with "_"
+     * Obscure sensitive information like password by replacing each character by "*"
      * @param input
      * @return the processed input
      */
     private String processInput(String input) {
-        StringBuilder tempBuild = new StringBuilder(input);
+        StringBuilder newString = new StringBuilder(input);
         int indexOfPrefix = input.indexOf(PREFIX_PASSWORD.getPrefix());
         int indexOfSpace = input.indexOf(" ", indexOfPrefix);
 
@@ -76,12 +76,12 @@ public class CommandBox extends UiPart<Region> {
                 indexOfSpace = input.length();
             }
             for (int i = indexOfPrefix + 3; i < indexOfSpace; i++) {
-                tempBuild.replace(i, i + 1, "*");
+                newString.replace(i, i + 1, "*");
             }
             indexOfPrefix = input.indexOf(PREFIX_PASSWORD.getPrefix(), indexOfPrefix + 3);
             indexOfSpace = input.indexOf(" ", indexOfPrefix);
         }
-        return tempBuild.toString();
+        return newString.toString();
     }
 
     /**
@@ -179,7 +179,7 @@ public class CommandBox extends UiPart<Region> {
             initHistory();
             // handle command failure
             setStyleToIndicateCommandFailure();
-            logger.info("Invalid command: " + commandTextFieldInput.getText());
+            logger.info("Invalid command: " + processInput(commandTextFieldInput.getText()));
             raise(new NewResultAvailableEvent(e.getMessage(), true));
         }
     }

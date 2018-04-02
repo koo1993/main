@@ -2,7 +2,7 @@ package seedu.ptman.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.CollectionUtil.requireAllNonNull;
-import static seedu.ptman.model.outlet.Timetable.getWeekFromDate;
+import static seedu.ptman.commons.util.DateUtil.getWeekFromDate;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -21,10 +21,10 @@ import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeException;
-import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.exceptions.ShiftNotFoundException;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -130,6 +130,7 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public void setAdminPassword(Password password) {
         partTimeManager.setAdminPassword(password);
+        indicatePartTimeManagerChanged();
     }
 
     @Override
@@ -160,7 +161,7 @@ public class ModelManager extends ComponentManager implements Model {
         }
     }
 
-    //@@author
+    //@@author shanwpf
     @Override
     public void addShift(Shift shift) throws DuplicateShiftException {
         partTimeManager.addShift(shift);
@@ -190,6 +191,7 @@ public class ModelManager extends ComponentManager implements Model {
         requireNonNull(predicate);
         filteredShifts.setPredicate(predicate);
     }
+    //@@author
 
     @Override
     public void updateEmployee(Employee target, Employee editedEmployee)

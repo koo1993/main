@@ -8,9 +8,10 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
 import seedu.ptman.logic.commands.exceptions.CommandException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
 
+//@@author shanwpf
 /**
  * Adds a shift to PTMan.
  */

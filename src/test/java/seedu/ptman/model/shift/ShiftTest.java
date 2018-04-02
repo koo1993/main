@@ -1,18 +1,25 @@
-package seedu.ptman.model.outlet;
+package seedu.ptman.model.shift;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static seedu.ptman.testutil.TypicalEmployees.ALICE;
 import static seedu.ptman.testutil.TypicalEmployees.BOB;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
+import seedu.ptman.model.shift.exceptions.ShiftFullException;
 import seedu.ptman.testutil.Assert;
 import seedu.ptman.testutil.ShiftBuilder;
 
+//@@author shanwpf
 public class ShiftTest {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void constructor_illegalTime_throwsIllegalArgumentException() {
@@ -32,7 +39,7 @@ public class ShiftTest {
     }
 
     @Test
-    public void setEmployees() throws DuplicateEmployeeException {
+    public void setEmployees() throws DuplicateEmployeeException, ShiftFullException {
         Shift shift = new ShiftBuilder().build();
         shift.addEmployee(ALICE);
         shift.addEmployee(BOB);
@@ -43,7 +50,29 @@ public class ShiftTest {
     }
 
     @Test
-    public void equals_sameShift_returnsTrue() throws DuplicateEmployeeException {
+    public void isFull_shiftFull_returnsTrue() throws ShiftFullException, DuplicateEmployeeException {
+        Shift shift = new ShiftBuilder().withCapacity("1").build();
+        shift.addEmployee(ALICE);
+        assertTrue(shift.isFull());
+    }
+
+    @Test
+    public void isFull_shiftNotFull_returnsFalse() throws ShiftFullException, DuplicateEmployeeException {
+        Shift shift = new ShiftBuilder().withCapacity("2").build();
+        shift.addEmployee(ALICE);
+        assertFalse(shift.isFull());
+    }
+
+    @Test
+    public void addEmployee_shiftFull_throwsShiftFullException() throws ShiftFullException, DuplicateEmployeeException {
+        Shift shift = new ShiftBuilder().withCapacity("1").build();
+        shift.addEmployee(ALICE);
+        thrown.expect(ShiftFullException.class);
+        shift.addEmployee(BOB);
+    }
+
+    @Test
+    public void equals_sameShift_returnsTrue() throws DuplicateEmployeeException, ShiftFullException {
         Shift shift1 = new ShiftBuilder().withDate("19-03-18")
                 .withCapacity("4")
                 .withStartTime("1200")

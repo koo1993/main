@@ -1,8 +1,9 @@
-package seedu.ptman.model.outlet;
+package seedu.ptman.model.shift;
 
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
 import static seedu.ptman.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.google.common.collect.Iterables;
@@ -12,7 +13,9 @@ import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.UniqueEmployeeList;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
+import seedu.ptman.model.shift.exceptions.ShiftFullException;
 
+//@@author shanwpf
 /**
  * Represents a shift that employees can work in.
  */
@@ -43,22 +46,39 @@ public class Shift {
         setEmployees(shift);
     }
 
+    public Shift(Date date, Time startTime, Time endTime, Capacity capacity, List<Employee> employees) {
+        requireAllNonNull(date, startTime, endTime, capacity, employees);
+        checkArgument(endTime.isAfter(startTime), MESSAGE_SHIFT_CONSTRAINTS);
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.capacity = capacity;
+        this.date = date;
+        this.uniqueEmployeeList = new UniqueEmployeeList();
+        try {
+            this.uniqueEmployeeList.setEmployees(employees);
+        } catch (DuplicateEmployeeException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected boolean contains(Employee employee) {
         return uniqueEmployeeList.contains(employee);
     }
 
     /**
-     * Adds an employee that is working in this shift.
-     * @param employee
+     * Adds an employee to this shift
      * @throws DuplicateEmployeeException
+     * @throws ShiftFullException
      */
-    public void addEmployee(Employee employee) throws DuplicateEmployeeException {
+    public void addEmployee(Employee employee) throws DuplicateEmployeeException, ShiftFullException {
+        if (this.isFull()) {
+            throw new ShiftFullException();
+        }
         uniqueEmployeeList.add(employee);
     }
 
     /**
-     * Removes an employee who is no longer working in this shift.
-     * @param employee
+     * Removes an employee from this shift
      * @throws EmployeeNotFoundException
      */
     public void removeEmployee(Employee employee) throws EmployeeNotFoundException {
@@ -107,11 +127,14 @@ public class Shift {
         return capacity.getCapacity() - numEmployees;
     }
 
+    public boolean isFull() {
+        return getEmployeeList().size() >= this.capacity.getCapacity();
+    }
+
     /**
-     * Compares this shift to another. Returns a negative integer if the argument is a later shift,
+     * Compares this shift to another.
+     * Returns a negative integer if the argument is an earlier shift,
      * 0 if the shifts are equal, or a positive integer if the argument is a later shift.
-     * @param other
-     * @return
      */
     public int compareTo(Shift other) {
         if (date.equals(other.getDate())) {

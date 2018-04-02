@@ -1,7 +1,7 @@
 = image:ptman_logo_ug.png[width="400"]
 :toc:
 :toclevels: 3
-:toc-title:
+:toc-title: Table of Contents
 :toc-placement: preamble
 :sectnums:
 :imagesDir: images
@@ -25,13 +25,6 @@ PTMan comes with many useful features for employers to easily schedule their par
 This user guide comes with comprehensive instructions and examples to help you get started using PTMan. +
  +
 Sounds great? Jump straight to <<Quick Start>> to get started. Enjoy!
-
-== About
-This user guide shows you how to get started using PTman. +
- +
-This user guide introduces you to the features PTMan have and leads you through with examples. +
- +
-You are required to know how to use Java to run a Graphical User Interface (GUI) application. +
 
 == Quick Start
 
@@ -115,12 +108,14 @@ Returns any employee having names `Betsy`, `Tim`, or `John`.
 ==== Listing all employees: `list`
 
 Shows a list of all employees in PTMan. +
+
 *Format:* `list` +
 *Shorthand:* `l`
 
 ==== Show employee shifts: `select`
 
 Displays the shifts of the selected employee on the timetable view. +
+
 *Format:* `select INDEX` +
 *Shorthand:* `s INDEX`
 
@@ -137,11 +132,13 @@ Selects the 1st employee in the results of the `find` command and displays his/h
 
 Displays the main timetable view (of the current week). Useful for users to navigate back to main timetable view
 after using the `select` command. +
+
 *Format:* `main`
 
 ==== Export timetable as image: `export`
 
 Exports the current timetable displayed as an image and saves it locally. +
+
 *Format:* `export` +
 *Shorthand:* `exp`
 
@@ -156,6 +153,7 @@ Exports the timetable with the shifts of the 1st employee in PTMan.
 ==== Listing entered commands: `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
+
 *Format:* `history` +
 *Shorthand:* `h`
 
@@ -167,6 +165,7 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 ==== Exiting the program: `exit`
 
 Exits the app. +
+
 *Format:* `exit`
 
 === Employer Features
@@ -180,7 +179,7 @@ Logs in to admin mode, allowing you to use all the employer features.
 
 [CAUTION]
 For security purposes, do remember to log out after you are done. +
-<<Logging out of admin mode: `logout`>>
+Refer to <<Logging out of admin mode: `logout`>> for more information.
 
 ==== Logging out of admin mode: `logout`
 Logs out of admin mode, preventing the use of employer features.
@@ -190,6 +189,7 @@ Logs out of admin mode, preventing the use of employer features.
 ==== Adding an employee: `add`
 
 Adds an employee to PTMan. +
+
 *Format:* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]...` +
 *Shorthand:* `a n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY [t/TAG]...`
 
@@ -207,11 +207,12 @@ Adds an employee named `Betsy Crowe` with email `betsycrowe@example.com`, addres
 ==== Editing an employee: `edit`
 
 Edits an existing employee in PTMan. +
+
 *Format:* `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...` +
 *Shorthand:* `e INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...`
 
 [NOTE]
-An employer password can't be edited. [refer to `rp` (reset password)]
+An employee's password can only be edited by the employee. +
 
 ****
 * Edits the employee at the specified `INDEX`. The index refers to the index number shown in the last employee listing. The index *must be a positive integer* 1, 2, 3, ...
@@ -233,6 +234,7 @@ Edits the name of the 2nd employee to be `Betsy Crower` and clears all existing 
 ==== Deleting an employee : `delete`
 
 Deletes the specified employee from PTMan. +
+
 *Format:* `delete INDEX` +
 *Shorthand:* `d INDEX`
 
@@ -254,13 +256,15 @@ Deletes the 1st employee in the results of the `find` command.
 ==== Changing master password: `cmp`
 You should be given a default password when your entry is created by your employer.
 For security purposes, you are required to change your password the moment your account is created. +
+
 *Format:* `cmp` `pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
 [NOTE]
-Password should be at least 8 character long.
+The password should be at least 8 characters long.
 
 ==== Resetting master password: `rmp`
 
 Resets the password of the specified employee. +
+
 *Format:* `rmp` +
 
 ****
@@ -275,12 +279,13 @@ Examples:
 
 
 [NOTE]
-Password reset will be sent to your outlet email.
+The temporary password will be sent to your outlet email.
 
 // tag::undoredo[]
 ==== Undoing previous command : `undo`
 
 Restores PTMan to the state before the previous _undoable_ command was executed. +
+
 *Format:* `undo` +
 *Shorthand:* `u`
 
@@ -291,8 +296,7 @@ Undoable commands: Commands that modify PTMan's data (`add`, `delete`, `edit`, `
 
 Examples:
 
-* `delete 1 +
-`list` +
+* `delete 1` +
 `undo` (reverses the `delete 1` command) +
 
 * `list` +
@@ -307,6 +311,7 @@ The `undo` command fails as there are no undoable commands executed previously.
 ==== Redoing the previously undone command: `redo`
 
 Reverses the most recent `undo` command. +
+
 *Format:* `redo` +
 *Shorthand:* `r`
 
@@ -330,17 +335,21 @@ The `redo` command fails as there are no `undo` commands executed previously.
 
 ==== Clearing all entries : `clear`
 
-Clears all employees from PTMan. +
+Clears all shifts and employees from PTMan. +
+
 *Format:* `clear` +
 *Shorthand:* `c`
 
 ==== Viewing all details of employees: `viewall`
 Displays all the details of the employees. These include their addresses and phone numbers. +
+
 *Format:* `viewall`
 
 ==== Editing outlet information: `editoutlet`
 Edits the outlet information. +
-*Format:* `editoutlet n/NAME h/OPERATING_HOURS c/CONTACT_NUMBERS e/EMAIL`  +
+
+*Format:* `editoutlet n/NAME h/OPERATING_HOURS c/CONTACT_NUMBER e/EMAIL`  +
+*Shorthand:* `eo`
 
 [NOTE]
 ====
@@ -348,16 +357,14 @@ Edits the outlet information. +
 For example, `h/0900-2200` +
 ====
 
-==== Changing admin password: `cap` [coming in v1.4]
-Changes the admin password. +
-*Format:* `cap old/CURRENT_ADMIN_PASSWORD new/NEW_ADMIN_PASSWORD` +
-
 ==== Creating an announcement: `announcement`
-PTman should be able to allow employers to create a new announcement. +
+Sets an announcement for the outlet. +
+
 *Format:* `announcement ANNOUNCEMENT_MESSAGE` +
 
 ==== Adding a shift: `addshift`
 Adds a shift to the timetable to indicate that you require employees at that period. +
+
 *Format:* `addshift d/DATE ts/START_TIME te/END_TIME c/EMPLOYEE_CAPACITY` +
 *Shorthand:* `as`
 
@@ -370,16 +377,28 @@ Adds a shift to the timetable to indicate that you require employees at that per
 
 ==== Deleting a shift: `deleteshift`
 Deletes a shift from the timetable.
+
 *Format:* `deleteshift SHIFT_INDEX`
 *Shorthand:* `ds`
 
-==== Adding an employee to a shift: `addto` [coming in v1.4]
-Adds an employee to a shift.
-*Format:* `addto EMPLOYEE_INDEX SHIFT_INDEX` +
-*Shorthand:* `at`
+==== Applying an employee for a shift: `apply`
+Applies an employee for a shift. +
+
+*Format:* `apply EMPLOYEE_INDEX SHIFT_INDEX` +
+*Shorthand:* `ap`
+
+Examples:
+
+* If the employee's index in the employee list is `2` and you want to apply them for shift `1`: `apply 2 1`
+* If the employee's index in the employee list is `6` and you want to apply them shift `5`: `apply 6 5`
+
+[NOTE]
+If you have accidentally applied the employee for the wrong shift, you may use the `unapply` command. +
+Refer to <<Removing an employee from a shift: `unapply`>> for more information.
 
 ==== Removing an employee from a shift: `unapply`
 Removes an employee from a shift. +
+
 *Format:* `unapply EMPLOYEE_INDEX SHIFT_INDEX` +
 *Shorthand:* `uap`
 
@@ -389,7 +408,8 @@ These employee commands require the use of your employee password.
 
 ==== Applying for a shift: `apply`
 Applies for a shift. +
-*Format:* `apply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD`
+
+*Format:* `apply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD` +
 *Shorthand:* `ap`
 
 Examples:
@@ -399,17 +419,19 @@ Examples:
 
 [NOTE]
 If you have accidentally applied for the wrong shift, you may use the `unapply` command. +
-View <<Removing yourself from a shift: `unapply`>> for more information.
+Refer to <<Removing yourself from a shift: `unapply`>> for more information.
 
 ==== Removing yourself from a shift: `unapply`
 Removes youreself from a shift. +
+
 *Format:* `unapply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD` +
 *Shorthand:* `uap`
 
 ==== Changing your password: `cp`
 You should be given a default password when your entry is created by your employer.
 For security purposes, you are required to change your password the moment your account is created. +
-*Format:* `cp INDEX` `pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
+
+*Format:* `cp INDEX pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
 
 ****
 * The password will change for employee at the specified INDEX.
@@ -419,7 +441,8 @@ For security purposes, you are required to change your password the moment your 
 
 ==== Resetting your password: `rp`
 
-Resets the password of the specified employee. +
+Resets your employee password. This sends a temporary password to your email which you may use to change your password. +
+
 *Format:* `rp INDEX` +
 
 ****
@@ -438,14 +461,7 @@ Reset password for the 2nd employee in PTMan.
 Reset password for the 1st employee in the results of the `find` command.
 
 [NOTE]
-Password reset will be sent to your email that you registered with your employer
-
-
-
-[NOTE]
-====
-You should change your password the moment you are in PTMan.
-====
+The temporary password will be sent to the email address that you entered in PTMan.
 
 === Saving the data
 
@@ -453,9 +469,11 @@ PTMan's data is saved in the hard disk automatically after any command that chan
 There is no need to save manually.
 
 // tag::dataencryption[]
-=== Encrypting data files `[coming in v2.0]`
+=== Encrypting data files
 
-_{explain how the user can enable/disable data encryption}_
+PTMan's data saved in the hard disk is encrypted automatically after any command that changes the data.
+Data is also decrypted when reading from local files. There is no need to encrypt and decrypt manually.
+
 // end::dataencryption[]
 
 
@@ -467,19 +485,49 @@ _{explain how the user can enable/disable data encryption}_
 
 == Command Summary
 
-* *Add* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY pw/AdminPassword [t/TAG]...` +
-e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 s/0 t/friend t/colleague`
-* *Clear* : `clear`
-* *Delete* : `delete INDEX` +
-e.g. `delete 3`
-* *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [s/SALARY] [t/TAG]...` +
-e.g. `edit 2 n/James Lee e/jameslee@example.com`
-* *Find* : `find KEYWORD [MORE_KEYWORDS]` +
+=== Shared commands
+
+* *Find*: `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
-* *List* : `list`
-* *Help* : `help`
-* *Select* : `select INDEX` +
+* *List*: `list`
+* *Help*: `help`
+* *Select*: `select INDEX` +
 e.g.`select 2`
-* *History* : `history`
-* *Undo* : `undo`
-* *Redo* : `redo`
+* *History*: `history`
+
+=== Employer commands
+
+==== General commands
+* *Undo*: `undo`
+* *Redo*: `redo`
+
+==== Employee management
+* *Add*: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY pw/AdminPassword t/TAG...` +
+e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 s/0 t/friend t/colleague`
+* *Clear*: `clear`
+* *Delete*: `delete INDEX` +
+e.g. `delete 3`
+* *Edit*: `edit INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS s/SALARY t/TAG...` +
+e.g. `edit 2 n/James Lee e/jameslee@example.com`
+
+==== Outlet management
+* *Edit outlet information:* `editoutlet n/NAME h/OPERATING_HOURS c/CONTACT_NUMBER e/EMAIL` +
+e.g. `editoutlet n/AwesomeFood`
+
+* *Create announcement:* `announcement ANNOUNCEMENT_MESSAGE` +
+e.g. `announcement This is a new announcement!`
+
+* *Change master password:* `cmp` `pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD` +
+
+==== Shift management
+* *Add shift*: `addshift d/DATE ts/TIME_START te/TIME_END c/CAPACITY`
+* *Delete shift*: `deleteshift SHIFT_INDEX`
+* *Apply*: `apply EMPLOYEE_INDEX SHIFT_INDEX`
+* *Unapply*: `unapply EMPLOYEE_INDEX SHIFT_INDEX`
+
+=== Employee commands
+
+==== Shift management
+* *Apply*: `apply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD`
+* *Unapply*: `unapply EMPLOYEE_INDEX SHIFT_INDEX pw/PASSWORD`
+

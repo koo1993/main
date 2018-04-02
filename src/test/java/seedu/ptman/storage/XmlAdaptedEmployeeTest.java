@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
+import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
+import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
 import seedu.ptman.model.employee.Salary;
@@ -148,4 +150,26 @@ public class XmlAdaptedEmployeeTest {
         Assert.assertThrows(IllegalValueException.class, employee::toModelType);
     }
 
+    @Test
+    public void setAttributesFromSource_validInputs_returnsEqualObject() {
+        Employee employee = new Employee(new Name(VALID_NAME), new Phone(VALID_PHONE), new Email(VALID_EMAIL),
+                new Address(VALID_ADDRESS), new Salary(VALID_SALARY), new Password(DEFAULT1_HASH),
+                BENSON.getTags());
+        XmlAdaptedEmployee adaptedEmployee = new XmlAdaptedEmployee();
+        adaptedEmployee.setAttributesFromSource(employee);
+        XmlAdaptedEmployee sameAdaptedEmployee = new XmlAdaptedEmployee();
+        sameAdaptedEmployee.setAttributesFromSource(employee);
+        assertEquals(adaptedEmployee, sameAdaptedEmployee);
+    }
+
+    @Test
+    public void setAttributesFromStrings_validInputs_returnEqualObject() {
+        XmlAdaptedEmployee adaptedEmployee = new XmlAdaptedEmployee();
+        XmlAdaptedEmployee sameAdaptedEmployee = new XmlAdaptedEmployee();
+        adaptedEmployee.setAttributesFromStrings(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SALARY, DEFAULT1_HASH);
+        sameAdaptedEmployee.setAttributesFromStrings(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SALARY, DEFAULT1_HASH);
+        assertEquals(adaptedEmployee, sameAdaptedEmployee);
+    }
 }

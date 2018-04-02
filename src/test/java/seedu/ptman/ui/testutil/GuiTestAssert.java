@@ -13,7 +13,7 @@ import guitests.guihandles.EmployeeCardHandle;
 import guitests.guihandles.EmployeeListPanelHandle;
 import guitests.guihandles.ResultDisplayHandle;
 import seedu.ptman.model.employee.Employee;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 import seedu.ptman.ui.EmployeeCard;
 
 /**

@@ -21,6 +21,8 @@ public class XmlSerializablePartTimeManager {
     private List<XmlAdaptedEmployee> employees;
     @XmlElement
     private List<XmlAdaptedTag> tags;
+    @XmlElement
+    private List<XmlAdaptedShift> shifts;
 
     /**
      * Creates an empty XmlSerializablePartTimeManager.
@@ -29,6 +31,7 @@ public class XmlSerializablePartTimeManager {
     public XmlSerializablePartTimeManager() {
         employees = new ArrayList<>();
         tags = new ArrayList<>();
+        shifts = new ArrayList<>();
     }
 
     /**
@@ -38,6 +41,7 @@ public class XmlSerializablePartTimeManager {
         this();
         employees.addAll(src.getEmployeeList().stream().map(XmlAdaptedEmployee::new).collect(Collectors.toList()));
         tags.addAll(src.getTagList().stream().map(XmlAdaptedTag::new).collect(Collectors.toList()));
+        shifts.addAll(src.getShiftList().stream().map(XmlAdaptedShift::new).collect(Collectors.toList()));
     }
 
     /**
@@ -54,6 +58,9 @@ public class XmlSerializablePartTimeManager {
         for (XmlAdaptedEmployee p : employees) {
             partTimeManager.addEmployee(p.toModelType());
         }
+        for (XmlAdaptedShift s : shifts) {
+            partTimeManager.addShift(s.toModelType());
+        }
         return partTimeManager;
     }
 
@@ -67,7 +74,9 @@ public class XmlSerializablePartTimeManager {
             return false;
         }
 
-        XmlSerializablePartTimeManager otherAb = (XmlSerializablePartTimeManager) other;
-        return employees.equals(otherAb.employees) && tags.equals(otherAb.tags);
+        XmlSerializablePartTimeManager otherPtm = (XmlSerializablePartTimeManager) other;
+        return employees.equals(otherPtm.employees)
+                && tags.equals(otherPtm.tags)
+                && shifts.equals(otherPtm.shifts);
     }
 }

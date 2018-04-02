@@ -1,10 +1,10 @@
 package seedu.ptman.logic.commands.exceptions;
 
 /**
- * Signals that the operation will result in incorrect Password objects.
+ * Signals that the expected password is missing.
  */
 public class MissingPasswordException extends CommandException {
     public MissingPasswordException() {
-        super("Password not present");
+        super("Please include your employee password");
     }
 }

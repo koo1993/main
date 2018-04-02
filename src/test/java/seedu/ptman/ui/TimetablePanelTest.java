@@ -44,7 +44,7 @@ import seedu.ptman.commons.events.ui.ExportTimetableAsImageAndEmailRequestEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageRequestEvent;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 
 
 //@@author hzxcaryn

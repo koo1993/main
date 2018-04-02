@@ -153,4 +153,31 @@ public class XmlAdaptedOutletInformationTest {
         // Different values -> return false
         assertFalse(firstOutletInformation.equals(secondOutletInformation));
     }
+
+    @Test
+    public void setAttributesFromSource_validInputs_returnsEqualObject() {
+        OutletInformation outlet = new OutletInformation();
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation();
+        outletInformation.setAttributesFromSource(outlet);
+        XmlAdaptedOutletInformation sameOutletInformation = new XmlAdaptedOutletInformation();
+        sameOutletInformation.setAttributesFromSource(outlet);
+        assertEquals(outletInformation, sameOutletInformation);
+    }
+
+    @Test
+    public void setAttributesFromStrings_validInputs_returnEqualObject() {
+        OutletInformation outlet = new OutletInformation();
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation();
+        outletInformation.setAttributesFromStrings(outlet.getName().toString(), outlet.getOperatingHours().toString(),
+                outlet.getOutletContact().toString(), outlet.getOutletEmail().toString(),
+                outlet.getMasterPassword().getPasswordHash(),
+                outlet.getAnnouncement().toString());
+        XmlAdaptedOutletInformation sameOutletInformation = new XmlAdaptedOutletInformation();
+        sameOutletInformation.setAttributesFromStrings(outlet.getName().toString(),
+                outlet.getOperatingHours().toString(),
+                outlet.getOutletContact().toString(), outlet.getOutletEmail().toString(),
+                outlet.getMasterPassword().getPasswordHash(),
+                outlet.getAnnouncement().toString());
+        assertEquals(outletInformation, sameOutletInformation);
+    }
 }

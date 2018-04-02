@@ -1,4 +1,4 @@
-package seedu.ptman.model.outlet;
+package seedu.ptman.model.shift;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
@@ -8,9 +8,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
+//@@author shanwpf
 /**
- * Represents an outlet's time in PTMan.
- * Guarantees: immutable; is valid as declared in {@link #isValidTime(String)}
+ * Represents a shift's date
+ * Guarantees: immutable; is valid as declared in {@link #isValidDate(String)}
  */
 public class Date {
 

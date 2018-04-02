@@ -5,25 +5,25 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_CAPACITY;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
-
-import java.util.stream.Stream;
+import static seedu.ptman.logic.parser.ParserUtil.arePrefixesPresent;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.logic.commands.AddShiftCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
-import seedu.ptman.model.outlet.Capacity;
-import seedu.ptman.model.outlet.Date;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.Time;
+import seedu.ptman.model.shift.Capacity;
+import seedu.ptman.model.shift.Date;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.Time;
 
+//@@author shanwpf
 /**
  * Parses input arguments and creates a new AddShiftCommand object
  */
 public class AddShiftCommandParser implements Parser<AddShiftCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the AddCommand
-     * and returns an AddCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the AddShiftCommand
+     * and returns an AddShiftCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     public AddShiftCommand parse(String args) throws ParseException {
@@ -50,13 +50,4 @@ public class AddShiftCommandParser implements Parser<AddShiftCommand> {
             throw new ParseException(ive.getMessage(), ive);
         }
     }
-
-    /**
-     * Returns true if none of the prefixes contains empty {@code Optional} values in the given
-     * {@code ArgumentMultimap}.
-     */
-    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
-        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
-    }
-
 }

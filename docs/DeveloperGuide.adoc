@@ -10,13 +10,13 @@ ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
 endif::[]
-:repoURL: https://github.com/CS2103JAN2018-W14-B2/main
+:repoURL: https://github.com/CS2103JAN2018-W14-B2/main/tree/master/
 
 By: `W14-B2`      Since: `March 2018`      Licence: `MIT`
 
 == Introduction
 
-PTMan is a Java application that helps employers manage and schedule their part-time employees. +
+Part-time Manager (PTMan) is a Java application that helps employers manage and schedule their part-time employees. +
 It provides a graphical user interface for displaying schedules and employee information while making use of a command-line interface as the primary mode of input.
 
 == Setting up
@@ -101,7 +101,7 @@ Here are some tips before you get started with coding:
 [[Design-Architecture]]
 === Architecture
 
-The _Architecture Diagram_ given below illustrates the high-level design of the app.
+_Figure 1_ below illustrates the high-level design of the app.
 
 .Architecture Diagram
 image::Architecture.png[width="600"]
@@ -111,7 +111,7 @@ The `.pptx` files used to create diagrams in this document can be found in the l
 
 Here are some quick overviews of each component:
 
-* `Main` has only one class called link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp`]. It is responsible for:
+* `Main` has only one class called link:{repoURL}/src/main/java/seedu/ptman/MainApp.java[`MainApp`]. It is responsible for:
 
 ** At app launch: Initializing the components in the correct sequence, and connecting them up with each other.
 ** At shut down: Shutting down the components and invoking cleanup methods where necessary.
@@ -133,7 +133,7 @@ Each of the four components:
 * Defines their API in an `interface` with the same name as the component.
 * Exposes their functionality using a `{Component Name}Manager` class.
 
-For example, the `Logic` component (see the class diagram given below) defines it's API in the `Logic.java` interface and exposes its functionality using the `LogicManager.java` class.
+For example, the `Logic` component, illustrated by _Figure 2_, defines it's API in the `Logic.java` interface and exposes its functionality using the `LogicManager.java` class.
 
 .Class Diagram of the Logic Component
 image::LogicClassDiagram.png[width="800"]
@@ -141,15 +141,15 @@ image::LogicClassDiagram.png[width="800"]
 [discrete]
 ==== Events-Driven nature of the design
 
-The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
+_Figure 3_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
 
 .Component interactions for `delete 1` command (part 1)
 image::SDforDeletePerson.png[width="800"]
 
 [NOTE]
-Note how the `Model` simply raises a `AddressBookChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
+Note how the `Model` simply raises a `PartTimeManagerChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
 
-The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
+_Figure 4_ below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
 .Component interactions for `delete 1` command (part 2)
 image::SDforDeletePersonEventHandling.png[width="800"]
@@ -168,11 +168,11 @@ _Figure 5_ below shows the structure of the `UI` component.
 .Structure of the UI Component
 image::UiClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
+*API* : link:{repoURL}/src/main/java/seedu/ptman/ui/Ui.java[`Ui.java`]
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
-The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
+The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/ptman/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
 The `UI` component:
 
@@ -191,9 +191,9 @@ image::LogicClassDiagram.png[width="800"]
 image::LogicCommandClassDiagram.png[width="800"]
 
 *API* :
-link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
+link:{repoURL}/src/main/java/seedu/ptman/logic/Logic.java[`Logic.java`]
 
-.  `Logic` uses the `AddressBookParser` class to parse the user command.
+.  `Logic` uses the `PartTimeManagerParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
 .  The command execution can affect the `Model` (e.g. adding a person) and/or raise events.
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
@@ -209,14 +209,14 @@ image::DeletePersonSdForLogic.png[width="800"]
 .Structure of the Model Component
 image::ModelClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
+*API* : link:{repoURL}/src/main/java/seedu/ptman/model/Model.java[`Model.java`]
 
 The `Model`,
 
 * stores a `UserPref` object that represents the user's preferences.
-* stores the Address Book data.
+* stores the PartTimeManager data in memory.
 * exposes an unmodifiable `ObservableList<Employee>` and `ObservableList<Shift>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the lists change.
-* does not depend on any of the other three components.
+* does not depend on any of the other three components (`UI`, `Storage` and `Logic`).
 
 [[Design-Storage]]
 === Storage component
@@ -224,21 +224,87 @@ The `Model`,
 .Structure of the Storage Component
 image::StorageClassDiagram.png[width="800"]
 
-*API* : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
+*API* : link:{repoURL}/src/main/java/seedu/ptman/storage/Storage.java[`Storage.java`]
 
 The `Storage` component,
 
 * can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in xml format and read it back.
+* can save the PartTimeManager data in xml format and read it back.
 
 [[Design-Commons]]
 === Common classes
 
-Classes used by multiple components are in the `seedu.addressbook.commons` package.
+Classes used by multiple components are in the `seedu.ptman.commons` package.
 
 == Implementation
 
 This section describes some noteworthy details on how certain features are implemented.
+
+=== Outlet feature
+
+==== Reason for implementation
+PTMan is designed for outlets such as bubble tea shops and fast food resturants which require a large number of part-time workers.
+This outlet feature stores basic outlet information such as outlet name, operating hours, contact number, email and admin password managed by the employers.
+Such details are essential to facilitate other functions such as the access control system and the timetable displayed in the GUI.
+
+==== Current implementation
+
+The `OutletInformation` class represents an outlet in PTMan. +
+
+_Figure 11_ is a class diagram that displays the association between `OutletInformation` and other components in the `Model`.
+
+.Overview of the OutletInformation class in the Model
+image::OutletInformationClassDiagram.png[width="800"]
+
+Currently, the `OutletInformation` object initialized in the `PartTimeManager` is created by calling its default constructor:
+----
+OutletInformation()
+----
+This default constructor initializes the six fields of `OutletInformation` as shown in _Figure 11_ to respective default values.
+
+With the help of initial values, any employer new to PTMan does not need to create a new `OutletInformation` object and modify necessary outlet details from there.
+It saves a lot of time as the `OutletInformation` object has already been created with default values.
+Employers can edit those values by entering an `editoutlet` command after they log in.
+
+However, there is an alternative way to create an `OutletInformation` object:
+----
+OutletInformation(OutletName outletName, OperatingHours operatingHours, OutletContact outletContact, OutletEmail outletEmail, Announcement announcement)
+----
+This constructor allows flexibility in storing outlet information where most fields can be initialized with specific values except the master password.
+The master password of an outlet must be set to the default value because it is used for employer's first login and it is impossible to change any password without the first login. +
+
+===== Relevant commands
+
+Currently, there are three commands that allows employers to change fields of the `OutletInformation` object. +
+
+*Edit outlet command*
+
+After login with correct master password, using the `editoutlet` command, employers should be able to edit the outlet information including
+outlet name, operating hours, contact numbers and email. Master password can only be changed using `changemasterpassword` command,
+while timetable can only be set with relevant `shift` commands.
+[NOTE]
+Editing with some fields unspecified is allowed.
+For example, editoutlet n/OUTLETNAME is a valid command. This enables employers to edit only the information required for change.
+
+*Change master password command*
+
+After login with correct master password, using the `changemasterpassword` command, employers should be able to change the master password.
+However, due to the possibility that previous employer forgot to log out, `changemasterpassword` command requires
+the old password for further verification. This reduces the risk of password getting stolen. You can find out more information on password in _Section 4.5 Password class_.
+
+*Announcement command*
+
+After login with correct master password, using the "announcement" command, employers should be able to create an announcement visible to all employees.
+This allows employers to broadcast important messages to employees. For example, when there is an urgent need of manpower in a specific time slot,
+employers can create an announcement to inform the employees who can sign up for the corresponding time slot upon receving the announcement.
+
+===== Store and display outlet information
+
+All outlet information is stored in a separate file with data encryption to ensure that crucial data cannot be interpreted by any third party.
+You can refer to _Section 4.7 Data Encryption_ for more information on how data is encrypted.
+
+In addition, outlet information is displayed in the outlet panel above the timetable.
+Any change in the outlet information will be reflected immediately after the command.
 
 === Shifts feature
 ==== Reason for implementation
@@ -248,13 +314,21 @@ By allowing employers to add or delete shifts, employees can then apply for shif
 
 ==== How it is implemented
 
-In order to create a shift, the date, starting time, ending time, and capacity of the shift must be specified.
-Figure 11 is a class diagram that displays the association between `Shift` and other components in the `Model`.
+The `Shift` class represents a shift in PTMan. +
+
+It stores:
+
+. The `Date` of the shift.
+. The starting and ending `Time` of the shift.
+. The employee `Capacity` for the shift.
+. The `UniqueEmployeeList` of employees working in the shift.
+
+_Figure 12_ is a class diagram that displays the association between `Shift` and other components in the `Model`.
 
 .Overview of the Shift class in the Model
 image::ShiftClassDiagram.png[width="800"]
 
-A `Shift` object is created using it's constructor:
+A `Shift` object is created using its constructor:
 ----
 Shift(Date date, Time startTime, Time endTime, Capacity capacity)
 ----
@@ -277,7 +351,7 @@ Example: `new Capacity("4")` creates a `Capacity` object representing integer `4
 In addition to these classes, `Shift` also contains a `UniqueEmployeeList` which is empty when `Shift` is constructed.
 This is used to store employees that have applied for this shift.
 
-To store a list of shifts, we may use a `UniqueShiftList` to ensure there are no duplicate shifts.
+To store a list of shifts, we use a `UniqueShiftList` to ensure there are no duplicate shifts.
 
 The following are commands that directly interact with the `Shift` class:
 
@@ -285,6 +359,18 @@ The following are commands that directly interact with the `Shift` class:
 . `DeleteShiftCommand`: Deletes a `Shift` from the `UniqueShiftList` in `PartTimeManager`.
 . `ApplyCommand`: Adds an `Employee` to the `UniqueEmployeeList` in the `Shift`.
 . `UnapplyCommand`: Removes an `Employee` from the `UniqueEmployeeList` in the `Shift`.
+
+The commands `DeleteShiftCommand`, `ApplyCommand` and `UnapplyCommand` access the specified `Shift` via its index.
+Having a large number of shifts that are not visible in PTMan will cause the visible shifts to have a large index. To avoid this, we only index shifts that are visible in the current timetable view. +
+This can be achieved by setting the `Predicate<Shift>` for the `FilteredList<Shift>` to filter shifts in the current week as shown below:
+----
+// In Model
+public static Predicate<Shift> PREDICATE_SHOW_WEEK_SHIFTS = shift ->
+    getWeekFromDate(shift.getDate().getLocalDate()) == getWeekFromDate(LocalDate.now());
+
+// In ModelManager
+updateFilteredShiftList(PREDICATE_SHOW_WEEK_SHIFTS);
+----
 
 ==== Reasons for how it is implemented
 
@@ -351,9 +437,9 @@ To be updated in v1.3.
 === Undo/Redo feature
 ==== Current Implementation
 
-The undo/redo mechanism is facilitated by an `UndoRedoStack`, which resides inside `LogicManager`. It supports undoing and redoing of commands that modifies the state of the address book (e.g. `add`, `edit`). Such commands will inherit from `UndoableCommand`.
+The undo/redo mechanism is facilitated by an `UndoRedoStack`, which resides inside `LogicManager`. It supports undoing and redoing of commands that modifies the state of the Part-time Manager (e.g. `add`, `edit`). Such commands will inherit from `UndoableCommand`.
 
-`UndoRedoStack` only deals with `UndoableCommands`. Commands that cannot be undone will inherit from `Command` instead. The following diagram (Figure 11) shows the inheritance diagram for commands:
+`UndoRedoStack` only deals with `UndoableCommands`. Commands that cannot be undone will inherit from `Command` instead. The following diagram (_Figure 13_) shows the inheritance diagram for commands:
 {nbsp} +
 
 .Inheritance Diagram for commands
@@ -361,7 +447,7 @@ image::LogicCommandClassDiagram.png[width="800"]
 
 {nbsp} +
 
-As you can see from Figure 11, `UndoableCommand` adds an extra layer between the abstract `Command` class and concrete commands that can be undone, such as the `DeleteCommand`. Note that extra tasks need to be done when executing a command in an _undoable_ way, such as saving the state of the address book before execution. `UndoableCommand` contains the high-level algorithm for those extra tasks while the child classes implement the details of how to execute the specific command. Note that this technique of putting the high-level algorithm in the parent class and lower-level steps of the algorithm in child classes is also known as the https://www.tutorialspoint.com/design_pattern/template_pattern.htm[template pattern].
+As you can see from _Figure 13_, `UndoableCommand` adds an extra layer between the abstract `Command` class and concrete commands that can be undone, such as the `DeleteCommand`. Note that extra tasks need to be done when executing a command in an _undoable_ way, such as saving the state of the Part-time Manager before execution. `UndoableCommand` contains the high-level algorithm for those extra tasks while the child classes implement the details of how to execute the specific command. Note that this technique of putting the high-level algorithm in the parent class and lower-level steps of the algorithm in child classes is also known as the https://www.tutorialspoint.com/design_pattern/template_pattern.htm[template pattern].
 
 Commands that are not undoable are implemented this way:
 [source,java]
@@ -396,7 +482,7 @@ public class DeleteCommand extends UndoableCommand {
 
 Suppose that the user has just launched the application. The `UndoRedoStack` will be empty at the beginning.
 
-The user executes a new `UndoableCommand`, `delete 5`, to delete the 5th person in the address book. The current state of the address book is saved before the `delete 5` command executes. The `delete 5` command will then be pushed onto the `undoStack` (the current state is saved together with the command).
+The user executes a new `UndoableCommand`, `delete 5`, to delete the 5th person in the Part-time Manager. The current state of the Part-time Manager is saved before the `delete 5` command executes. The `delete 5` command will then be pushed onto the `undoStack` (the current state is saved together with the command).
 
 image::UndoRedoStartingStackDiagram.png[width="800"]
 
@@ -413,7 +499,7 @@ If a command fails its execution, it will not be pushed to the `UndoRedoStack` a
 
 The user now decides that adding the person was a mistake, and decides to undo that action using `undo`.
 
-We will pop the most recent command out of the `undoStack` and push it back to the `redoStack`. We will restore the address book to the state before the `add` command executed.
+We will pop the most recent command out of the `undoStack` and push it back to the `redoStack`. We will restore the Part-time Manager to the state before the `add` command executed.
 
 image::UndoRedoExecuteUndoStackDiagram.png[width="800"]
 
@@ -421,14 +507,14 @@ image::UndoRedoExecuteUndoStackDiagram.png[width="800"]
 If the `undoStack` is empty, then there are no other commands left to be undone, and an `Exception` will be thrown when popping the `undoStack`.
 
 {nbsp} +
-The following sequence diagram (Figure 12) shows how the undo operation works:
+The following sequence diagram (_Figure 14_) shows how the undo operation works:
 
 .Sequence Diagram for Undo Operation
 image::UndoRedoSequenceDiagram.png[width="800"]
 
 {nbsp} +
 
-The redo does the exact opposite (pops from `redoStack`, push to `undoStack`, and restores the address book to the state after the command is executed).
+The redo does the exact opposite (pops from `redoStack`, push to `undoStack`, and restores the Part-time Manager to the state after the command is executed).
 
 [NOTE]
 If the `redoStack` is empty, then there are no other commands left to be redone, and an `Exception` will be thrown when popping the `redoStack`.
@@ -465,7 +551,7 @@ This section highlights the considerations behind our application's design choic
 
 ===== Aspect: How undo & redo executes
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 (current choice):** Saves the entire Part-time Manager.
 ** Pros: Easy to implement.
 ** Cons: May have performance issues in terms of memory usage.
 * **Alternative 2:** Individual command knows how to undo/redo by itself.
@@ -475,7 +561,7 @@ This section highlights the considerations behind our application's design choic
 
 ===== Aspect: Type of commands that can be undone/redone
 
-* **Alternative 1 (current choice):** Only include commands that modify the address book (`add`, `clear`, `edit`).
+* **Alternative 1 (current choice):** Only include commands that modify the Part-time Manager (`add`, `clear`, `edit`).
 ** Pros: We only revert changes that are hard to change back (the view can easily be re-modified as no data are lost).
 ** Cons: User might think that undo also applies when the list is modified (undoing filtering for example),  only to realize that it does not do that, after executing `undo`.
 * **Alternative 2:** Include all commands.
@@ -493,72 +579,7 @@ This section highlights the considerations behind our application's design choic
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
 
-=== Outlet Feature
 
-==== Reason for implementation
-PTMan is designed for outlets such as bubble tea shops and fast food resturants which require a large number of part-time workers.
-This outlet feature stores basic outlet information such as outlet name, operating hours, contact number, admin password and timetable for workers.
-Such details are essential to facilitate other functions such as the access control system and the timetable displayed in the GUI.
-
-==== Current implementation
-
-===== Model component
-
-Currently, the `OutletInformation` object initialized in the `PartTimeManager` is created by calling its default constructor:
-----
-OutletInformation()
-----
-This default constructor initializes the seven fields of `OutletInformation` to respective default values:
-
-* Outlet name +
-* Operating hours +
-* Contact number +
-* Email +
-* Master password +
-* Announcement +
-* Timetable +
-
-This saves the time of any employer new to PTMan because the creation of an outlet has already been done with default values.
-Employers can edit those values by entering an `editoutlet` command.
-However, there is an alternative way to create an `OutletInformation` object:
-----
-OutletInformation(OutletName outletName, OperatingHours operatingHours, OutletContact outletContact, OutletEmail outletEmail, Announcement announcement)
-----
-This constructor allows flexibility in storing outlet information, but master password must be set to the default value.
-It is because this default password is used for employer's first login and any employer cannot change his password without the first login. +
-
-===== Logic component
-
-Currently, there are three commands that allows employers to change fields of the `OutletInformation` object. +
-
-*Edit outlet command*
-
-After login with correct master password, using the `editoutlet` command, employers should be able to edit the outlet information including
-outlet name, operating hours, contact numbers and email. Master password can only be changed using changemasterpassword command,
-while timetable can only be set with relevant `shift` commands.
-[NOTE]
-Editing with some fields not specified is allowed.
-For example, editoutlet n/OUTLETNAME is allowed. This enables employers to edit only the information required for change.
-
-*Change master password command*
-
-After login with correct master password, using the `changemasterpassword` command, employers should be able to change the master password as well.
-However, due to the possibility that previous employer forgot to log out, changemasterpassword command requires
-the old password for further verification. This reduces the risk of password getting stolen.
-
-*Announcement command*
-
-After login with correct master password, using the "announcement" command, employers should be able to create an announcement.
-This allows employers to broadcast important messages to employees. For example, when there is an urgent need of manpower in a specific time slot,
-employers can create an announcement to inform the employees who can sign up for the corresponding time slot upon receving the announcement.
-
-===== Storage component
-
-All outlet information is stored in a separate file with data encryption to ensure crucial data cannot be interpreted by any third party.
-
-===== UI component
-Outlet information is displayed in the outlet panel above the time table.
-Any change in the outlet information will be reflected immediately after the command.
 
 
 === Password Class
@@ -611,9 +632,29 @@ if (!model.isAdminMode()) {
 ----
 
 // tag::dataencryption[]
-=== [Proposed] Data Encryption
+=== Data Encryption
 
-_{Explain here how the data encryption feature will be implemented}_
+==== Reason for implementation
+
+Since PTMan stores files locally, it is highly possible that any worker in the outlet can open the storage files and read data inside.
+Such files store a large amount of essential and private data such as admin password, employees' passwords, employees' phones, addresses, and emails.
+The information is supposed to be hidden from any group of people who do not have the access to it.
+Therefore, local storage files are encrypted to prevent any direct interpretation of saved data.
+
+==== How it is implemented
+
+Currently, any data is encrypted in the Advanced Encryption Standard (AES) before writing into XML files.
+Data read from XML files must be decrypted before passing to the constructor of any object.
+This implementation successfully prevents any user of the computer directly interpreting the stored information.
+However, the limitation is that the XML file structure is still maintained and the title of each element is not encrypted as shown in _Figure 15_.
+It is possible that any user with advanced knowledge of data encryption is able to decrypt the data with the found pattern.
+
+.Example of Encrypted XML File of Outlet Information
+image::OutletInformationEncryptedXMLFile.jpg[width="700"]
+
+Hence, there is an alternative implementation which encrypts the entire XML file.
+The XMLCipher package from apache.org can be used to encrypt the XML file stored locally.
+
 
 // end::dataencryption[]
 
@@ -662,9 +703,9 @@ Here are the steps to convert the project documentation files to PDF format:
 .  Follow the instructions in <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to convert the AsciiDoc files in the `docs/` directory to HTML format.
 .  Go to `build/docs` folder, your should see the generated HTML files.
 .  Right click on the file and select `Open with` -> `Google Chrome`. You should see a Google Chrome window.
-.  Click on the `Print` option in Chrome's menu. You should see a `Print` window as shown in Figure 11 below.
+.  Click on the `Print` option in Chrome's menu. You should see a `Print` window as shown in _Figure 16_ below.
 .  Set the destination to `Save as PDF`.
-.  Click `Save` to save a copy of the file in PDF format. For the best results, use the settings indicated in Figure 11.
+.  Click `Save` to save a copy of the file in PDF format. For the best results, use the settings indicated in _Figure 14_.
 
 .Saving Documentation as PDF Files in Chrome
 image::chrome_save_as_pdf.png[width="300"]
@@ -789,9 +830,9 @@ Do take a look at <<Design-Logic>> before attempting to modify the `Logic` compo
 ****
 * Hints
 ** Just like we store each individual command word constant `COMMAND_WORD` inside `*Command.java` (e.g.  link:{repoURL}/src/main/java/seedu/address/logic/commands/FindCommand.java[`FindCommand#COMMAND_WORD`], link:{repoURL}/src/main/java/seedu/address/logic/commands/DeleteCommand.java[`DeleteCommand#COMMAND_WORD`]), you need a new constant for aliases as well (e.g. `FindCommand#COMMAND_ALIAS`).
-** link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] is responsible for analyzing command words.
+** link:{repoURL}/src/main/java/seedu/address/logic/parser/PartTimeManagerParser.java[`PartTimeManagerParser`] is responsible for analyzing command words.
 * Solution
-** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
+** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/PartTimeManagerParser.java[`PartTimeManagerParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
 ** Add new tests for each of the aliases that you have added.
 ** Update the user guide to document the new aliases.
 ** See this https://github.com/se-edu/addressbook-level4/pull/785[PR] for the full solution.
@@ -800,31 +841,31 @@ Do take a look at <<Design-Logic>> before attempting to modify the `Logic` compo
 [discrete]
 ==== `Model` component
 
-*Scenario:* You are in charge of `model`. One day, the `logic`-in-charge approaches you for help. He wants to implement a command such that the user is able to remove a particular tag from everyone in the address book, but the model API does not support such a functionality at the moment. Your job is to implement an API method, so that your teammate can use your API to implement his command.
+*Scenario:* You are in charge of `model`. One day, the `logic`-in-charge approaches you for help. He wants to implement a command such that the user is able to remove a particular tag from everyone in the Part-time Manager, but the model API does not support such a functionality at the moment. Your job is to implement an API method, so that your teammate can use your API to implement his command.
 
 [TIP]
 Do take a look at <<Design-Model>> before attempting to modify the `Model` component.
 
-. Add a `removeTag(Tag)` method. The specified tag will be removed from everyone in the address book.
+. Add a `removeTag(Tag)` method. The specified tag will be removed from everyone in the Part-time Manager.
 +
 ****
 * Hints
-** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] API need to be updated.
+** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/PartTimeManager.java[`PartTimeManager`] API need to be updated.
 ** Think about how you can use SLAP to design the method. Where should we place the main logic of deleting tags?
-**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
+**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/PartTimeManager.java[`PartTimeManager`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/PartTimeManager.java[`PartTimeManager`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
 * Solution
-** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. Loop through each person, and remove the `tag` from each person.
-** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `AddressBook#removeTag(Tag)`.
+** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/PartTimeManager.java[`PartTimeManager`]. Loop through each person, and remove the `tag` from each person.
+** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `PartTimeManager#removeTag(Tag)`.
 ** Add new tests for each of the new public methods that you have added.
 ** See this https://github.com/se-edu/addressbook-level4/pull/790[PR] for the full solution.
-*** The current codebase has a flaw in tags management. Tags no longer in use by anyone may still exist on the link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. This may cause some tests to fail. See issue  https://github.com/se-edu/addressbook-level4/issues/753[`#753`] for more information about this flaw.
+*** The current codebase has a flaw in tags management. Tags no longer in use by anyone may still exist on the link:{repoURL}/src/main/java/seedu/address/model/PartTimeManager.java[`PartTimeManager`]. This may cause some tests to fail. See issue  https://github.com/se-edu/addressbook-level4/issues/753[`#753`] for more information about this flaw.
 *** The solution PR has a temporary fix for the flaw mentioned above in its first commit.
 ****
 
 [discrete]
 ==== `Ui` component
 
-*Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your address book application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last person in the list. Your job is to implement improvements to the UI to solve all these problems.
+*Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your Part-time Manager application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last person in the list. Your job is to implement improvements to the UI to solve all these problems.
 
 [TIP]
 Do take a look at <<Design-Ui>> before attempting to modify the `UI` component.
@@ -869,12 +910,12 @@ image::getting-started-ui-result-after.png[width="200"]
 ** Modify link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay#handleNewResultAvailableEvent(NewResultAvailableEvent)`] to react to this event appropriately.
 ** You can write two different kinds of tests to ensure that the functionality works:
 *** The unit tests for `ResultDisplay` can be modified to include verification of the color.
-*** The system tests link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest#assertCommandBoxShowsDefaultStyle() and AddressBookSystemTest#assertCommandBoxShowsErrorStyle()`] to include verification for `ResultDisplay` as well.
+*** The system tests link:{repoURL}/src/test/java/systemtests/PartTimeManagerSystemTest.java[`PartTimeManagerSystemTest#assertCommandBoxShowsDefaultStyle() and PartTimeManagerSystemTest#assertCommandBoxShowsErrorStyle()`] to include verification for `ResultDisplay` as well.
 ** See this https://github.com/se-edu/addressbook-level4/pull/799[PR] for the full solution.
 *** Do read the commits one at a time if you feel overwhelmed.
 ****
 
-. Modify the link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to show the total number of people in the address book.
+. Modify the link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to show the total number of people in the Part-time Manager.
 +
 **Before**
 +
@@ -887,29 +928,29 @@ image::getting-started-ui-status-after.png[width="500"]
 ****
 * Hints
 ** link:{repoURL}/src/main/resources/view/StatusBarFooter.fxml[`StatusBarFooter.fxml`] will need a new `StatusBar`. Be sure to set the `GridPane.columnIndex` properly for each `StatusBar` to avoid misalignment!
-** link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] needs to initialize the status bar on application start, and to update it accordingly whenever the address book is updated.
+** link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] needs to initialize the status bar on application start, and to update it accordingly whenever the Part-time Manager is updated.
 * Solution
 ** Modify the constructor of link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to take in the number of persons when the application just started.
-** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handleAddressBookChangedEvent(AddressBookChangedEvent)`] to update the number of persons whenever there are new changes to the addressbook.
+** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handlePartTimeManagerChangedEvent(PartTimeManagerChangedEvent)`] to update the number of persons whenever there are new changes to the addressbook.
 ** For tests, modify link:{repoURL}/src/test/java/guitests/guihandles/StatusBarFooterHandle.java[`StatusBarFooterHandle`] by adding a state-saving functionality for the total number of people status, just like what we did for save location and sync status.
-** For system tests, modify link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest`] to also verify the new total number of persons status bar.
+** For system tests, modify link:{repoURL}/src/test/java/systemtests/PartTimeManagerSystemTest.java[`PartTimeManagerSystemTest`] to also verify the new total number of persons status bar.
 ** See this https://github.com/se-edu/addressbook-level4/pull/803[PR] for the full solution.
 ****
 
 [discrete]
 ==== `Storage` component
 
-*Scenario:* You are in charge of `storage`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storage.
+*Scenario:* You are in charge of `storage`. For your next project milestone, your team plans to implement a new feature of saving the Part-time Manager to the cloud. However, the current implementation of the application constantly saves the Part-time Manager after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the Part-time Manager storage.
 
 [TIP]
 Do take a look at <<Design-Storage>> before attempting to modify the `Storage` component.
 
-. Add a new method `backupAddressBook(ReadOnlyAddressBook)`, so that the address book can be saved in a fixed temporary location.
+. Add a new method `backupPartTimeManager(ReadOnlyPartTimeManager)`, so that the Part-time Manager can be saved in a fixed temporary location.
 +
 ****
 * Hint
-** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/AddressBookStorage.java[`AddressBookStorage`] interface.
-** Implement the logic in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storage/XmlAddressBookStorage.java[`XmlAddressBookStorage`] class.
+** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/PartTimeManagerStorage.java[`PartTimeManagerStorage`] interface.
+** Implement the logic in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storage/XmlPartTimeManagerStorage.java[`XmlPartTimeManagerStorage`] class.
 * Solution
 ** See this https://github.com/se-edu/addressbook-level4/pull/594[PR] for the full solution.
 ****
@@ -940,12 +981,12 @@ Let's start by teaching the application how to parse a `remark` command. We will
 **Main:**
 
 . Add a `RemarkCommand` that extends link:{repoURL}/src/main/java/seedu/address/logic/commands/UndoableCommand.java[`UndoableCommand`]. Upon execution, it should just throw an `Exception`.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to accept a `RemarkCommand`.
+. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/PartTimeManagerParser.java[`PartTimeManagerParser`] to accept a `RemarkCommand`.
 
 **Tests:**
 
 . Add `RemarkCommandTest` that tests that `executeUndoableCommand()` throws an Exception.
-. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
+. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/PartTimeManagerParserTest.java[`PartTimeManagerParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
 
 ===== [Step 2] Logic: Teach the app to accept 'remark' arguments
 Let's teach the application to parse arguments that our `remark` command will accept. E.g. `1 r/Likes to drink coffee.`
@@ -954,14 +995,14 @@ Let's teach the application to parse arguments that our `remark` command will ac
 
 . Modify `RemarkCommand` to take in an `Index` and `String` and print those two parameters as the error message.
 . Add `RemarkCommandParser` that knows how to parse two arguments, one index and one with prefix 'r/'.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to use the newly implemented `RemarkCommandParser`.
+. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/PartTimeManagerParser.java[`PartTimeManagerParser`] to use the newly implemented `RemarkCommandParser`.
 
 **Tests:**
 
 . Modify `RemarkCommandTest` to test the `RemarkCommand#equals()` method.
 . Add `RemarkCommandParserTest` that tests different boundary values
 for `RemarkCommandParser`.
-. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
+. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/PartTimeManagerParserTest.java[`PartTimeManagerParserTest`] to test that the correct command is generated according to the user input.
 
 ===== [Step 3] Ui: Add a placeholder for remark in `PersonCard`
 Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each person later.
@@ -1005,7 +1046,7 @@ We now have `Remark` s for `Person` s, but they will be gone when we exit the ap
 
 **Tests:**
 
-. Fix `invalidAndValidPersonAddressBook.xml`, `typicalPersonsAddressBook.xml`, `validAddressBook.xml` etc., such that the XML tests will not fail due to a missing `<remark>` element.
+. Fix `invalidAndValidPersonPartTimeManager.xml`, `typicalPersonsPartTimeManager.xml`, `validPartTimeManager.xml` etc., such that the XML tests will not fail due to a missing `<remark>` element.
 
 ===== [Step 6b] Test: Add withRemark() for `PersonBuilder`
 Since `Person` can now have a `Remark`, we should add a helper method to link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`], so that users are able to create remarks when building a link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
@@ -1083,7 +1124,7 @@ See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-
 .. *Edit outlet information*: Commands are added for the employers to edit outlet information, including outlet name and operating hours.
 .. *Display outlet information*: Outlet information will be displayed in the UI. Any change in the outlet information will be reflected as well.
 .. *Store Outlet information*: Outlet information is stored in a separate file.
-. *Data Encryption(Minor)*: Storage files will be encrypted to ciphertext to ensure that data cannot be obtained and undertood by any third party.
+. *Data Encryption(Minor)*: Storage files are encrypted to ciphertext to ensure that data cannot be obtained and understood by any third party.
 
 
 [appendix]

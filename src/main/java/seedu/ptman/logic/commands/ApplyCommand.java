@@ -5,19 +5,22 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
-import seedu.ptman.model.Model;
+import seedu.ptman.logic.commands.exceptions.MissingPasswordException;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
-import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.exceptions.ShiftFullException;
+import seedu.ptman.model.shift.exceptions.ShiftNotFoundException;
 
+//@@author shanwpf
 /**
  * Registers an employee to a shift identified using their last displayed index from PTMan.
  */
@@ -30,22 +33,23 @@ public class ApplyCommand extends UndoableCommand {
             + ": Applies an employee for the shift identified by the index number.\n"
             + "Parameters: EMPLOYEE_INDEX (must be a positive integer) "
             + "SHIFT_INDEX "
-            + PREFIX_PASSWORD + "PASSWORD\n"
+            + "[" + PREFIX_PASSWORD + "PASSWORD]\n"
             + "Example: " + COMMAND_WORD + " 1 1 " + PREFIX_PASSWORD + "hunter2";
 
     public static final String MESSAGE_APPLY_SHIFT_SUCCESS = "Employee %1$s applied for shift %2$s";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "Employee is already in the shift";
+    public static final String MESSAGE_SHIFT_FULL = "Shift %1$s is full";
 
     private final Index employeeIndex;
     private final Index shiftIndex;
-    private final Password password;
+    private final Optional<Password> optionalPassword;
 
     private Employee applicant;
     private Shift shiftToApply;
     private Shift editedShift;
 
-    public ApplyCommand(Index employeeIndex, Index shiftIndex, Password password) {
-        this.password = password;
+    public ApplyCommand(Index employeeIndex, Index shiftIndex, Optional<Password> optionalPassword) {
+        this.optionalPassword = optionalPassword;
         this.employeeIndex = employeeIndex;
         this.shiftIndex = shiftIndex;
     }
@@ -55,8 +59,14 @@ public class ApplyCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(applicant);
 
-        if (!applicant.isCorrectPassword(password)) {
-            throw new InvalidPasswordException();
+        // Check if password is present when not in admin mode
+        if (!model.isAdminMode()) {
+            if (!optionalPassword.isPresent()) {
+                throw new MissingPasswordException();
+            }
+            if (!applicant.isCorrectPassword(optionalPassword.get())) {
+                throw new InvalidPasswordException();
+            }
         }
 
         try {
@@ -67,7 +77,6 @@ public class ApplyCommand extends UndoableCommand {
             throw new AssertionError("Duplicate shift");
         }
 
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         return new CommandResult(String.format(MESSAGE_APPLY_SHIFT_SUCCESS,
                 applicant.getName(), shiftIndex.getOneBased()));
     }
@@ -91,6 +100,8 @@ public class ApplyCommand extends UndoableCommand {
             editedShift.addEmployee(applicant);
         } catch (DuplicateEmployeeException e) {
             throw new CommandException(MESSAGE_DUPLICATE_EMPLOYEE);
+        } catch (ShiftFullException e) {
+            throw new CommandException(String.format(MESSAGE_SHIFT_FULL, shiftIndex.getOneBased()));
         }
 
     }

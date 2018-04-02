@@ -9,11 +9,12 @@ import java.util.List;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
 
+//@@author shanwpf
 /**
- * A utility class containing a list of {@code Employee} objects to be used in tests.
+ * A utility class containing a list of {@code Shift} objects to be used in tests.
  */
 public class TypicalShifts {
 
@@ -52,7 +53,8 @@ public class TypicalShifts {
     public static final Shift THURSDAY_AM = new ShiftBuilder().withDate("22-03-18")
             .withStartTime("0900")
             .withEndTime("1200")
-            .withCapacity("5").build();
+            .withCapacity("5")
+            .withEmployees(new EmployeeBuilder().build()).build();
     public static final Shift THURSDAY_PM = new ShiftBuilder().withDate("22-03-18")
             .withStartTime("1200")
             .withEndTime("2200")

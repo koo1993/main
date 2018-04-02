@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!-- Employee with an invalid phone field -->
 <employee>
-    <name>Hans Muster</name>
-    <phone>9482asf424</phone>
-    <email>hans@example</email>
-    <address>4th street</address>
-	<salary>0</salary>
-    <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00</passwordHash>
-    <tagged>friends</tagged>
+    <name>CurU9CCNY0mueTcpOaMg/w==</name>
+    <phone>xgYbk10sXH9mYLdY5vjCosnCKBKliFxVb5mtIZKqV/Y=</phone>
+    <email>xgYbk10sXH9mYLdY5vjCosnCKBKliFxVb5mtIZKqV/Y=</email>
+    <address>iILdzzJnLagWRMYjGWeYN0Ued7JOBzsARnYyiG4LYldIcP5RW4qHw8sZztCzv87M</address>
+    <salary>KBPP6vUcTHiVw1/st8SQCw==</salary>
+    <passwordHash>64c46tfd4zPZWWkvFBJjfhV+QfLR+alUL8TbQlcNoNSstyRHiJXD6Jbgi5pYhlhB</passwordHash>
+    <tagged>kVT4ua8Ww7W5G6DWx7oMlQ==</tagged>
 </employee>

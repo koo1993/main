@@ -27,18 +27,18 @@ public class XmlUtilTest {
     private static final String TEST_DATA_FOLDER = FileUtil.getPath("src/test/data/XmlUtilTest/");
     private static final File EMPTY_FILE = new File(TEST_DATA_FOLDER + "empty.xml");
     private static final File MISSING_FILE = new File(TEST_DATA_FOLDER + "missing.xml");
-    private static final File VALID_FILE = new File(TEST_DATA_FOLDER + "validPartTimeManager.xml");
+    private static final File VALID_FILE = new File(TEST_DATA_FOLDER + "validEncryptedPartTimeManager.xml");
     private static final File MISSING_EMPLOYEE_FIELD_FILE = new File(TEST_DATA_FOLDER + "missingEmployeeField.xml");
     private static final File INVALID_EMPLOYEE_FIELD_FILE = new File(TEST_DATA_FOLDER + "invalidEmployeeField.xml");
     private static final File VALID_EMPLOYEE_FILE = new File(TEST_DATA_FOLDER + "validEmployee.xml");
     private static final File TEMP_FILE = new File(TestUtil.getFilePathInSandboxFolder("tempPartTimeManager.xml"));
 
-    private static final String INVALID_PHONE = "9482asf424";
+    private static final String INVALID_PHONE = "alexyeoh@example.com";
 
-    private static final String VALID_NAME = "Hans Muster";
-    private static final String VALID_PHONE = "9482424";
-    private static final String VALID_EMAIL = "hans@example";
-    private static final String VALID_ADDRESS = "4th street";
+    private static final String VALID_NAME = "Alex Yeoh";
+    private static final String VALID_PHONE = "87438807";
+    private static final String VALID_EMAIL = "alexyeoh@example.com";
+    private static final String VALID_ADDRESS = "Blk 30 Geylang Street 29, #06-40";
     private static final String VALID_SALARY = "0";
     private static final String DEFAULT1_HASH = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=";
     private static final List<XmlAdaptedTag> VALID_TAGS = Collections.singletonList(new XmlAdaptedTag("friends"));
@@ -74,8 +74,8 @@ public class XmlUtilTest {
     public void getDataFromFile_validFile_validResult() throws Exception {
         PartTimeManager dataFromFile =
                 XmlUtil.getDataFromFile(VALID_FILE, XmlSerializablePartTimeManager.class).toModelType();
-        assertEquals(9, dataFromFile.getEmployeeList().size());
-        assertEquals(0, dataFromFile.getTagList().size());
+        assertEquals(6, dataFromFile.getEmployeeList().size());
+        assertEquals(5, dataFromFile.getTagList().size());
     }
 
     @Test
