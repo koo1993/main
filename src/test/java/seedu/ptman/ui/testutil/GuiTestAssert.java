@@ -13,7 +13,7 @@ import guitests.guihandles.EmployeeCardHandle;
 import guitests.guihandles.EmployeeListPanelHandle;
 import guitests.guihandles.ResultDisplayHandle;
 import seedu.ptman.model.employee.Employee;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 import seedu.ptman.ui.EmployeeCard;
 
 /**
@@ -54,8 +54,8 @@ public class GuiTestAssert {
      * Asserts that {@code actualEntry} displays the details of {@code expectedShift}.
      */
     public static void assertEntryDisplaysShift(Shift expectedShift, Entry actualEntry, int index) {
-        assertEquals(expectedShift.getDay().getDayOfWeek(), actualEntry.getStartDate().getDayOfWeek());
-        assertEquals(expectedShift.getDay().getDayOfWeek(), actualEntry.getEndDate().getDayOfWeek());
+        assertEquals(expectedShift.getDate().getLocalDate(), actualEntry.getStartDate());
+        assertEquals(expectedShift.getDate().getLocalDate(), actualEntry.getEndDate());
         assertEquals(expectedShift.getStartTime().getLocalTime(), actualEntry.getStartTime());
         assertEquals(expectedShift.getEndTime().getLocalTime(), actualEntry.getEndTime());
         assertEquals("SHIFT " + index + "\nSlots left: " + expectedShift.getSlotsLeft(),

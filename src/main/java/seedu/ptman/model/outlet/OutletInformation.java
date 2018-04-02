@@ -3,11 +3,9 @@ package seedu.ptman.model.outlet;
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 import seedu.ptman.model.Password;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeException;
 
 /**
@@ -29,7 +27,6 @@ public class OutletInformation {
     private OutletContact outletContact;
     private OutletEmail outletEmail;
     private Announcement announcement;
-    private Timetable timetable;
 
     /**
      * Constructs an {@code OutletInformation}.
@@ -46,14 +43,12 @@ public class OutletInformation {
         this.outletEmail = outletEmail;
         this.masterPassword = masterPassword;
         this.announcement = announcement;
-        this.timetable = new Timetable(LocalDate.now());
     }
 
     public OutletInformation(OutletInformation outlet) {
         this.name = new OutletName(outlet.getName().toString());
         this.masterPassword = new Password(outlet.getMasterPassword());
         this.outletContact = new OutletContact(outlet.getOutletContact().toString());
-        this.timetable = new Timetable(outlet.getTimetable());
         this.operatingHours = new OperatingHours(outlet.getOperatingHours().toString());
         this.outletEmail = new OutletEmail(outlet.getOutletEmail().toString());
         this.announcement = new Announcement(outlet.getAnnouncement().toString());
@@ -69,11 +64,6 @@ public class OutletInformation {
         this.outletContact = new OutletContact(DEFAULT_OUTLET_CONTACT);
         this.outletEmail = new OutletEmail(DEFAULT_OUTLET_EMAIL);
         this.announcement = new Announcement(DEFAULT_ANNOUNCEMENT_MESSAGE);
-        this.timetable = new Timetable(LocalDate.now());
-    }
-
-    public void addShift(Shift shift) throws DuplicateShiftException {
-        timetable.addShift(shift);
     }
 
     public OutletName getName() {
@@ -94,10 +84,6 @@ public class OutletInformation {
 
     public OutletEmail getOutletEmail() {
         return outletEmail;
-    }
-
-    public Timetable getTimetable() {
-        return timetable;
     }
 
     /**
@@ -138,8 +124,7 @@ public class OutletInformation {
     public void setOutletInformation(OutletInformation outlet) throws NoOutletInformationFieldChangeException {
         try {
             requireAllNonNull(outlet.getName(), outlet.getOperatingHours(), outlet.getMasterPassword(),
-                    outlet.getTimetable(), outlet.getOutletEmail(), outlet.getOutletContact(),
-                    outlet.getAnnouncement());
+                    outlet.getOutletEmail(), outlet.getOutletContact(), outlet.getAnnouncement());
         } catch (NullPointerException e) {
             throw new NoOutletInformationFieldChangeException();
         }
@@ -147,7 +132,6 @@ public class OutletInformation {
         this.operatingHours = outlet.getOperatingHours();
         this.outletContact = outlet.getOutletContact();
         this.outletEmail = outlet.getOutletEmail();
-        this.timetable = outlet.getTimetable();
         this.masterPassword = outlet.getMasterPassword();
         this.announcement = outlet.getAnnouncement();
     }

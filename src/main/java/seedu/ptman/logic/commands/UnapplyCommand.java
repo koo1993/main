@@ -16,10 +16,11 @@ import seedu.ptman.model.Model;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
-import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.exceptions.ShiftNotFoundException;
 
+//@@author shanwpf
 /**
  * Registers an employee to a shift identified using their last displayed index from PTMan.
  */

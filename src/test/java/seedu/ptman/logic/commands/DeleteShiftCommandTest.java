@@ -24,8 +24,9 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 
+//@@author shanwpf
 /**
  * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for
  * {@code DeleteShiftCommand}.
@@ -40,6 +41,11 @@ public class DeleteShiftCommandTest {
         model.setTrueAdminMode(new Password());
     }
 
+    @Before
+    public void showAllShifts() {
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
+    }
+
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {
         Shift shiftToDelete = model.getFilteredShiftList().get(INDEX_FIRST_SHIFT.getZeroBased());
@@ -49,6 +55,7 @@ public class DeleteShiftCommandTest {
 
         ModelManager expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(),
                 new OutletInformation());
+        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         expectedModel.deleteShift(shiftToDelete);
 
         assertCommandSuccess(deleteShiftCommand, model, expectedMessage, expectedModel);
@@ -70,6 +77,7 @@ public class DeleteShiftCommandTest {
         String expectedMessage = String.format(DeleteShiftCommand.MESSAGE_DELETE_SHIFT_SUCCESS, shiftToDelete);
 
         Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
+        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         expectedModel.deleteShift(shiftToDelete);
         assertNotEquals(shiftToDelete, expectedModel.getFilteredShiftList().get(INDEX_FIRST_SHIFT.getZeroBased()));
 
@@ -93,6 +101,7 @@ public class DeleteShiftCommandTest {
         Shift shiftToDelete = model.getFilteredShiftList().get(INDEX_FIRST_SHIFT.getZeroBased());
         DeleteShiftCommand deleteShiftCommand = prepareCommand(INDEX_FIRST_SHIFT);
         Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
+        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
 
         // delete -> first employee deleted
         deleteShiftCommand.execute();

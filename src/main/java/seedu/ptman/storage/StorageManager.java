@@ -1,5 +1,6 @@
 package seedu.ptman.storage;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -49,6 +50,10 @@ public class StorageManager extends ComponentManager implements Storage {
 
     @Override
     public void saveUserPrefs(UserPrefs userPrefs) throws IOException {
+        Point coordinate = userPrefs.getGuiSettings().getWindowCoordinates();
+        if (coordinate.x > 1600 || coordinate.x < 0 || coordinate.y > 1600 || coordinate.y < 0) {
+            userPrefs.resetGuiPosition();
+        }
         userPrefsStorage.saveUserPrefs(userPrefs);
     }
 

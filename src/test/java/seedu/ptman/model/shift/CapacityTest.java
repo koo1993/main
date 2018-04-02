@@ -1,4 +1,4 @@
-package seedu.ptman.model.outlet;
+package seedu.ptman.model.shift;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import seedu.ptman.testutil.Assert;
 
+//@@author shanwpf
 public class CapacityTest {
 
     @Test

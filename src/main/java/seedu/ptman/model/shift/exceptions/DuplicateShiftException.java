@@ -1,7 +1,8 @@
-package seedu.ptman.model.outlet.exceptions;
+package seedu.ptman.model.shift.exceptions;
 
 import seedu.ptman.commons.exceptions.DuplicateDataException;
 
+//@@author shanwpf
 /**
  * Signals that the operation will result in duplicate Shift objects.
  */

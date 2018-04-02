@@ -9,9 +9,10 @@ import java.util.Objects;
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.commands.exceptions.CommandException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.ShiftNotFoundException;
 
+//@@author shanwpf
 /**
  * Deletes a shift identified using it's last displayed index in the timetable.
  */

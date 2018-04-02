@@ -3,14 +3,15 @@ package seedu.ptman.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_CAPACITY;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DAY;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
 import seedu.ptman.logic.commands.exceptions.CommandException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
 
+//@@author shanwpf
 /**
  * Adds a shift to PTMan.
  */
@@ -21,12 +22,12 @@ public class AddShiftCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a shift. "
             + "Parameters: "
-            + PREFIX_DAY + "DAY "
+            + PREFIX_DATE + "DATE (in dd-mm-yy format) "
             + PREFIX_TIME_START + "START_TIME "
             + PREFIX_TIME_END + "END_TIME "
             + PREFIX_CAPACITY + "CAPACITY "
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_DAY + "Monday "
+            + PREFIX_DATE + "12-03-18 "
             + PREFIX_TIME_START + "0900 "
             + PREFIX_TIME_END + "1600 "
             + PREFIX_CAPACITY + "5 ";

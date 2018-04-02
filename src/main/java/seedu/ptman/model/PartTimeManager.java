@@ -17,11 +17,11 @@ import seedu.ptman.model.employee.UniqueEmployeeList;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.UniqueShiftList;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
 import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeException;
-import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.UniqueShiftList;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.exceptions.ShiftNotFoundException;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.model.tag.UniqueTagList;
 
@@ -102,9 +102,11 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         this.outlet.setOutletInformation(outlet);
     }
 
+    //@@author shanwpf
     public void setShifts(List<Shift> shifts) throws DuplicateShiftException {
         this.shifts.setShifts(shifts);
     }
+    //@@author
 
     public void setTags(Set<Tag> tags) {
         this.tags.setTags(tags);
@@ -139,7 +141,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     //// employee-level operations
 
     /**
-     * Adds an employee to the address book.
+     * Adds an employee to PTMan.
      * Also checks the new employee's tags and updates {@link #tags} with any new tags found,
      * and updates the Tag objects in the employee to point to those in {@link #tags}.
      *
@@ -223,18 +225,34 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         }
     }
 
+    //@@author shanwpf
+    /**
+     * Removes {@code key} from this {@code PartTimeManager}.
+     * @throws ShiftNotFoundException if the {@code key} is not in this {@code PartTimeManager}
+     */
     public boolean removeShift(Shift key) throws ShiftNotFoundException {
         return shifts.remove(key);
     }
 
     /**
-     * Adds a shift to the address book.
-     *
+     * Adds a shift to PTMan.
      * @throws DuplicateShiftException if a equivalent shift already exists.
      */
     public void addShift(Shift p) throws DuplicateShiftException {
         shifts.add(p);
     }
+
+    /**
+     * Replaces the given shift {@code target} in the list with {@code editedShift}.
+     *
+     * @throws DuplicateShiftException if updating the shift's details causes the shift to be equivalent to
+     *      another existing shift in the list.
+     * @throws ShiftNotFoundException if {@code target} could not be found in the list.
+     */
+    public void updateShift(Shift target, Shift editedShift) throws ShiftNotFoundException, DuplicateShiftException {
+        shifts.setShift(target, editedShift);
+    }
+    //@@author
 
     //// tag-level operations
 
@@ -307,10 +325,12 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         return employees.asObservableList();
     }
 
+    //@@author shanwpf
     @Override
     public ObservableList<Shift> getShiftList() {
         return shifts.asObservableList();
     }
+    //@@author
 
     @Override
     public ObservableList<Tag> getTagList() {
@@ -338,7 +358,4 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         return Objects.hash(employees, tags);
     }
 
-    public void updateShift(Shift target, Shift editedShift) throws ShiftNotFoundException, DuplicateShiftException {
-        shifts.setShift(target, editedShift);
-    }
 }

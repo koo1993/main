@@ -10,14 +10,15 @@ import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
-import seedu.ptman.model.Model;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.exceptions.DuplicateEmployeeException;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.exceptions.DuplicateShiftException;
-import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
+import seedu.ptman.model.shift.exceptions.ShiftFullException;
+import seedu.ptman.model.shift.exceptions.ShiftNotFoundException;
 
+//@@author shanwpf
 /**
  * Registers an employee to a shift identified using their last displayed index from PTMan.
  */
@@ -35,6 +36,7 @@ public class ApplyCommand extends UndoableCommand {
 
     public static final String MESSAGE_APPLY_SHIFT_SUCCESS = "Employee %1$s applied for shift %2$s";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "Employee is already in the shift";
+    public static final String MESSAGE_SHIFT_FULL = "Shift %1$s is full";
 
     private final Index employeeIndex;
     private final Index shiftIndex;
@@ -67,7 +69,6 @@ public class ApplyCommand extends UndoableCommand {
             throw new AssertionError("Duplicate shift");
         }
 
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         return new CommandResult(String.format(MESSAGE_APPLY_SHIFT_SUCCESS,
                 applicant.getName(), shiftIndex.getOneBased()));
     }
@@ -91,6 +92,8 @@ public class ApplyCommand extends UndoableCommand {
             editedShift.addEmployee(applicant);
         } catch (DuplicateEmployeeException e) {
             throw new CommandException(MESSAGE_DUPLICATE_EMPLOYEE);
+        } catch (ShiftFullException e) {
+            throw new CommandException(String.format(MESSAGE_SHIFT_FULL, shiftIndex.getOneBased()));
         }
 
     }

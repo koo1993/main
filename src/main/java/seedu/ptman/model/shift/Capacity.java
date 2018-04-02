@@ -1,12 +1,13 @@
-package seedu.ptman.model.outlet;
+package seedu.ptman.model.shift;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
 
 import java.util.Objects;
 
+//@@author shanwpf
 /**
- * Represents an outlet's day in PTMan.
+ * Represents a shift's capacity
  * Guarantees: immutable; is valid as declared in {@link #isValidCapacity(String)}
  */
 public class Capacity {

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -43,8 +42,7 @@ import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.UniqueEmployeeList;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.Timetable;
+import seedu.ptman.model.shift.Shift;
 
 //@@author hzxcaryn
 /**
@@ -76,7 +74,6 @@ public class TimetablePanel extends UiPart<Region> {
     @FXML
     private CalendarView timetableView;
 
-    private Timetable timetable;
     private ObservableList<Shift> shiftObservableList;
     private OutletInformation outletInformation;
 
@@ -86,7 +83,6 @@ public class TimetablePanel extends UiPart<Region> {
     protected TimetablePanel(ObservableList<Shift> shiftObservableList, OutletInformation outletInformation) {
         super(FXML);
 
-        timetable = new Timetable(LocalDate.now());
         this.shiftObservableList = shiftObservableList;
         this.outletInformation = outletInformation;
 
@@ -175,7 +171,7 @@ public class TimetablePanel extends UiPart<Region> {
     private void setShifts() {
         int index = 1;
         for (Shift shift: shiftObservableList) {
-            LocalDate date = getDateOfShift(shift.getDay().toDayOfWeek());
+            LocalDate date = shift.getDate().getLocalDate();
             Interval timeInterval = new Interval(date, shift.getStartTime().getLocalTime(),
                     date, shift.getEndTime().getLocalTime());
             Entry<String> shiftEntry = new Entry<>("SHIFT " + index + "\nSlots left: " + shift.getSlotsLeft(),
@@ -213,15 +209,6 @@ public class TimetablePanel extends UiPart<Region> {
             }
         }
         return false;
-    }
-
-    /**
-     * Converts DayOfWeek into LocalDate for the timetable
-     */
-    private LocalDate getDateOfShift(DayOfWeek dayOfWeek) {
-        LocalDate date = timetable.getMondayDate();
-        date = date.plusDays(dayOfWeek.getValue() - 1);
-        return date;
     }
 
     /**

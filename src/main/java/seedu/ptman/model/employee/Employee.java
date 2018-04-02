@@ -88,8 +88,7 @@ public class Employee {
                 && otherEmployee.getPhone().equals(this.getPhone())
                 && otherEmployee.getEmail().equals(this.getEmail())
                 && otherEmployee.getAddress().equals(this.getAddress())
-                && otherEmployee.getSalary().equals(this.getSalary())
-                && otherEmployee.getPassword().equals(this.getPassword());
+                && otherEmployee.getSalary().equals(this.getSalary());
     }
 
     /**

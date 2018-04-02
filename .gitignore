@@ -21,10 +21,10 @@ out/
 seedu.ptman.model.util.SampleDataUtil.class
 seedu.ptman.model.tag.UniqueTagList.class
 seedu.ptman.model.tag.Tag.class
-seedu.ptman.model.outlet.UniqueShiftList.class
+seedu.ptman.model.shift.UniqueShiftList.class
 seedu.ptman.model.outlet.TimetableDay.class
 seedu.ptman.model.outlet.Timetable.class
-seedu.ptman.model.outlet.Shift.class
+seedu.ptman.model.shift.Shift.class
 seedu.ptman.model.outlet.OutletName.class
 seedu.ptman.model.outlet.OutletInformation.class
 seedu.ptman.model.outlet.OutletEmail.class

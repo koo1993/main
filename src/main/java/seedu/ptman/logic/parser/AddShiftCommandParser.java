@@ -2,7 +2,7 @@ package seedu.ptman.logic.parser;
 
 import static seedu.ptman.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_CAPACITY;
-import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DAY;
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.logic.commands.AddShiftCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
-import seedu.ptman.model.outlet.Capacity;
-import seedu.ptman.model.outlet.Day;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.Time;
+import seedu.ptman.model.shift.Capacity;
+import seedu.ptman.model.shift.Date;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.Time;
 
 /**
  * Parses input arguments and creates a new AddShiftCommand object
@@ -28,22 +28,22 @@ public class AddShiftCommandParser implements Parser<AddShiftCommand> {
      */
     public AddShiftCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_DAY, PREFIX_TIME_START,
+                ArgumentTokenizer.tokenize(args, PREFIX_DATE, PREFIX_TIME_START,
                         PREFIX_TIME_END, PREFIX_CAPACITY);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_DAY, PREFIX_TIME_START,
+        if (!arePrefixesPresent(argMultimap, PREFIX_DATE, PREFIX_TIME_START,
                 PREFIX_TIME_END, PREFIX_CAPACITY)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddShiftCommand.MESSAGE_USAGE));
         }
 
         try {
-            Day day = ParserUtil.parseDay(argMultimap.getValue(PREFIX_DAY)).get();
+            Date date = ParserUtil.parseDate(argMultimap.getValue(PREFIX_DATE)).get();
             Time startTime = ParserUtil.parseTime(argMultimap.getValue(PREFIX_TIME_START)).get();
             Time endTime = ParserUtil.parseTime(argMultimap.getValue(PREFIX_TIME_END)).get();
             Capacity capacity = ParserUtil.parseCapacity(argMultimap.getValue(PREFIX_CAPACITY)).get();
 
-            Shift shift = new Shift(day, startTime, endTime, capacity);
+            Shift shift = new Shift(date, startTime, endTime, capacity);
 
             return new AddShiftCommand(shift);
         } catch (IllegalValueException ive) {

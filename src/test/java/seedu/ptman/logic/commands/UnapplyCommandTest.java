@@ -31,11 +31,12 @@ import seedu.ptman.model.Password;
 import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 import seedu.ptman.testutil.Assert;
 import seedu.ptman.testutil.EmployeeBuilder;
 import seedu.ptman.testutil.ShiftBuilder;
 
+//@@author shanwpf
 /**
  * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand)
  * and unit tests for UnapplyCommand.
@@ -52,9 +53,15 @@ public class UnapplyCommandTest {
         model.setTrueAdminMode(new Password());
     }
 
+    @Before
+    public void showAllShifts() {
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
+    }
+
     @Test
     public void execute_employeeNotInShift_throwsCommandException() throws Exception {
         Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         model.setTrueAdminMode(new Password());
         Employee employee = new EmployeeBuilder().withName("Absent").build();
         Shift shift = new ShiftBuilder().build();
@@ -69,6 +76,8 @@ public class UnapplyCommandTest {
     public void execute_adminModeEmployeeInShift_success() throws Exception {
         Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
         Model expectedModel = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
+        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         model.setTrueAdminMode(new Password());
         expectedModel.setTrueAdminMode(new Password());
         Employee employee = new EmployeeBuilder().withName("Present").build();
@@ -93,7 +102,9 @@ public class UnapplyCommandTest {
         Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
         Model expectedModel = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
         model.setFalseAdminMode();
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         expectedModel.setFalseAdminMode();
+        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         Employee employee = new EmployeeBuilder().withName("Present").build();
         Employee expectedEmployee = new EmployeeBuilder().withName("Present").build();
         Shift shift = new ShiftBuilder().build();
@@ -115,28 +126,30 @@ public class UnapplyCommandTest {
     public void execute_userModeNoPassword_throwsMissingPasswordException() throws Exception {
         Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
         model.setFalseAdminMode();
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         Employee employee = new EmployeeBuilder().withName("Present").build();
         Shift shift = new ShiftBuilder().build();
         shift.addEmployee(employee);
         model.addEmployee(employee);
         model.addShift(shift);
         UnapplyCommand unapplyCommand = prepareCommandWithoutPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
-
-        Assert.assertThrows(MissingPasswordException.class, unapplyCommand::execute);
+        thrown.expect(MissingPasswordException.class);
+        unapplyCommand.execute();
     }
 
     @Test
     public void execute_userModeIncorrectPassword_throwsInvalidPasswordException() throws Exception {
         Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
         model.setFalseAdminMode();
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         Employee employee = new EmployeeBuilder().withName("Present").withPassword("incorrect").build();
         Shift shift = new ShiftBuilder().build();
         shift.addEmployee(employee);
         model.addEmployee(employee);
         model.addShift(shift);
         UnapplyCommand unapplyCommand = prepareCommandWithPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
-
-        Assert.assertThrows(InvalidPasswordException.class, unapplyCommand::execute);
+        thrown.expect(InvalidPasswordException.class);
+        unapplyCommand.execute();
     }
 
     @Test

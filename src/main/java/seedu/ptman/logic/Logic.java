@@ -6,7 +6,7 @@ import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 
 /**
  * API of the Logic component

@@ -20,7 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.outlet.OutletInformation;
-import seedu.ptman.model.outlet.Shift;
+import seedu.ptman.model.shift.Shift;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.testutil.EmployeeBuilder;
 import seedu.ptman.testutil.PartTimeManagerBuilder;
@@ -67,6 +67,7 @@ public class PartTimeManagerTest {
         partTimeManager.resetData(newData);
     }
 
+    //@@author shanwpf
     @Test
     public void resetData_withDuplicateShifts_throwsAssertionError() {
         List<Employee> newEmployees = Arrays.asList(ALICE);
@@ -78,6 +79,7 @@ public class PartTimeManagerTest {
         thrown.expect(AssertionError.class);
         partTimeManager.resetData(newData);
     }
+    //@@author
 
     @Test
     public void getEmployeeList_modifyList_throwsUnsupportedOperationException() {

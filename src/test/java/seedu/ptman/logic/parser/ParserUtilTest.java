@@ -21,12 +21,11 @@ import seedu.ptman.model.employee.Address;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
-import seedu.ptman.model.outlet.Capacity;
-import seedu.ptman.model.outlet.Day;
 import seedu.ptman.model.outlet.OperatingHours;
 import seedu.ptman.model.outlet.OutletContact;
 import seedu.ptman.model.outlet.OutletName;
-import seedu.ptman.model.outlet.Time;
+import seedu.ptman.model.shift.Capacity;
+import seedu.ptman.model.shift.Time;
 import seedu.ptman.model.tag.Tag;
 import seedu.ptman.testutil.Assert;
 
@@ -39,7 +38,6 @@ public class ParserUtilTest {
     private static final String INVALID_OUTLET_NAME = "Awesome@Outlet";
     private static final String INVALID_OUTLET_CONTACT = "+1234";
     private static final String INVALID_OPERATING_HOURS = "09:00/18:00";
-    private static final String INVALID_DAY = "tue";
     private static final String INVALID_TIME = "1pm";
     private static final String INVALID_CAPACITY = "one";
     private static final String VALID_NAME = "Rachel Walker";
@@ -51,7 +49,6 @@ public class ParserUtilTest {
     private static final String VALID_OUTLET_NAME = "AwesomeOutlet";
     private static final String VALID_OUTLET_CONTACT = "91234567";
     private static final String VALID_OPERATING_HOURS = "09:00-18:00";
-    private static final String VALID_DAY = "tuesday";
     private static final String VALID_TIME = "1300";
     private static final String VALID_CAPACITY = "10";
     private static final String WHITESPACE = " \t\r\n";
@@ -81,38 +78,7 @@ public class ParserUtilTest {
         assertEquals(INDEX_FIRST_EMPLOYEE, ParserUtil.parseIndex("  1  "));
     }
 
-    @Test
-    public void parseDay_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseDay((String) null));
-        Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseDay((Optional<String>) null));
-    }
-
-    @Test
-    public void parseDay_invalidValue_throwsIllegalValueException() {
-        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseDay(INVALID_DAY));
-        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseDay(Optional.of(INVALID_DAY)));
-    }
-
-    @Test
-    public void parseDay_optionalEmpty_returnsOptionalEmpty() throws Exception {
-        assertFalse(ParserUtil.parseDay(Optional.empty()).isPresent());
-    }
-
-    @Test
-    public void parseDay_validValueWithoutWhitespace_returnsDay() throws Exception {
-        Day expectedDay = new Day(VALID_DAY);
-        assertEquals(expectedDay, ParserUtil.parseDay(VALID_DAY));
-        assertEquals(Optional.of(expectedDay), ParserUtil.parseDay(Optional.of(VALID_DAY)));
-    }
-
-    @Test
-    public void parseDay_validValueWithWhitespace_returnsTrimmedDay() throws Exception {
-        String dayWithWhitespace = WHITESPACE + VALID_DAY + WHITESPACE;
-        Day expectedDay = new Day(VALID_DAY);
-        assertEquals(expectedDay, ParserUtil.parseDay(dayWithWhitespace));
-        assertEquals(Optional.of(expectedDay), ParserUtil.parseDay(Optional.of(dayWithWhitespace)));
-    }
-    //
+    //@@author shanwpf
     @Test
     public void parseTime_null_throwsNullPointerException() {
         Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseTime((String) null));
@@ -144,7 +110,6 @@ public class ParserUtilTest {
         assertEquals(expectedTime, ParserUtil.parseTime(timeWithWhitespace));
         assertEquals(Optional.of(expectedTime), ParserUtil.parseTime(Optional.of(timeWithWhitespace)));
     }
-    //
 
     @Test
     public void parseCapacity_null_throwsNullPointerException() {
@@ -177,6 +142,13 @@ public class ParserUtilTest {
         assertEquals(expectedCapacity, ParserUtil.parseCapacity(capacityWithWhitespace));
         assertEquals(Optional.of(expectedCapacity), ParserUtil.parseCapacity(Optional.of(capacityWithWhitespace)));
     }
+
+    @Test
+    public void parseSecondIndex_invalidValue_throwsIllegalValueException() {
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseSecondIndex("1 a"));
+        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseSecondIndex("1 -1"));
+    }
+    //@@author
 
     @Test
     public void parseName_null_throwsNullPointerException() {
@@ -425,9 +397,6 @@ public class ParserUtilTest {
                 Optional.of(outletContactWithWhitespace)));
     }
 
-
-
-
     @Test
     public void parseOperatingHours_null_throwsNullPointerException() {
         Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseOperatingHours((String) null));
@@ -462,11 +431,5 @@ public class ParserUtilTest {
         assertEquals(expectedOperatingHours, ParserUtil.parseOperatingHours(operatingHoursWithWhitespace));
         assertEquals(Optional.of(expectedOperatingHours), ParserUtil.parseOperatingHours(
                 Optional.of(operatingHoursWithWhitespace)));
-    }
-
-    @Test
-    public void parseSecondIndex_invalidValue_throwsIllegalValueException() {
-        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseSecondIndex("1 a"));
-        Assert.assertThrows(IllegalValueException.class, () -> ParserUtil.parseSecondIndex("1 -1"));
     }
 }

@@ -7,7 +7,7 @@ public class CliSyntax {
 
     /* Prefix definitions */
     public static final Prefix PREFIX_NAME = new Prefix("n/");
-    public static final Prefix PREFIX_DAY = new Prefix("d/");
+    public static final Prefix PREFIX_DATE = new Prefix("d/");
     public static final Prefix PREFIX_CAPACITY = new Prefix("c/");
     public static final Prefix PREFIX_TIME_START = new Prefix("ts/");
     public static final Prefix PREFIX_TIME_END = new Prefix("te/");

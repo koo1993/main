@@ -17,13 +17,13 @@ import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Name;
 import seedu.ptman.model.employee.Phone;
 import seedu.ptman.model.employee.Salary;
-import seedu.ptman.model.outlet.Capacity;
-import seedu.ptman.model.outlet.Day;
 import seedu.ptman.model.outlet.OperatingHours;
 import seedu.ptman.model.outlet.OutletContact;
 import seedu.ptman.model.outlet.OutletEmail;
 import seedu.ptman.model.outlet.OutletName;
-import seedu.ptman.model.outlet.Time;
+import seedu.ptman.model.shift.Capacity;
+import seedu.ptman.model.shift.Date;
+import seedu.ptman.model.shift.Time;
 import seedu.ptman.model.tag.Tag;
 
 /**
@@ -103,31 +103,6 @@ public class ParserUtil {
     public static Optional<Name> parseName(Optional<String> name) throws IllegalValueException {
         requireNonNull(name);
         return name.isPresent() ? Optional.of(parseName(name.get())) : Optional.empty();
-    }
-
-
-    /**
-     * Parses a {@code String day} into a {@code DayOfWeek}.
-     * Leading and trailing whitespaces will be trimmed.
-     *
-     * @throws IllegalValueException if the given {@code day} is invalid.
-     */
-    public static Day parseDay(String day) throws IllegalValueException {
-        requireNonNull(day);
-        String trimmedDay = day.trim();
-        if (!Day.isValidDay(trimmedDay)) {
-            throw new IllegalValueException(Day.MESSAGE_DAY_CONSTRAINTS);
-        }
-        return new Day(trimmedDay);
-    }
-
-    /**
-     * Parses a {@code Optional<String> day} into an {@code Optional<DayOfWeek>} if {@code day} is present.
-     * See header comment of this class regarding the use of {@code Optional} parameters.
-     */
-    public static Optional<Day> parseDay(Optional<String> day) throws IllegalValueException {
-        requireNonNull(day);
-        return day.isPresent() ? Optional.of(parseDay(day.get())) : Optional.empty();
     }
 
     /**
@@ -432,5 +407,29 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String date} into a {@code Date}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code day} is invalid.
+     */
+    public static Date parseDate(String date) throws IllegalValueException {
+        requireNonNull(date);
+        String trimmedDate = date.trim();
+        if (!Date.isValidDate(trimmedDate)) {
+            throw new IllegalValueException(Date.MESSAGE_DATE_CONSTRAINTS);
+        }
+        return new Date(trimmedDate);
+    }
+
+    /**
+     * Parses a {@code Optional<String> date} into an {@code Optional<Date>} if {@code date} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Date> parseDate(Optional<String> date) throws IllegalValueException {
+        requireNonNull(date);
+        return date.isPresent() ? Optional.of(parseDate(date.get())) : Optional.empty();
     }
 }

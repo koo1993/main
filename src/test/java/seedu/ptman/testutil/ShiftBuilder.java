@@ -1,47 +1,56 @@
 package seedu.ptman.testutil;
 
-import seedu.ptman.model.outlet.Capacity;
-import seedu.ptman.model.outlet.Day;
-import seedu.ptman.model.outlet.Shift;
-import seedu.ptman.model.outlet.Time;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import seedu.ptman.model.employee.Employee;
+import seedu.ptman.model.shift.Capacity;
+import seedu.ptman.model.shift.Date;
+import seedu.ptman.model.shift.Shift;
+import seedu.ptman.model.shift.Time;
+
+//@@author shanwpf
 /**
- * A utility class to help with building Employee objects.
+ * A utility class to help with building Shift objects.
  */
 public class ShiftBuilder {
 
-    public static final String DEFAULT_DAY = "tuesday";
+    public static final String DEFAULT_DATE = "04-03-18";
     public static final String DEFAULT_TIME_START = "0900";
     public static final String DEFAULT_TIME_END = "1600";
     public static final String DEFAULT_CAPACITY = "5";
 
-    private Day day;
+    private Date date;
     private Time startTime;
     private Time endTime;
     private Capacity capacity;
+    private List<Employee> employees;
 
     public ShiftBuilder() {
-        day = new Day(DEFAULT_DAY);
+        date = new Date(DEFAULT_DATE);
         startTime = new Time(DEFAULT_TIME_START);
         endTime = new Time(DEFAULT_TIME_END);
         capacity = new Capacity(DEFAULT_CAPACITY);
+        employees = new ArrayList<>();
     }
 
     /**
      * Initializes the ShiftBuilder with the data of {@code shiftToCopy}.
      */
     public ShiftBuilder(Shift shiftToCopy) {
-        day = shiftToCopy.getDay();
+        date = shiftToCopy.getDate();
         startTime = shiftToCopy.getStartTime();
         endTime = shiftToCopy.getEndTime();
         capacity = shiftToCopy.getCapacity();
+        employees = new ArrayList<>(shiftToCopy.getEmployeeList());
     }
 
     /**
-     * Sets the {@code Day} of the {@code Shift} that we are building.
+     * Sets the {@code Date} of the {@code Shift} that we are building.
      */
-    public ShiftBuilder withDay(String day) {
-        this.day = new Day(day);
+    public ShiftBuilder withDate(String date) {
+        this.date = new Date(date);
         return this;
     }
 
@@ -70,11 +79,19 @@ public class ShiftBuilder {
     }
 
     /**
+     * Sets the {@code Employee} of the {@code Shift} that we are building.
+     */
+    public ShiftBuilder withEmployees(Employee... employees) {
+        this.employees.addAll(Arrays.asList(employees));
+        return this;
+    }
+
+    /**
      * Returns the {@code Shift}
      * @return
      */
     public Shift build() {
-        return new Shift(day, startTime, endTime, capacity);
+        return new Shift(date, startTime, endTime, capacity, employees);
     }
 
 }
