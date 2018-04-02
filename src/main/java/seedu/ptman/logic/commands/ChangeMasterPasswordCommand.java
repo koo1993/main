@@ -11,6 +11,7 @@ import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.Password;
 
+//@@author koo1993
 /**
  * Change password of the outlet in PTMan.
  */

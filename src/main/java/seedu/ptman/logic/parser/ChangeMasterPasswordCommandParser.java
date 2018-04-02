@@ -13,6 +13,8 @@ import seedu.ptman.logic.commands.ChangeMasterPasswordCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
 
+
+//@@author koo1993
 /**
  * Parses input arguments and creates a new ChangeMasterPasswordCommand object
  */

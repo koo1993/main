@@ -10,8 +10,9 @@ import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.outlet.OutletInformation;
 
+//@@author koo1993
 /**
- * Reset password for an existing employee in PTMan.
+ * Reset password for the outlet in PTMan.
  */
 public class ResetMasterPasswordCommand extends Command {
 

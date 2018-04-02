@@ -3,6 +3,7 @@ package seedu.ptman.model.employee;
 import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
 
+//@@author koo1993
 /**
  * Represents a Employee's Salary earned so far in PTMan.
  * Guarantees: immutable; is valid as declared in {@link #isValidSalary(String)}

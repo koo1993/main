@@ -10,7 +10,7 @@ import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 
-
+//@@author koo1993
 public class LogOutAdminCommandTest {
     private final Password defaultPassword = new Password();
 

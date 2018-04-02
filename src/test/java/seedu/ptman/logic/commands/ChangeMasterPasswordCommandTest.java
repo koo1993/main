@@ -23,6 +23,7 @@ import seedu.ptman.model.UserPrefs;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.outlet.OutletInformation;
 
+//@@author koo1993
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
  * {@code ChangeMasterPasswordCommand}.

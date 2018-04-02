@@ -7,6 +7,7 @@ import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.logic.commands.ResetPasswordCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 
+//@@author koo1993
 /**
  * Parses input arguments and creates a new ResetPasswordCommand object
  */

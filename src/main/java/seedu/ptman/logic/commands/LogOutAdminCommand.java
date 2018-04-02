@@ -3,8 +3,9 @@ package seedu.ptman.logic.commands;
 import seedu.ptman.commons.core.EventsCenter;
 import seedu.ptman.commons.events.model.UserModeChangedEvent;
 
+//@@author koo1993
 /**
- * Lists all employees in PTMan to the user.
+ * logout command from admin mode.
  */
 public class LogOutAdminCommand extends Command {
 

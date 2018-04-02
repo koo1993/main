@@ -12,6 +12,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import com.sun.media.jfxmedia.logging.Logger;
 
 
+//@@author koo1993
 /**
  * Represents a Password in PartTimeManger
  * Store password as hashCode
@@ -116,7 +117,7 @@ public class Password {
 
     /**
      *
-     * @return random 8 character password.
+     * @return random 8 character String password.
      */
     public static String generateRandomPassword() {
         String charactersAllowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

@@ -7,8 +7,9 @@ import seedu.ptman.logic.commands.LogInAdminCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
 
+//@@author koo1993
 /**
- * Parses input arguments and creates a new RedoCommand object
+ * Parses input arguments and creates a new LogInAdminCommand object
  */
 public class LogInAdminCommandParser implements Parser<LogInAdminCommand> {
     /**

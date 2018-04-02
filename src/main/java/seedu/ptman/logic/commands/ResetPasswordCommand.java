@@ -14,6 +14,8 @@ import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Employee;
 
+
+//@@author koo1993
 /**
  * Reset password for an existing employee in PTMan.
  */

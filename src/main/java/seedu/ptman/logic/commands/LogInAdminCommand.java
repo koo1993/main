@@ -8,8 +8,9 @@ import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
 import seedu.ptman.model.Password;
 
+//@@author koo1993
 /**
- * Selects a employee identified using it's last displayed index from PTMan.
+ * Login command for admin mode access.
  */
 public class LogInAdminCommand extends Command {
 

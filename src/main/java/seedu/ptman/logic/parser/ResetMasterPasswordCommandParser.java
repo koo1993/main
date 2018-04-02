@@ -3,6 +3,7 @@ package seedu.ptman.logic.parser;
 import seedu.ptman.logic.commands.ResetMasterPasswordCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 
+//@@author koo1993
 /**
  * Parses input arguments and creates a new ResetMasterPasswordCommand object
  */

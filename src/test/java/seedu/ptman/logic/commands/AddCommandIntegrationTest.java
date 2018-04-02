@@ -1,5 +1,6 @@
 package seedu.ptman.logic.commands;
 
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.ptman.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
@@ -24,12 +25,25 @@ public class AddCommandIntegrationTest {
 
     private Model model;
 
+    //@@author koo1993
     @Before
     public void setUp() {
         model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
         model.setTrueAdminMode(new Password());
     }
 
+    @Test
+    public void execute_newEmployeeNotAdminMode_accessDenied() throws Exception {
+        model.setFalseAdminMode();
+        Employee validEmployee = new EmployeeBuilder().build();
+
+        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
+        expectedModel.addEmployee(validEmployee);
+
+        assertCommandFailure(prepareCommand(validEmployee, model), model, MESSAGE_ACCESS_DENIED);
+
+    }
+    //@@author
     @Test
     public void execute_newEmployee_success() throws Exception {
         Employee validEmployee = new EmployeeBuilder().build();

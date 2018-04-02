@@ -62,6 +62,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         resetData(toBeCopied);
     }
 
+    //@@author koo1993
     //// authorization operations
     public boolean isAdminMode() {
         return this.isAdminMode;
@@ -92,6 +93,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         outlet.setOutletPassword(password);
     }
 
+    //@@author
     //// list overwrite operations
 
     public void setEmployees(List<Employee> employees) throws DuplicateEmployeeException {

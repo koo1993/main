@@ -33,6 +33,7 @@ import seedu.ptman.model.employee.Salary;
 import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.tag.Tag;
 
+//@@author koo1993
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
  * {@code ChangePasswordCommand}.

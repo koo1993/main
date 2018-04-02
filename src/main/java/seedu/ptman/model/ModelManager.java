@@ -101,6 +101,7 @@ public class ModelManager extends ComponentManager implements Model {
         indicatePartTimeManagerChanged();
     }
 
+    //@@author koo1993
     @Override
     public boolean isAdminMode() {
         return partTimeManager.isAdminMode();
@@ -159,6 +160,7 @@ public class ModelManager extends ComponentManager implements Model {
         }
     }
 
+    //@@author
     @Override
     public void addShift(Shift shift) throws DuplicateShiftException {
         partTimeManager.addShift(shift);

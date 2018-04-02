@@ -8,10 +8,11 @@ import org.junit.Test;
 
 import seedu.ptman.testutil.Assert;
 
-
+//@@author koo1993
 public class PasswordTest {
     public static final String DEFAULT1_HASH = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00="; // hash code for DEFAULT1
-    public static final String DEFAULT2_HASH = "j9R1Y0IIRVI052lxIOkweVd88O+EiSLGJvnXAZXKD40=";
+    public static final String DEFAULT2_HASH = "j9R1Y0IIRVI052lxIOkweVd88O+EiSLGJvnXAZXKD40="; // hash code for DEFAULT2
+
     @Test
     public void constructor_null_throwsNullPointerException() {
         Assert.assertThrows(NullPointerException.class, () -> new Password((Password) null));

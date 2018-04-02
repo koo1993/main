@@ -30,7 +30,7 @@ import seedu.ptman.model.outlet.exceptions.ShiftNotFoundException;
 import seedu.ptman.model.tag.Tag;
 
 
-
+//@@author koo1993
 public class LogInAdminCommandTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
