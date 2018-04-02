@@ -1,5 +1,7 @@
 package seedu.ptman.logic;
 
+import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
+
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -43,10 +45,34 @@ public class LogicManager extends ComponentManager implements Logic {
             undoRedoStack.push(command);
             return result;
         } finally {
-            history.add(commandText);
+            history.add(processInput(commandText));
         }
     }
 
+    //@@author koo1993
+    /**
+     * Obscure sensitive information like password by replacing it with "a space"
+     * @param input
+     * @return the processed input
+     */
+    private String processInput(String input) {
+        StringBuilder newString = new StringBuilder(input);
+        int indexOfPrefix = newString.indexOf(PREFIX_PASSWORD.getPrefix());
+        int indexOfSpace = newString.indexOf(" ", indexOfPrefix);
+        while (indexOfPrefix >= 0) {
+            if (indexOfSpace == -1) {
+                indexOfSpace = newString.length();
+            }
+            newString.replace(indexOfPrefix + 3 , indexOfSpace, " ");
+
+            indexOfPrefix = newString.indexOf(PREFIX_PASSWORD.getPrefix(), indexOfPrefix + 3);
+            indexOfSpace = newString.indexOf(" ", indexOfPrefix);
+
+        }
+        return newString.toString();
+    }
+
+    //@@author
     @Override
     public ObservableList<Employee> getFilteredEmployeeList() {
         return model.getFilteredEmployeeList();
