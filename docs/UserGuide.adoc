@@ -44,15 +44,24 @@ image::Ui.png[width="790"]
 _Figure 1._ Successful start up window +
  +
 .  Type a command in the command box and press kbd:[Enter] to execute it. +
-e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
-*  Some example commands you can try:
+e.g. typing *`help`* and pressing kbd:[Enter] will open the help windo
 
-** *`list`* : Lists all contacts.
-** **`add`** `n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 s/0` : Adds an employee named `John Doe` to PTMan.
-** **`delete`** `3` `pw/ADMIN_PASSWORD` : Deletes the 3rd contact shown in the current list.
-** *`exit`* : Exits the app.
+6a. If you are an employer, you are required to login to admin mode to use all employer features +
+by typing: `login` `pw/AdminPassword`
 
-*  Refer to <<Features>> for more details of each command.
+[CAUTION]
+Admin default password is DEFAULT1. +
+Remember to change your admin password.  +
+Refer to <<Changing master password: `changemasterpw`>> command
+
+
+
+6b. If you are an employee, you should expect your name to be added in PTMan. +
+Find your name by typing: `find` `YOURNAME` +
+Refer to <<Locating an employee by name: `find`>>
+
+
+**Refer to <<Features>> for more details of each command.**
 
 [[Features]]
 == Features
@@ -253,30 +262,25 @@ Deletes the 2nd employee in PTMan.
 `delete 1` +
 Deletes the 1st employee in the results of the `find` command.
 
-==== Changing master password: `cmp`
+==== Changing master password: `changemasterpw`
 You should be given a default password when your entry is created by your employer.
 For security purposes, you are required to change your password the moment your account is created. +
 
-*Format:* `cmp` `pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
+*Format:* `changemasterpw pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD` +
+*Shorthand:* `cmp`
 [NOTE]
 The password should be at least 8 characters long.
 
-==== Resetting master password: `rmp`
+==== Resetting master password: `resetmasterpw`
 
-Resets the password of the specified employee. +
+Resets the password for your admin login. +
 
-*Format:* `rmp` +
-
-****
-* The password will reset for employee at the specified INDEX.
-* The INDEX refers to the index number shown in the most recent listing.
-* The INDEX *must be a positive integer* 1, 2, 3, ...
-****
+*Format:* `resetmasterpw` +
+*Shorthand:* `rmp`
 
 Examples:
 
 * `rmp` +
-
 
 [NOTE]
 The temporary password will be sent to your outlet email.
@@ -351,6 +355,10 @@ Edits the outlet information. +
 *Format:* `editoutlet n/NAME h/OPERATING_HOURS c/CONTACT_NUMBER e/EMAIL`  +
 *Shorthand:* `eo`
 
+[CAUTION]
+Ensure email is valid for reset master password command +
+to send you a reset password email.
+
 [NOTE]
 ====
 `OperatingHours` in HHMM-HHMM format. +
@@ -378,7 +386,7 @@ Adds a shift to the timetable to indicate that you require employees at that per
 ==== Deleting a shift: `deleteshift`
 Deletes a shift from the timetable.
 
-*Format:* `deleteshift SHIFT_INDEX`
+*Format:* `deleteshift SHIFT_INDEX` +
 *Shorthand:* `ds`
 
 ==== Applying an employee for a shift: `apply`
