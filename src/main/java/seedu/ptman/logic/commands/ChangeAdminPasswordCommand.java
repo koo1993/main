@@ -17,8 +17,8 @@ import seedu.ptman.model.Password;
  */
 public class ChangeAdminPasswordCommand extends Command {
 
-    public static final String COMMAND_WORD = "changemasterpw";
-    public static final String COMMAND_ALIAS = "cmp";
+    public static final String COMMAND_WORD = "changeadminpw";
+    public static final String COMMAND_ALIAS = "cap";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + " pw/currentPassword "
             + "pw/NewPassword "  + "pw/ConfirmNewPassword ";

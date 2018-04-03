@@ -16,8 +16,8 @@ import seedu.ptman.model.outlet.OutletInformation;
  */
 public class ResetAdminPasswordCommand extends Command {
 
-    public static final String COMMAND_WORD = "resetmasterpw";
-    public static final String COMMAND_ALIAS = "rmp";
+    public static final String COMMAND_WORD = "resetadminpw";
+    public static final String COMMAND_ALIAS = "rap";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD;
     public static final String MESSAGE_SUCCESS = "Email with the new password is sent to you at: %1$s";

@@ -200,7 +200,7 @@ link:{repoURL}/src/main/java/seedu/ptman/logic/Logic.java[`Logic.java`]
 
 Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
+.Interactions inside the Logic Component for the `delete 1` Admin Command
 image::DeletePersonSdForLogic.png[width="800"]
 
 [[Design-Model]]
@@ -582,7 +582,7 @@ This section highlights the considerations behind our application's design choic
 
 
 
-=== Password Class
+=== Password feature
 
 ==== Reason for implementation
 As PTMan is currently designed to use locally on a system, both employer and employee must go through the same system to allocate their preferred slot or to edit the data in PTMan. A Password class is given to both employer and employee to ensure that they are the authorized person that is using the system.
@@ -603,33 +603,42 @@ To create a password with desired password String, one can invoke the method bel
 createPassword(String password)
 ----
 
-==== Reasons for how it is implemented
+As of version 1.2, each person and outlet now has a class password. Refer to the diagram below:
+
+.Overview of the Password class in Model
+image::PasswordClassDiagram.png[width="700"]
+
+
 The reason of converting password string to hashCode is to protect user’s password from being seen in the storage file.  Anyone who get hold of the data are not able to convert the hashCode back to the original password string as SHA-256 is a https://en.wikipedia.org/wiki/Collision_resistance[collision resistant] hash.
 
-=== Feature Admin Mode
+=== Admin Mode/Admin Command Feature
 
 ==== Reason for implementation
-Initial stage of PTMan require huge amount of manual input by admin. To promote hassle-free command, employers can log in to admin mode and use the command provided without the need to enter the password for every command.
+Initial startup of PTMan require huge amount of manual input by admin. To promote hassle-free commands, employers can log in to admin mode with `login` command and use the command provided without the need to be autheticated for every command.
 
-==== How it is implemented
+==== How it is implemented  (Admin mode)
 Model component now implement three new API for logic component to use.
 ----
 boolean isAdminMode();
 boolean setTrueAdminMode(Password password);
 
-/** guarantee to break out from adminMode */
+/** guarantee to set adminMode to false */
 setFalseAdminMode();
 ----
 
 `setTrueAdminMode(Password password)` requires a password that will check against the outlet password and set admin mode accordingly. Failing to give the correct password will result in returning false.
 
-[NOTE]
-In order to enable the command to be usable only in command mode the code below must be added to the execution() of the command *first*.
+==== How it is implemented (Admin Command)
+In order to enable commands to be usable only in admin mode the code below must be added to the execution() of the command *first*.
 ----
 if (!model.isAdminMode()) {
     throw new CommandException(MESSAGE_ACCESS_DENIED);
 }
 ----
+The sequence Diagram below illustrate how the admin command is generally executed.
+
+.Interactions inside the Logic Component for the `delete 1` Admin Command
+image::DeletePersonSdForLogic.png[width="800"]
 
 // tag::dataencryption[]
 === Data Encryption
