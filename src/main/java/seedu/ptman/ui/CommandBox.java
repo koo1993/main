@@ -4,16 +4,18 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 
 import java.util.logging.Logger;
 
+import com.sun.javafx.scene.control.behavior.PasswordFieldBehavior;
 import com.sun.javafx.scene.control.skin.TextFieldSkin;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+
 import seedu.ptman.commons.core.LogsCenter;
 import seedu.ptman.commons.events.ui.NewResultAvailableEvent;
 import seedu.ptman.logic.ListElementPointer;
@@ -36,10 +38,9 @@ public class CommandBox extends UiPart<Region> {
     private ListElementPointer historySnapshot;
     private final Tooltip tooltip = new Tooltip();
 
+
     @FXML
-    private TextField commandTextFieldOutput;
-    @FXML
-    private TextField commandTextFieldInput;
+    private PasswordField commandTextField;
 
     //@@author koo1993
     public CommandBox(Logic logic) {
@@ -47,17 +48,12 @@ public class CommandBox extends UiPart<Region> {
         this.logic = logic;
 
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
-        commandTextFieldOutput.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
-        commandTextFieldOutput.setEditable(false);
+        commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
 
-        // copying text from input to output textfield
-        commandTextFieldInput.textProperty()
-                .addListener((observable, oldText, newText) -> commandTextFieldOutput.setText(processInput(newText)));
-
-        commandTextFieldInput.setSkin(new TextFieldCaretControlSkin(commandTextFieldInput, Color.web("969696")));
+        commandTextField.setSkin(new PasswordFieldSkinAndCaret(commandTextField , Color.web("969696")));
         historySnapshot = logic.getHistorySnapshot();
         tooltip.setText("Tip: Enter \"help\" when you get stuck");
-        commandTextFieldInput.setTooltip(tooltip);
+        commandTextField.setTooltip(tooltip);
 
     }
 
@@ -84,22 +80,6 @@ public class CommandBox extends UiPart<Region> {
         return newString.toString();
     }
 
-    /**
-     * Disable caret at certain Password Field to avoid funny caret location when entering password
-     */
-    private void updateCaret() {
-        int indexOfPrefix = commandTextFieldInput.getText().indexOf(PREFIX_PASSWORD.getPrefix());
-
-        if (indexOfPrefix == -1) {
-            indexOfPrefix = commandTextFieldInput.getText().length();
-        }
-
-        if (indexOfPrefix + 3 > commandTextFieldInput.getCaretPosition()) {
-            commandTextFieldInput.setOpacity(1);
-        } else {
-            commandTextFieldInput.setOpacity(0);
-        }
-    }
 
     //@@author
     /**
@@ -121,7 +101,6 @@ public class CommandBox extends UiPart<Region> {
         default:
             // let JavaFx handle the keypress
         }
-        updateCaret();
     }
 
     /**
@@ -155,10 +134,9 @@ public class CommandBox extends UiPart<Region> {
      * positions the caret to the end of the {@code text}.
      */
     private void replaceText(String text) {
-        commandTextFieldInput.setText(text);
-        commandTextFieldInput.positionCaret(commandTextFieldInput.getText().length());
+        commandTextField.setText(text);
+        commandTextField.positionCaret(commandTextField.getText().length());
     }
-
 
 
     /**
@@ -167,11 +145,11 @@ public class CommandBox extends UiPart<Region> {
     @FXML
     private void handleCommandInputChanged() {
         try {
-            CommandResult commandResult = logic.execute(commandTextFieldInput.getText());
+            CommandResult commandResult = logic.execute(commandTextField.getText());
             initHistory();
             historySnapshot.next();
             // process result of the command
-            commandTextFieldInput.setText("");
+            commandTextField.setText("");
             logger.info("Result: " + commandResult.feedbackToUser);
             raise(new NewResultAvailableEvent(commandResult.feedbackToUser, false));
 
@@ -179,19 +157,11 @@ public class CommandBox extends UiPart<Region> {
             initHistory();
             // handle command failure
             setStyleToIndicateCommandFailure();
-            logger.info("Invalid command: " + processInput(commandTextFieldInput.getText()));
+            logger.info("Invalid command: " + processInput(commandTextField.getText()));
             raise(new NewResultAvailableEvent(e.getMessage(), true));
         }
     }
 
-    /**
-     * Handle clicks
-     * @param event
-     */
-    @FXML
-    private void handleClick(MouseEvent event) {
-        updateCaret();
-    }
 
     /**
      * Initializes the history snapshot.
@@ -207,14 +177,14 @@ public class CommandBox extends UiPart<Region> {
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {
-        commandTextFieldOutput.getStyleClass().remove(ERROR_STYLE_CLASS);
+        commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
     /**
      * Sets the command box style to indicate a failed command.
      */
     private void setStyleToIndicateCommandFailure() {
-        ObservableList<String> styleClass = commandTextFieldOutput.getStyleClass();
+        ObservableList<String> styleClass = commandTextField.getStyleClass();
 
         if (styleClass.contains(ERROR_STYLE_CLASS)) {
             return;
@@ -222,22 +192,45 @@ public class CommandBox extends UiPart<Region> {
 
         styleClass.add(ERROR_STYLE_CLASS);
     }
+
     //@@author koo1993
     /**
-     * class to set up caret colour for textField
+     * class to set up caret colour for textField and skinning of password
      */
-    public class TextFieldCaretControlSkin extends TextFieldSkin {
+    public class PasswordFieldSkinAndCaret extends TextFieldSkin {
+        public static final String ASTERISK = "*";
 
-        public TextFieldCaretControlSkin(TextField textField, Color caretColor) {
-            super(textField);
+        public PasswordFieldSkinAndCaret(PasswordField passwordField, Color caretColor) {
+            super(passwordField, new PasswordFieldBehavior(passwordField));
             setCaretColor(caretColor);
         }
-
         private void setCaretColor(Color color) {
             caretPath.strokeProperty().unbind();
             caretPath.fillProperty().unbind();
             caretPath.setStroke(color);
             caretPath.setFill(color);
+        }
+
+        @Override
+        protected String maskText(String txt) {
+            TextField textField = getSkinnable();
+
+            StringBuilder newString = new StringBuilder(textField.getText());
+            int indexOfPrefix = newString.indexOf(PREFIX_PASSWORD.getPrefix());
+            int indexOfSpace = newString.indexOf(" ", indexOfPrefix);
+
+            while (indexOfPrefix >= 0) {
+                if (indexOfSpace == -1) {
+                    indexOfSpace = newString.length();
+                }
+                for (int i = indexOfPrefix + 3; i < indexOfSpace; i++) {
+                    newString.replace(i, i + 1, ASTERISK);
+                }
+                indexOfPrefix = newString.indexOf(PREFIX_PASSWORD.getPrefix(), indexOfPrefix + 3);
+                indexOfSpace = newString.indexOf(" ", indexOfPrefix);
+            }
+
+            return newString.toString();
         }
     }
 

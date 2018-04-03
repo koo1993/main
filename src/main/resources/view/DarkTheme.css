@@ -375,28 +375,14 @@
     -fx-text-fill: #F70D1A;
 }
 
-#commandTextFieldInput {
-    -fx-background-color: transparent #383838 transparent #383838;
-    -fx-background-insets: 0;
-    -fx-border-color: #383838 #383838 #ffffff #383838;
-    -fx-border-insets: 0;
-    -fx-border-width: 1;
-    -fx-font-family: "Segoe UI Light";
-    -fx-font-size: 16px;
-    -fx-text-fill: transparent;
-}
-
-#commandTextFieldOutput {
-    -fx-background-color: transparent #383838 transparent #383838;
-    -fx-background-insets: 0;
-    -fx-border-color: #383838 #383838 #ffffff #383838;
-    -fx-border-insets: 0;
-    -fx-border-width: 1;
-    -fx-font-family: "Segoe UI Light";
-    -fx-font-size: 16px;
-    -fx-text-fill: white;
-
-}
+#commandTextField {
+     -fx-background-color: transparent #FBFBFB transparent #FBFBFB;
+     -fx-background-insets: 0;
+     -fx-border-insets: 0;
+     -fx-font-family: "Gotham Rounded Book";
+     -fx-font-size: 16px;
+     -fx-text-fill: #969696;
+ }
 
 #filterField, #employeeListPanel, #employeeWebpage {
     -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);

@@ -10,7 +10,6 @@ public class MainWindowHandle extends StageHandle {
     private final EmployeeListPanelHandle employeeListPanel;
     private final ResultDisplayHandle resultDisplay;
     private final CommandBoxHandle commandBox;
-    private final CommandBoxHandle commandBoxOutput;
     private final AdminModeDisplayHandle adminModeDisplay;
     private final StatusBarFooterHandle statusBarFooter;
     private final MainMenuHandle mainMenu;
@@ -22,8 +21,7 @@ public class MainWindowHandle extends StageHandle {
 
         employeeListPanel = new EmployeeListPanelHandle(getChildNode(EmployeeListPanelHandle.EMPLOYEE_LIST_VIEW_ID));
         resultDisplay = new ResultDisplayHandle(getChildNode(ResultDisplayHandle.RESULT_DISPLAY_ID));
-        commandBoxOutput = new CommandBoxHandle(getChildNode(CommandBoxHandle.COMMAND_OUTPUT_FIELD_ID));
-        commandBox = new CommandBoxHandle(getChildNode(CommandBoxHandle.COMMAND_INPUT_FIELD_ID));
+        commandBox = new CommandBoxHandle(getChildNode(CommandBoxHandle.COMMAND_FIELD_ID));
         adminModeDisplay = new AdminModeDisplayHandle(getChildNode(AdminModeDisplayHandle.ADMIN_MODE_DISPLAY_LABEL_ID));
         statusBarFooter = new StatusBarFooterHandle(getChildNode(StatusBarFooterHandle.STATUS_BAR_PLACEHOLDER));
         mainMenu = new MainMenuHandle(getChildNode(MainMenuHandle.MENU_BAR_ID));
@@ -43,9 +41,6 @@ public class MainWindowHandle extends StageHandle {
         return commandBox;
     }
 
-    public CommandBoxHandle getCommandBoxOutput() {
-        return commandBoxOutput;
-    }
     public AdminModeDisplayHandle getAdminModeDisplay() {
         return adminModeDisplay;
     }

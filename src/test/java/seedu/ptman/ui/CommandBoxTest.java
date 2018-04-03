@@ -41,9 +41,9 @@ public class CommandBoxTest extends GuiUnitTest {
 
         CommandBox commandBox = new CommandBox(logic);
         commandBoxHandle = new CommandBoxHandle(getChildNode(commandBox.getRoot(),
-                CommandBoxHandle.COMMAND_INPUT_FIELD_ID));
+                CommandBoxHandle.COMMAND_FIELD_ID));
         commandBoxHandleOutput = new CommandBoxHandle(getChildNode(commandBox.getRoot(),
-                CommandBoxHandle.COMMAND_OUTPUT_FIELD_ID));
+                CommandBoxHandle.COMMAND_FIELD_ID));
         uiPartRule.setUiPart(commandBox);
 
         defaultStyleOfCommandBox = new ArrayList<>(commandBoxHandle.getStyleClass());

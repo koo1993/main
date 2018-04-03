@@ -429,23 +429,14 @@
     -fx-text-fill: #969696;
 }
 
-#commandTextFieldInput {
-    -fx-background-color: transparent #FBFBFB transparent #FBFBFB;
-    -fx-background-insets: 0;
-    -fx-border-insets: 0;
-    -fx-font-family: "Gotham Rounded Book";
-    -fx-font-size: 16px;
-    -fx-text-fill: transparent;
-}
 
-#commandTextFieldOutput {
+#commandTextField {
     -fx-background-color: transparent #FBFBFB transparent #FBFBFB;
     -fx-background-insets: 0;
     -fx-border-insets: 0;
     -fx-font-family: "Gotham Rounded Book";
     -fx-font-size: 16px;
     -fx-text-fill: #969696;
-
 }
 
 #resultDisplay .content {
