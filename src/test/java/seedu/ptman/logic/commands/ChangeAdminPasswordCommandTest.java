@@ -26,9 +26,9 @@ import seedu.ptman.model.outlet.OutletInformation;
 //@@author koo1993
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
- * {@code ChangeMasterPasswordCommand}.
+ * {@code ChangeAdminPasswordCommand}.
  */
-public class ChangeMasterPasswordCommandTest {
+public class ChangeAdminPasswordCommandTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -42,9 +42,9 @@ public class ChangeMasterPasswordCommandTest {
         passwords.add("DEFAULT2");
         passwords.add("DEFAULT2");
 
-        ChangeMasterPasswordCommand changePwCommand = prepareCommand(passwords);
+        ChangeAdminPasswordCommand changePwCommand = prepareCommand(passwords);
 
-        String expectedMessage = String.format(ChangeMasterPasswordCommand.MESSAGE_SUCCESS, employeeToEdit.getName());
+        String expectedMessage = String.format(ChangeAdminPasswordCommand.MESSAGE_SUCCESS, employeeToEdit.getName());
 
         ModelManager expectedModel = new ModelManager(model.getPartTimeManager(),
                 new UserPrefs(), new OutletInformation());
@@ -76,8 +76,8 @@ public class ChangeMasterPasswordCommandTest {
         passwords.add("DEFAULT3");
         passwords.add("DEFAULT4");
 
-        ChangeMasterPasswordCommand changePwCommand = prepareCommand(passwords);
-        assertCommandFailure(changePwCommand, model, ChangeMasterPasswordCommand.MESSAGE_INVALID_CONFIMREDPASSWORD);
+        ChangeAdminPasswordCommand changePwCommand = prepareCommand(passwords);
+        assertCommandFailure(changePwCommand, model, ChangeAdminPasswordCommand.MESSAGE_INVALID_CONFIMREDPASSWORD);
     }
 
 
@@ -93,14 +93,14 @@ public class ChangeMasterPasswordCommandTest {
         passwords2.add("DEFAULT3");
         passwords2.add("DEFAULT3");
 
-        ChangeMasterPasswordCommand changePwFirstCommand = prepareCommand(passwords);
-        ChangeMasterPasswordCommand changePwSecondCommand = prepareCommand(passwords2);
+        ChangeAdminPasswordCommand changePwFirstCommand = prepareCommand(passwords);
+        ChangeAdminPasswordCommand changePwSecondCommand = prepareCommand(passwords2);
 
         // same object -> returns true
         assertTrue(changePwFirstCommand.equals(changePwFirstCommand));
 
         // same values -> returns true
-        ChangeMasterPasswordCommand changePwFirstCommandCopy = prepareCommand(passwords);
+        ChangeAdminPasswordCommand changePwFirstCommandCopy = prepareCommand(passwords);
         assertTrue(changePwFirstCommand.equals(changePwFirstCommandCopy));
 
         // different types -> returns false
@@ -115,10 +115,10 @@ public class ChangeMasterPasswordCommandTest {
 
 
     /**
-     * Returns a {@code ChangeMasterPasswordCommand} with the parameter {@code index} and {@code passwords}.
+     * Returns a {@code ChangeAdminPasswordCommand} with the parameter {@code index} and {@code passwords}.
      */
-    private ChangeMasterPasswordCommand prepareCommand(ArrayList<String> passwords) {
-        ChangeMasterPasswordCommand changePwCommand = new ChangeMasterPasswordCommand(passwords);
+    private ChangeAdminPasswordCommand prepareCommand(ArrayList<String> passwords) {
+        ChangeAdminPasswordCommand changePwCommand = new ChangeAdminPasswordCommand(passwords);
         changePwCommand.setData(model, new CommandHistory(), new UndoRedoStack());
         return changePwCommand;
     }

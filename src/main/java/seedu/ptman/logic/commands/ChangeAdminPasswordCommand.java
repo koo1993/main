@@ -15,7 +15,7 @@ import seedu.ptman.model.Password;
 /**
  * Change password of the outlet in PTMan.
  */
-public class ChangeMasterPasswordCommand extends Command {
+public class ChangeAdminPasswordCommand extends Command {
 
     public static final String COMMAND_WORD = "changemasterpw";
     public static final String COMMAND_ALIAS = "cmp";
@@ -35,7 +35,7 @@ public class ChangeMasterPasswordCommand extends Command {
      * @param passwords should contain 3 password String in the sequence of:
      *                 confirmed password, new password, confirmed new password
      */
-    public ChangeMasterPasswordCommand(ArrayList<String> passwords) {
+    public ChangeAdminPasswordCommand(ArrayList<String> passwords) {
         requireNonNull(passwords);
         this.passwords = passwords;
     }
@@ -84,12 +84,12 @@ public class ChangeMasterPasswordCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof ChangeMasterPasswordCommand)) {
+        if (!(other instanceof ChangeAdminPasswordCommand)) {
             return false;
         }
 
         // state check
-        ChangeMasterPasswordCommand e = (ChangeMasterPasswordCommand) other;
+        ChangeAdminPasswordCommand e = (ChangeAdminPasswordCommand) other;
         return passwords.equals(e.passwords);
     }
 

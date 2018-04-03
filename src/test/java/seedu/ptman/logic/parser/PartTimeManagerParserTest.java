@@ -28,7 +28,7 @@ import seedu.ptman.logic.commands.AddCommand;
 import seedu.ptman.logic.commands.AddShiftCommand;
 import seedu.ptman.logic.commands.AnnouncementCommand;
 import seedu.ptman.logic.commands.ApplyCommand;
-import seedu.ptman.logic.commands.ChangeMasterPasswordCommand;
+import seedu.ptman.logic.commands.ChangeAdminPasswordCommand;
 import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
@@ -197,6 +197,7 @@ public class PartTimeManagerParserTest {
         assertEquals(new EditCommand(INDEX_FIRST_EMPLOYEE, descriptor), command);
     }
 
+    //@@author koo1993
     @Test
     public void parseCommand_changePassword() throws Exception {
         ArrayList<String> passwords = new ArrayList<>();
@@ -229,10 +230,10 @@ public class PartTimeManagerParserTest {
         passwords.add("DEFAULT1");
         passwords.add("DEFAULT2");
         passwords.add("DEFAULT2");
-        ChangeMasterPasswordCommand command =
-                (ChangeMasterPasswordCommand) parser.parseCommand(ChangeMasterPasswordCommand.COMMAND_WORD
+        ChangeAdminPasswordCommand command =
+                (ChangeAdminPasswordCommand) parser.parseCommand(ChangeAdminPasswordCommand.COMMAND_WORD
                         + " pw/DEFAULT1 " + " pw/DEFAULT2 " + " pw/DEFAULT2 ");
-        assertEquals(new ChangeMasterPasswordCommand(passwords), command);
+        assertEquals(new ChangeAdminPasswordCommand(passwords), command);
     }
 
     @Test
@@ -241,12 +242,12 @@ public class PartTimeManagerParserTest {
         passwords.add("DEFAULT1");
         passwords.add("DEFAULT2");
         passwords.add("DEFAULT2");
-        ChangeMasterPasswordCommand command =
-                (ChangeMasterPasswordCommand) parser.parseCommand(ChangeMasterPasswordCommand.COMMAND_ALIAS
+        ChangeAdminPasswordCommand command =
+                (ChangeAdminPasswordCommand) parser.parseCommand(ChangeAdminPasswordCommand.COMMAND_ALIAS
                         + " pw/DEFAULT1 " + " pw/DEFAULT2 " + " pw/DEFAULT2 ");
-        assertEquals(new ChangeMasterPasswordCommand(passwords), command);
+        assertEquals(new ChangeAdminPasswordCommand(passwords), command);
     }
-
+    //@@author
     @Test
     public void parseCommand_editoutlet() throws Exception {
         String name = "EditedOutlet";

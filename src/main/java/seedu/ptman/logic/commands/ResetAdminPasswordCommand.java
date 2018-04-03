@@ -14,7 +14,7 @@ import seedu.ptman.model.outlet.OutletInformation;
 /**
  * Reset password for the outlet in PTMan.
  */
-public class ResetMasterPasswordCommand extends Command {
+public class ResetAdminPasswordCommand extends Command {
 
     public static final String COMMAND_WORD = "resetmasterpw";
     public static final String COMMAND_ALIAS = "rmp";
@@ -64,7 +64,7 @@ public class ResetMasterPasswordCommand extends Command {
     @Override
     public boolean equals(Object other) {
         // instanceof handles nulls
-        return (other instanceof ResetMasterPasswordCommand);
+        return (other instanceof ResetAdminPasswordCommand);
     }
 
     /**

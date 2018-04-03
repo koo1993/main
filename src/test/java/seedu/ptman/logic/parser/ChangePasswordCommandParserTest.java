@@ -12,14 +12,7 @@ import org.junit.Test;
 import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.model.Password;
 
-/**
- * As we are only doing white-box testing, our test cases do not cover path variations
- * outside of the ChangePasswordCommand code. For example, inputs "1 pw/default1 pw/default2 pw/default2"
- * and ""1 pw/default1 pw/default2 abc pw/default2" take the
- * same path through the ChangePasswordCommandParser, and therefore we test only one of them.
- * The path variation for those two cases occur inside the ParserUtil, and
- * therefore should be covered by the ParserUtilTest.
- */
+//@@author koo1993
 public class ChangePasswordCommandParserTest {
 
     private ChangePasswordCommandParser parser = new ChangePasswordCommandParser();

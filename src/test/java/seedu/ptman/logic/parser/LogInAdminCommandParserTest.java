@@ -9,9 +9,7 @@ import org.junit.Test;
 import seedu.ptman.logic.commands.LogInAdminCommand;
 import seedu.ptman.model.Password;
 
-/**
- * Parses input arguments and creates a new LogInAdminCommand object
- */
+//@@author koo1993
 public class LogInAdminCommandParserTest {
     private LogInAdminCommandParser parser = new LogInAdminCommandParser();
 

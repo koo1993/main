@@ -9,29 +9,29 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
-import seedu.ptman.logic.commands.ChangeMasterPasswordCommand;
+import seedu.ptman.logic.commands.ChangeAdminPasswordCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
 
 
 //@@author koo1993
 /**
- * Parses input arguments and creates a new ChangeMasterPasswordCommand object
+ * Parses input arguments and creates a new ChangeAdminPasswordCommand object
  */
-public class ChangeMasterPasswordCommandParser implements Parser<ChangeMasterPasswordCommand> {
+public class ChangeAdminPasswordCommandParser implements Parser<ChangeAdminPasswordCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the ChangeMasterPassword
-     * and returns an ChangeMasterPasswordCommand object for execution.
+     * and returns an ChangeAdminPasswordCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
-    public ChangeMasterPasswordCommand parse(String args) throws ParseException {
+    public ChangeAdminPasswordCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_PASSWORD);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_PASSWORD) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    ChangeMasterPasswordCommand.MESSAGE_USAGE));
+                    ChangeAdminPasswordCommand.MESSAGE_USAGE));
         }
 
         ArrayList<String> passwords;
@@ -40,12 +40,12 @@ public class ChangeMasterPasswordCommandParser implements Parser<ChangeMasterPas
             passwords = parsePasswords(argMultimap.getAllValues(PREFIX_PASSWORD));
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    ChangeMasterPasswordCommand.MESSAGE_USAGE));
+                    ChangeAdminPasswordCommand.MESSAGE_USAGE));
         }
 
         checkPasswordValidity(passwords.get(1));
 
-        return new ChangeMasterPasswordCommand(passwords);
+        return new ChangeAdminPasswordCommand(passwords);
     }
 
     /**
