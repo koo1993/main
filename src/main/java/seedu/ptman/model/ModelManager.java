@@ -38,7 +38,7 @@ public class ModelManager extends ComponentManager implements Model {
     private final FilteredList<Employee> filteredEmployees;
     private final FilteredList<Shift> filteredShifts;
     private HashMap<Employee, Password> tempPasswordMap;
-    private HashMap<OutletInformation, Password> tempMasterPasswordMap;
+    private HashMap<OutletInformation, Password> tempAdminPasswordMap;
 
     /**
      * Initializes a ModelManager with the given partTimeManager and userPrefs.
@@ -64,7 +64,7 @@ public class ModelManager extends ComponentManager implements Model {
                 getWeekFromDate(shift.getDate().getLocalDate()) == getWeekFromDate(LocalDate.now()));
 
         tempPasswordMap = new HashMap<>();
-        tempMasterPasswordMap = new HashMap<>();
+        tempAdminPasswordMap = new HashMap<>();
     }
 
     public ModelManager() {
@@ -140,7 +140,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public void storeResetPassword(OutletInformation outlet, Password tempPassword) {
-        tempMasterPasswordMap.put(outlet, tempPassword);
+        tempAdminPasswordMap.put(outlet, tempPassword);
     }
 
     @Override
@@ -154,10 +154,10 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public boolean isCorrectTempPwd(OutletInformation outlet, Password tempPassword) {
-        if (!tempMasterPasswordMap.containsKey(outlet)) {
+        if (!tempAdminPasswordMap.containsKey(outlet)) {
             return false;
         } else {
-            return tempMasterPasswordMap.get(outlet).equals(tempPassword);
+            return tempAdminPasswordMap.get(outlet).equals(tempPassword);
         }
     }
 
