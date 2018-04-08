@@ -47,7 +47,7 @@ public class AddSalaryCommand extends UndoableCommand {
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "This employee already exists in PTMan.";
 
     private final Index index;
-    private Salary salaryToIncrease;
+    private Salary salaryToAdd;
 
     private Employee employeeToEdit;
     private Employee editedEmployee;
@@ -55,13 +55,13 @@ public class AddSalaryCommand extends UndoableCommand {
 
     /**
      * @param index of the employee in the filtered employee list to edit
-     * @param salaryToIncrease amount of salary to increase with.
+     * @param salaryToAdd amount of salary to increase with.
      */
-    public AddSalaryCommand(Index index, Salary salaryToIncrease) {
+    public AddSalaryCommand(Index index, Salary salaryToAdd) {
         requireNonNull(index);
-        requireNonNull(salaryToIncrease);
+        requireNonNull(salaryToAdd);
         this.index = index;
-        this.salaryToIncrease = salaryToIncrease;
+        this.salaryToAdd = salaryToAdd;
 
     }
 
@@ -81,7 +81,7 @@ public class AddSalaryCommand extends UndoableCommand {
         }
         model.updateFilteredEmployeeList(PREDICATE_SHOW_ALL_EMPLOYEES);
         return new CommandResult(String.format(MESSAGE_EDIT_EMPLOYEE_SUCCESS,
-                editedEmployee.getSalary(), editedEmployee.getName()));
+                salaryToAdd.toString(), editedEmployee.getName()));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class AddSalaryCommand extends UndoableCommand {
             throw new CommandException(Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
         }
         employeeToEdit = lastShownList.get(index.getZeroBased());
-        editedEmployee = createAddedSalaryEmployee(employeeToEdit, salaryToIncrease);
+        editedEmployee = createAddedSalaryEmployee(employeeToEdit, salaryToAdd);
     }
 
     /**
@@ -140,7 +140,7 @@ public class AddSalaryCommand extends UndoableCommand {
         // state check
         AddSalaryCommand e = (AddSalaryCommand) other;
         return index.equals(e.index)
-                && salaryToIncrease.equals(e.salaryToIncrease)
+                && salaryToAdd.equals(e.salaryToAdd)
                 && Objects.equals(employeeToEdit, e.employeeToEdit);
     }
 }
