@@ -8,19 +8,17 @@ import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_SECOND_EMPLOYEE;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import seedu.ptman.commons.core.Messages;
 import seedu.ptman.commons.core.index.Index;
 import seedu.ptman.logic.CommandHistory;
 import seedu.ptman.logic.UndoRedoStack;
-import seedu.ptman.logic.commands.exceptions.InvalidPasswordException;
-import seedu.ptman.logic.parser.ParserUtil;
 import seedu.ptman.model.Model;
 import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
@@ -48,7 +46,7 @@ public class AddSalaryCommandTest {
     private Salary salaryToAdd = new Salary("100");
 
     @Before
-    public void setup(){
+    public void setup() {
         model.setTrueAdminMode(new Password());
     }
 

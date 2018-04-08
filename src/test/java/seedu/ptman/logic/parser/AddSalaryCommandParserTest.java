@@ -7,12 +7,9 @@ import static seedu.ptman.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.ptman.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.ptman.testutil.TypicalIndexes.INDEX_FIRST_EMPLOYEE;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
+
 import seedu.ptman.logic.commands.AddSalaryCommand;
-import seedu.ptman.logic.commands.ChangePasswordCommand;
-import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Salary;
 
 //@@author koo1993

@@ -5,8 +5,6 @@ import static java.util.Objects.requireNonNull;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
-import com.sun.javafx.util.Logging;
-
 import seedu.ptman.commons.services.EmailService;
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.Password;
@@ -23,10 +21,10 @@ public class ResetAdminPasswordCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD;
     public static final String MESSAGE_SUCCESS = "Email with the new password is sent to you at: %1$s";
-    public static final String MESSAGE_SENTFAIL =
+    public static final String MESSAGE_SENT_FAIL =
             "Reset password fail to send through email, please check your internet connection";
 
-    public static final String MESSAGE_EMAILFAIL = "No such email address %1$s";
+    public static final String MESSAGE_EMAIL_FAIL = "No such email address %1$s";
 
 
     @Override
@@ -38,10 +36,9 @@ public class ResetAdminPasswordCommand extends Command {
         try {
             newPassword = createAndSendRandomPassword(outletRequested);
         } catch (AddressException ae) {
-            return new CommandResult(String.format(MESSAGE_EMAILFAIL, outletRequested.getOutletEmail()));
+            return new CommandResult(String.format(MESSAGE_EMAIL_FAIL, outletRequested.getOutletEmail()));
         } catch (MessagingException e) {
-            Logging.getInputLogger().warning(e.toString());
-            return new CommandResult(MESSAGE_SENTFAIL);
+            return new CommandResult(MESSAGE_SENT_FAIL);
         }
 
         model.storeResetPassword(outletRequested, newPassword);
