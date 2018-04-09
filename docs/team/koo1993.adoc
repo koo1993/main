@@ -31,19 +31,14 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. It
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+*** Constantly collating the update from the team and call for meeting if there is a need to.
 ** Enhancements to existing features:
 *** Implemented obfuscation for password in input text field and history. (Pull requests https://github.com/CS2103JAN2018-W14-B2/main/pull/132[#132], https://github.com/CS2103JAN2018-W14-B2/main/pull/141[#141], https://github.com/CS2103JAN2018-W14-B2/main/pull/157[#157])
 *** Wrote email service to send reset password to employer and employee via email. (Pull requests https://github.com/CS2103JAN2018-W14-B2/main/pull/113[#113])
-
-** Documentation:
-*** (REMOVE)Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** Fixed a bug when closing the application when minimized (pull requests https://github.com/CS2103JAN2018-W14-B2/main/pull/133[#133])
 ** Community:
 *** Reported bugs and suggestions for other teams in the class (Issue:  https://github.com/CS2103JAN2018-W10-B2/main/issues/68[#68], https://github.com/CS2103JAN2018-W10-B2/main/issues/69[#69], https://github.com/CS2103JAN2018-W10-B2/main/issues/72[#72], https://github.com/CS2103JAN2018-W10-B2/main/issues/85[#85], https://github.com/CS2103JAN2018-W10-B2/main/issues/89[#89])
-*** (REMOVE) Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
-** Tools: (remove)
-*** Integrated a third party library (Natty) to the project (https://github.com[#42])
-*** Integrated a new Github plugin (CircleCI) to the team repo
+
 
 
 == Contributions to the User Guide
