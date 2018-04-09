@@ -40,13 +40,14 @@ public class AddShiftCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "addshift";
     public static final String COMMAND_ALIAS = "as";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a shift. "
-            + "Parameters: "
-            + PREFIX_DATE + "DATE (in dd-mm-yy format) "
+    public static final String COMMAND_FORMAT = PREFIX_DATE + "DATE (in dd-mm-yy format) "
             + PREFIX_TIME_START + "START_TIME "
             + PREFIX_TIME_END + "END_TIME "
-            + PREFIX_CAPACITY + "CAPACITY "
-            + "Example: " + COMMAND_WORD + " "
+            + PREFIX_CAPACITY + "CAPACITY ";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a shift. "
+            + "Parameters: "
+            + COMMAND_FORMAT
+            + "\nExample: " + COMMAND_WORD + " "
             + PREFIX_DATE + "12-03-18 "
             + PREFIX_TIME_START + "0900 "
             + PREFIX_TIME_END + "1600 "
@@ -100,12 +101,14 @@ public class ApplyCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "apply";
     public static final String COMMAND_ALIAS = "ap";
 
+    public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX (must be a positive integer) "
+            + "SHIFT_INDEX "
+            + "[" + PREFIX_PASSWORD + "PASSWORD]";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Applies an employee for the shift identified by the index number.\n"
-            + "Parameters: EMPLOYEE_INDEX (must be a positive integer) "
-            + "SHIFT_INDEX "
-            + "[" + PREFIX_PASSWORD + "PASSWORD]\n"
-            + "Example: " + COMMAND_WORD + " 1 1 " + PREFIX_PASSWORD + "hunter2";
+            + "Parameters: "
+            + COMMAND_FORMAT
+            + "\nExample: " + COMMAND_WORD + " 1 1 " + PREFIX_PASSWORD + "hunter2";
 
     public static final String MESSAGE_APPLY_SHIFT_SUCCESS = "Employee %1$s applied for shift %2$s";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "Employee is already in the shift";
@@ -208,10 +211,13 @@ public class DeleteShiftCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "deleteshift";
     public static final String COMMAND_ALIAS = "ds";
 
+    public static final String COMMAND_FORMAT = "SHIFT_INDEX";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the shift identified by the index number used in the timetable.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + "Parameters: "
+            + COMMAND_FORMAT
+            + " (must be a positive integer)"
+            + "\nExample: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_SHIFT_SUCCESS = "Deleted Shift: %1$s";
 
@@ -271,12 +277,14 @@ public class UnapplyCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "unapply";
     public static final String COMMAND_ALIAS = "uap";
 
+    public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX "
+            + "SHIFT_INDEX "
+            + "[" + PREFIX_PASSWORD + "PASSWORD]";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes an employee from the shift identified by the index number.\n"
-            + "Parameters: EMPLOYEE_INDEX (must be a positive integer) "
-            + "SHIFT_INDEX "
-            + "[" + PREFIX_PASSWORD + "PASSWORD]\n"
-            + "Example: " + COMMAND_WORD + " 1 1 " + PREFIX_PASSWORD + "hunter2";
+            + "Parameters: "
+            + COMMAND_FORMAT
+            + "\nExample: " + COMMAND_WORD + " 1 1 " + PREFIX_PASSWORD + "hunter2";
 
     public static final String MESSAGE_UNAPPLY_SHIFT_SUCCESS = "Employee %1$s removed from shift %2$s";
     public static final String MESSAGE_EMPLOYEE_NOT_FOUND = "Employee is not in the shift.";
@@ -530,6 +538,26 @@ public class UnapplyCommandParser implements Parser<UnapplyCommand> {
 ###### \java\seedu\ptman\model\PartTimeManager.java
 ``` java
     /**
+     * Removes {@code key} from all shifts
+     * @throws EmployeeNotFoundException if the {@code key} is not found
+     */
+    private void removeEmployeeFromAllShifts(Employee key) throws EmployeeNotFoundException {
+        for (Shift shift : shifts) {
+            if (shift.containsEmployee(key)) {
+                Shift copy = new Shift(shift);
+                try {
+                    copy.removeEmployee(key);
+                    shifts.setShift(shift, copy);
+                } catch (DuplicateShiftException e) {
+                    throw new AssertionError("shifts should never be duplicates");
+                } catch (ShiftNotFoundException e) {
+                    throw new AssertionError("shift should always exist");
+                }
+            }
+        }
+    }
+
+    /**
      * Removes {@code key} from this {@code PartTimeManager}.
      * @throws ShiftNotFoundException if the {@code key} is not in this {@code PartTimeManager}
      */
@@ -734,19 +762,14 @@ public class Shift {
         setEmployees(shift);
     }
 
-    public Shift(Date date, Time startTime, Time endTime, Capacity capacity, List<Employee> employees) {
+    public Shift(Date date, Time startTime, Time endTime, Capacity capacity, Set<Employee> employees) {
         requireAllNonNull(date, startTime, endTime, capacity, employees);
         checkArgument(endTime.isAfter(startTime), MESSAGE_SHIFT_CONSTRAINTS);
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;
         this.date = date;
-        this.uniqueEmployeeList = new UniqueEmployeeList();
-        try {
-            this.uniqueEmployeeList.setEmployees(employees);
-        } catch (DuplicateEmployeeException e) {
-            e.printStackTrace();
-        }
+        this.uniqueEmployeeList = new UniqueEmployeeList(employees);
     }
 
     protected boolean contains(Employee employee) {
@@ -863,6 +886,14 @@ public class Shift {
 
     public Date getDate() {
         return date;
+    }
+
+    public boolean containsEmployee(Employee key) {
+        return uniqueEmployeeList.contains(key);
+    }
+
+    public Set<Employee> getEmployees() {
+        return Collections.unmodifiableSet(uniqueEmployeeList.toSet());
     }
 }
 ```
@@ -1050,7 +1081,6 @@ public class UniqueShiftList implements Iterable<Shift> {
 public class XmlAdaptedShift {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT_SHIFT = "Shifts's %s field is missing!";
-    public static final String DECRYPT_FAIL_MESSAGE = "Cannot decrypt %s.";
 
     @XmlElement(required = true)
     private String date;
@@ -1075,14 +1105,10 @@ public class XmlAdaptedShift {
      */
     public XmlAdaptedShift(String date, String startTime, String endTime,
                            String capacity, List<XmlAdaptedEmployee> employees) {
-        try {
-            this.date = encrypt(date);
-            this.startTime = encrypt(startTime);
-            this.endTime = encrypt(endTime);
-            this.capacity = encrypt(capacity);
-        } catch (Exception e) {
-            setAttributesFromStrings(date, startTime, endTime, capacity);
-        }
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.capacity = capacity;
 
         if (employees != null) {
             this.employees = new ArrayList<>(employees);
@@ -1095,14 +1121,10 @@ public class XmlAdaptedShift {
      * @param source future changes to this will not affect the created XmlAdaptedShift
      */
     public XmlAdaptedShift(Shift source) {
-        try {
-            date = encrypt(source.getDate().toString());
-            startTime = encrypt(source.getStartTime().toString());
-            endTime = encrypt(source.getEndTime().toString());
-            capacity = encrypt(source.getCapacity().toString());
-        } catch (Exception e) {
-            setAttributesFromSource(source);
-        }
+        date = source.getDate().toString();
+        startTime = source.getStartTime().toString();
+        endTime = source.getEndTime().toString();
+        capacity = source.getCapacity().toString();
 
         employees = new ArrayList<>();
         for (Employee employee : source.getEmployeeList()) {
@@ -1110,40 +1132,20 @@ public class XmlAdaptedShift {
         }
     }
 
-    public void setAttributesFromSource(Shift source) {
-        date = source.getDate().toString();
-        startTime = source.getStartTime().toString();
-        endTime = source.getEndTime().toString();
-        capacity = source.getCapacity().toString();
-    }
-
-    public void setAttributesFromStrings(String date, String startTime, String endTime, String capacity) {
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.capacity = capacity;
-    }
-
     /**
      * Decrypts date
      * @return
      * @throws IllegalValueException
      */
-    private Date decryptDate() throws IllegalValueException {
-        String decryptedDate;
-        try {
-            decryptedDate = decrypt(this.date);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Date.class.getSimpleName()));
-        }
-        if (decryptedDate == null) {
+    private Date setDate() throws IllegalValueException {
+        if (this.date == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
                     Date.class.getSimpleName()));
         }
-        if (!Date.isValidDate(decryptedDate)) {
+        if (!Date.isValidDate(this.date)) {
             throw new IllegalValueException(Date.MESSAGE_DATE_CONSTRAINTS);
         }
-        return new Date(decryptedDate);
+        return new Date(this.date);
     }
 
     /**
@@ -1152,21 +1154,15 @@ public class XmlAdaptedShift {
      * @return
      * @throws IllegalValueException
      */
-    private Time decryptTime(String time) throws IllegalValueException {
-        String decryptedTime;
-        try {
-            decryptedTime = decrypt(time);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Time.class.getSimpleName()));
-        }
-        if (decryptedTime == null) {
+    private Time setTime(String time) throws IllegalValueException {
+        if (time == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
                     Time.class.getSimpleName()));
         }
-        if (!Time.isValidTime(decryptedTime)) {
+        if (!Time.isValidTime(time)) {
             throw new IllegalValueException(Time.MESSAGE_TIME_CONSTRAINTS);
         }
-        return new Time(decryptedTime);
+        return new Time(time);
     }
 
     /**
@@ -1174,21 +1170,15 @@ public class XmlAdaptedShift {
      * @return
      * @throws IllegalValueException
      */
-    private Capacity decryptCapacity() throws IllegalValueException {
-        String decryptedCapacity;
-        try {
-            decryptedCapacity = decrypt(this.capacity);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Capacity.class.getSimpleName()));
-        }
-        if (decryptedCapacity == null) {
+    private Capacity setCapacity() throws IllegalValueException {
+        if (this.capacity == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
                     Capacity.class.getSimpleName()));
         }
-        if (!Capacity.isValidCapacity(decryptedCapacity)) {
+        if (!Capacity.isValidCapacity(this.capacity)) {
             throw new IllegalValueException(Capacity.MESSAGE_CAPACITY_CONSTRAINTS);
         }
-        return new Capacity(decryptedCapacity);
+        return new Capacity(this.capacity);
     }
 
     /**
@@ -1202,12 +1192,12 @@ public class XmlAdaptedShift {
             employees.add(employee.toModelType());
         }
 
-        final Date date = decryptDate();
-        final Time startTime = decryptTime(this.startTime);
-        final Time endTime = decryptTime(this.endTime);
-        final Capacity capacity = decryptCapacity();
+        final Date date = setDate();
+        final Time startTime = setTime(this.startTime);
+        final Time endTime = setTime(this.endTime);
+        final Capacity capacity = setCapacity();
 
-        return new Shift(date, startTime, endTime, capacity, employees);
+        return new Shift(date, startTime, endTime, capacity, new HashSet<>(employees));
     }
 
     @Override

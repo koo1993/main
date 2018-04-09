@@ -287,6 +287,16 @@ public class AddShiftCommandTest {
         public void updateFilteredShiftList(Predicate<Shift> predicate) {
             fail("This method should not be called.");
         }
+
+        @Override
+        public void encryptLocalStorage() {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void decryptLocalStorage() {
+            fail("This method should not be called.");
+        }
     }
 
     /**
@@ -899,10 +909,11 @@ public class UnapplyCommandTest {
 
     @Test
     public void execute_incorrectPassword_throwsInvalidPasswordException() {
-        UnapplyCommand applyCommand = new UnapplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT,
+        model.setFalseAdminMode();
+        UnapplyCommand unapplyCommand = new UnapplyCommand(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT,
                 Optional.of(new Password("wrongPassword")));
-        applyCommand.setData(model, new CommandHistory(), new UndoRedoStack());
-        Assert.assertThrows(InvalidPasswordException.class, applyCommand::execute);
+        unapplyCommand.setData(model, new CommandHistory(), new UndoRedoStack());
+        Assert.assertThrows(InvalidPasswordException.class, unapplyCommand::execute);
     }
 
     @Test
@@ -1626,25 +1637,14 @@ public class ShiftBuilder {
     private Time startTime;
     private Time endTime;
     private Capacity capacity;
-    private List<Employee> employees;
+    private Set<Employee> employees;
 
     public ShiftBuilder() {
         date = new Date(DEFAULT_DATE);
         startTime = new Time(DEFAULT_TIME_START);
         endTime = new Time(DEFAULT_TIME_END);
         capacity = new Capacity(DEFAULT_CAPACITY);
-        employees = new ArrayList<>();
-    }
-
-    /**
-     * Initializes the ShiftBuilder with the data of {@code shiftToCopy}.
-     */
-    public ShiftBuilder(Shift shiftToCopy) {
-        date = shiftToCopy.getDate();
-        startTime = shiftToCopy.getStartTime();
-        endTime = shiftToCopy.getEndTime();
-        capacity = shiftToCopy.getCapacity();
-        employees = new ArrayList<>(shiftToCopy.getEmployeeList());
+        employees = new HashSet<>();
     }
 
     /**
@@ -1689,7 +1689,6 @@ public class ShiftBuilder {
 
     /**
      * Returns the {@code Shift}
-     * @return
      */
     public Shift build() {
         return new Shift(date, startTime, endTime, capacity, employees);

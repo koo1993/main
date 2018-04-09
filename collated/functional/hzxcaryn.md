@@ -148,12 +148,13 @@ public class ExportCommand extends Command {
     public static final String COMMAND_WORD = "export";
     public static final String COMMAND_ALIAS = "exp";
 
+    public static final String COMMAND_FORMAT = "[" + PREFIX_EMAIL + "EMAIL]";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Exports timetable as image. "
             + "If email is stated, timetable image will be sent as an attachment to the stated email. "
             + "Else, timetable image will be saved locally.\n"
             + "Parameters: "
-            + "[" + PREFIX_EMAIL + "EMAIL]\n"
-            + "Example: " + COMMAND_WORD + " "
+            + COMMAND_FORMAT
+            + "\nExample: " + COMMAND_WORD + " "
             + PREFIX_EMAIL + "email@example.com";
 
     public static final String MESSAGE_SAVE_SUCCESS = "Timetable is successfully exported!";
@@ -206,24 +207,6 @@ public class ExportCommand extends Command {
         return emailToSendImageTo.equals(e.emailToSendImageTo);
     }
 
-}
-```
-###### \java\seedu\ptman\logic\commands\MainCommand.java
-``` java
-/**
- * Returns back to main timetable view (of current week) in PTMan
- */
-public class MainCommand extends Command {
-
-    public static final String COMMAND_WORD = "main";
-
-    public static final String MESSAGE_SUCCESS = "Showing main timetable view.";
-
-    @Override
-    public CommandResult execute() {
-        EventsCenter.getInstance().post(new EmployeePanelSelectionChangedEvent(null));
-        return new CommandResult(MESSAGE_SUCCESS);
-    }
 }
 ```
 ###### \java\seedu\ptman\logic\parser\ExportCommandParser.java
@@ -302,6 +285,29 @@ public class AdminModeDisplay extends UiPart<Region> {
 
 }
 ```
+###### \java\seedu\ptman\ui\EmployeeListPanel.java
+``` java
+    /**
+     * Scrools to the top of the {@code EmployeeListPanel} and deselect any current selection.
+     */
+    private void scrollToTopAndDeselect() {
+        Platform.runLater(() -> {
+            employeeListView.scrollTo(0);
+            employeeListView.getSelectionModel().clearSelection();
+        });
+    }
+
+    @Subscribe
+    private void handleJumpToListRequestEvent(JumpToListRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (event.isNewSelection) {
+            scrollToAndSelect(event.targetIndex);
+        } else {
+            scrollToTopAndDeselect();
+        }
+    }
+
+```
 ###### \java\seedu\ptman\ui\OutletDetailsPanel.java
 ``` java
 /**
@@ -335,7 +341,7 @@ public class OutletDetailsPanel extends UiPart<Region> {
         super(FXML);
         this.outlet = outlet;
         //outletInformation.setWrapText(true);
-        setOutletInformation(outlet.getOperatingHours().toString(),
+        setOutletInformation(outlet.getOperatingHours().getDisplayedMessage(),
                 outlet.getOutletContact().toString(),
                 outlet.getOutletEmail().toString());
         setOutletName(outlet.getName().toString());
@@ -754,6 +760,13 @@ public class TimetablePanel extends UiPart<Region> {
     <Label fx:id="adminModeDisplay" />
 </StackPane>
 ```
+###### \resources\view\EmployeeListCard.fxml
+``` fxml
+      <StackPane minWidth="45" prefWidth="45" maxWidth="45">
+        <Circle fx:id="idCircle" radius="18" fill="transparent" stroke="#5AC2BC"/>
+        <Label fx:id="id" styleClass="cell_big_label"/>
+      </StackPane>
+```
 ###### \resources\view\MainWindow.fxml
 ``` fxml
         <HBox styleClass="pane-with-border">
@@ -817,11 +830,11 @@ public class TimetablePanel extends UiPart<Region> {
     <VBox>
         <Label fx:id="outletNamePanelHeader" styleClass="panel_large_label" />
         <HBox fx:id="outletInformation">
-            <Label fx:id="operatingHours">><graphic><FontAwesomeIconView fill="#969696" glyphName="CALENDAR" /></graphic></Label>
-            <Label fx:id="outletContact">><graphic><FontAwesomeIconView fill="#969696" glyphName="PHONE" /></graphic></Label>
-            <Label fx:id="outletEmail">><graphic><FontAwesomeIconView fill="#969696" glyphName="ENVELOPE" /></graphic></Label>
+            <Label fx:id="operatingHours"><graphic><FontAwesomeIconView fill="#7A8492" glyphName="CALENDAR" /></graphic></Label>
+            <Label fx:id="outletContact"><graphic><FontAwesomeIconView fill="#7A8492" glyphName="PHONE" /></graphic></Label>
+            <Label fx:id="outletEmail"><graphic><FontAwesomeIconView fill="#7A8492" glyphName="ENVELOPE" /></graphic></Label>
         </HBox>
-        <Label fx:id="announcement"><graphic><FontAwesomeIconView fill="#969696" glyphName="BULLHORN" /></graphic></Label>
+        <Label fx:id="announcement"><graphic><FontAwesomeIconView fill="#7A8492" glyphName="BULLHORN" /></graphic></Label>
     </VBox>
 </StackPane>
 ```
@@ -830,6 +843,524 @@ public class TimetablePanel extends UiPart<Region> {
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <ImageView fx:id="ptmanLogoView" />
 </StackPane>
+```
+###### \resources\view\PtmanTheme.css
+``` css
+/* Fonts */
+@font-face {
+    src: url("/fonts/Gotham-Rounded-Book.ttf");
+}
+
+@font-face {
+    src: url("/fonts/Gotham-Rounded-Medium.ttf");
+}
+
+@font-face {
+    font-family: "Proxima Nova Alt";
+    src: url("/fonts/Proxima-Nova-Alt-Regular.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Proxima Nova Alt";
+    src: url("/fonts/Proxima-Nova-Alt-Bold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+
+
+/* Classes */
+.root {
+    -fx-accent: #8E9AAA;
+    -fx-focus-color: #8E9AAA;
+}
+
+.background {
+    -fx-background-color: #FFFFFF;
+    background-color: #FFFFFF; /* Used in the default.html file */
+}
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-text-fill: #7A8492;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-admin-mode {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+    -fx-background-color: #E16A66;
+    -fx-text-fill: white;
+    -fx-padding: 5 5 5 5;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 12;
+}
+
+.label-non-admin-mode {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+    -fx-text-fill: transparent;
+    -fx-padding: 2 4 2 4;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 12;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Gotham Rounded Book";
+}
+
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
+.table-view {
+    -fx-base: #FFFFFF;
+    -fx-control-inner-background: #FFFFFF;
+    -fx-background-color: #FFFFFF;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+        transparent
+        transparent
+        #FFFFFF
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Proxima Nova Alt";
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: #DDDEE4;
+    -fx-padding: 1;
+}
+
+.split-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: #FFFFFF;
+}
+
+.list-cell {
+    -fx-label-padding: 12 6 12 6;
+    -fx-graphic-text-gap : 0;
+    -fx-padding: 0 0 0 0;
+    -fx-background-color: #FFFFFF;
+}
+
+.list-cell:filled {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #DDDEE4 transparent;
+    -fx-border-width: 1px;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #F5F8FA;
+}
+
+.list-cell:filled:selected #idCircle {
+    -fx-fill: #5AC2BC;
+}
+
+.list-cell:filled:selected #id {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.list-cell .label {
+    -fx-text-fill: #7A8492;
+}
+
+.panel_medium_text {
+    -fx-font-family: "Proxima Nova Alt";
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+}
+
+.panel_big_label {
+    -fx-font-family: "Proxima Nova Alt";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-padding: 10 15 10 20;
+}
+
+.panel_large_label {
+    -fx-font-family: "Proxima Nova Alt";
+    -fx-font-weight: bold;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5AC2BC;
+    -fx-padding: 18 5 5 15;
+}
+
+.cell_big_label {
+    -fx-font-family: "Gotham Rounded Medium";
+    -fx-font-size: 16px;
+    -fx-text-fill: #010504;
+}
+
+.cell_small_label {
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-font-size: 12px;
+    -fx-padding: 2 0 0 0;
+    -fx-text-fill: #010504;
+}
+
+.anchor-pane {
+     -fx-background-color: #FFFFFF;
+}
+
+.pane-with-border {
+     -fx-background-color: #FFFFFF;
+     -fx-border-color: transparent transparent #DDDEE4 transparent;
+     -fx-border-top-width: 1px;
+}
+
+.pane-with-dark-background {
+     -fx-background-color: #F5F8FA;
+}
+
+.pane-with-mint-background {
+    -fx-background-color: #5AC2BC;
+}
+
+.status-bar {
+    -fx-background-color: #EFF2F5;
+}
+
+.result-display {
+    -fx-background-color: transparent;
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-font-size: 15px;
+    -fx-text-fill: #7A8492;
+}
+
+.status-bar .label {
+    -fx-font-family: "Proxima Nova Alt";
+    -fx-text-fill: #7A8492;
+}
+
+.status-bar-with-border {
+    -fx-background-color: #EFF2F5;
+    -fx-border-color: #EFF2F5;
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: white;
+}
+
+.grid-pane {
+    -fx-background-color: #EFF2F5;
+}
+
+.grid-pane .anchor-pane {
+    -fx-padding: 5 10 5 10;
+}
+
+.context-menu {
+    -fx-background-color: #EFF2F5;
+}
+
+.context-menu .label {
+    -fx-text-fill: #7A8492;
+}
+
+.menu-bar {
+    -fx-background-color: #EFF2F5;
+}
+
+.menu-bar .label {
+    -fx-font-size: 15px;
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-text-fill: #7A8492;
+}
+
+.menu-button:hover,
+.menu-button:focused,
+.menu-button:showing {
+    -fx-background-color: #5AC2BC;
+}
+
+.menu-button:hover > .label,
+.menu-button:focused > .label,
+.menu-button:showing > .label {
+    -fx-text-fill: white;
+}
+
+.menu-item:hover,
+.menu-item:focused {
+    -fx-background-color: #EFF2F5;
+    -fx-cursor: hand;
+}
+
+.menu-item:hover > .label,
+.menu-item:focused > .label {
+    -fx-text-fill: #7A8492;
+}
+
+.menu .left-container {
+    -fx-background-color: black;
+}
+
+/*
+ * Metro style Push Button
+ * Author: Pedro Duque Vieira
+ * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #FFFFFF;
+    -fx-font-family: "Proxima Nova Alt", "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #3a3a3a;
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-background-color: white;
+  -fx-text-fill: #FFFFFF;
+}
+
+.button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.button:default:hover {
+    -fx-background-color: #EFF2F5;
+}
+
+.dialog-pane {
+    -fx-background-color: #FFFFFF;
+}
+
+.dialog-pane > *.button-bar > *.container {
+    -fx-background-color: #FFFFFF;
+}
+
+.dialog-pane > *.label.content {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.dialog-pane:header *.header-panel {
+    -fx-background-color: #FFFFFF;
+}
+
+.dialog-pane:header *.header-panel *.label {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.scroll-bar {
+    -fx-background-color: #EFF2F5;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #CDCDCD;
+    -fx-background-insets: 3;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+}
+
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 1 8 1 8;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
+    -fx-padding: 8 1 8 1;
+}
+
+.timetable-container {
+    -fx-opacity: 0.8;
+}
+
+
+/* Identities */
+#outletInformation {
+    -fx-padding: 5 5 3 20;
+}
+
+#outletInformation .label {
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-font-size: 14px;
+    -fx-text-fill: #7A8492;
+}
+
+#announcement {
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-font-size: 14px;
+    -fx-text-fill: #7A8492;
+    -fx-padding: 0 5 10 20;
+}
+
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+#id {
+    -fx-font-family: "Proxima Nova Alt";
+    -fx-text-fill: #5AC2BC;
+}
+
+#commandTypeLabel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #7A8492;
+}
+
+
+#commandTextField {
+    -fx-background-color: transparent #FFFFFF transparent #FFFFFF;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-font-family: "Gotham Rounded Book";
+    -fx-font-size: 16px;
+    -fx-text-fill: #7A8492;
+}
+
+#resultDisplay .content {
+    -fx-background-color: #F5F8FA;
+    -fx-background-radius: 0;
+}
+
+#tags {
+    -fx-hgap: 8;
+    -fx-vgap: 3;
+    -fx-padding: 5 0 3 0;
+}
+
+#tags .label {
+    -fx-text-fill: white;
+    -fx-padding: 3 4 3 4;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11;
+}
+
+#tags .salmon {
+    -fx-background-color: #E57373;
+}
+
+#tags .mint {
+    -fx-background-color: #80CBC4;
+}
+
+#tags .teal {
+    -fx-background-color: #26A69A;
+}
+
+#tags .turquoise {
+    -fx-background-color: #4DD0E1;
+}
+
+#tags .pink {
+    -fx-background-color: #F06292;
+}
+
+#tags .blue {
+    -fx-background-color: #42A5F5;
+}
+
+#tags .purple {
+    -fx-background-color: #9575CD;
+}
+
+#tags .pale-blue {
+    -fx-background-color: #82B1FF;
+}
+
+#tags .indigo {
+    -fx-background-color: #5C6BC0;
+}
+
+#tags .yellow {
+    -fx-background-color: #FFC107;
+}
 ```
 ###### \resources\view\TimetableView.fxml
 ``` fxml
