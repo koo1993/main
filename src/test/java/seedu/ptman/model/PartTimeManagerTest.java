@@ -1,6 +1,8 @@
 package seedu.ptman.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static seedu.ptman.testutil.TypicalEmployees.ALICE;
 import static seedu.ptman.testutil.TypicalEmployees.BENSON;
 import static seedu.ptman.testutil.TypicalEmployees.getTypicalPartTimeManager;
@@ -115,12 +117,27 @@ public class PartTimeManagerTest {
         assertEquals(expectedPartTimeManager, partTimeManagerWithAliceAndBenson);
     }
 
+    //@@author SunBangjie
     @Test
     public void getOutletInformationMessage_defaultData_returnCorrectMessage() {
         String actualMessage = partTimeManager.getOutletInformationMessage();
         String expectedMessage = new OutletInformation().toString();
         assertEquals(actualMessage, expectedMessage);
     }
+
+    @Test
+    public void encryptLocalStorage_dataNotEncrypted_encryptSuccessfully() {
+        partTimeManager.encryptLocalStorage();
+        assertTrue(partTimeManager.getOutletInformation().getEncryptionMode());
+    }
+
+    @Test
+    public void decryptLocalStorage_dataEncrypted_decryptSuccessfully() {
+        partTimeManager.encryptLocalStorage();
+        partTimeManager.decryptLocalStorage();
+        assertFalse(partTimeManager.getOutletInformation().getEncryptionMode());
+    }
+    //@@author
 
     /**
      * A stub ReadOnlyPartTimeManager whose employees and tags lists can violate interface constraints.

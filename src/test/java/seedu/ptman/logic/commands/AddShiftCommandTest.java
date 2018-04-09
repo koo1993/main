@@ -243,6 +243,16 @@ public class AddShiftCommandTest {
         public void updateFilteredShiftList(Predicate<Shift> predicate) {
             fail("This method should not be called.");
         }
+
+        @Override
+        public void encryptLocalStorage() {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void decryptLocalStorage() {
+            fail("This method should not be called.");
+        }
     }
 
     /**

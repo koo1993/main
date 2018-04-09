@@ -94,6 +94,10 @@ public interface Model {
 
     String getOutletInformationMessage();
 
+    void encryptLocalStorage();
+
+    void decryptLocalStorage();
+
     /** Returns an unmodifiable view of the filtered employee list */
     ObservableList<Employee> getFilteredEmployeeList();
 

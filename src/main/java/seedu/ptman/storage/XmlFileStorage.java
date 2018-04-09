@@ -25,6 +25,18 @@ public class XmlFileStorage {
     }
 
     /**
+     * Saves the given parttimemanager data to the specified file.
+     */
+    public static void saveEncryptedDataToFile(File file, XmlEncryptedSerializablePartTimeManager partTimeManager)
+            throws FileNotFoundException {
+        try {
+            XmlUtil.saveDataToFile(file, partTimeManager);
+        } catch (JAXBException e) {
+            throw new AssertionError("Unexpected exception " + e.getMessage());
+        }
+    }
+
+    /**
      * Returns ptman book in the file or an empty ptman book
      */
     public static XmlSerializablePartTimeManager loadDataFromSaveFile(File file) throws DataConversionException,
@@ -36,4 +48,15 @@ public class XmlFileStorage {
         }
     }
 
+    /**
+     * Returns ptman book in the file or an empty ptman book
+     */
+    public static XmlEncryptedSerializablePartTimeManager loadEncryptedDataFromSaveFile(File file)
+            throws DataConversionException, FileNotFoundException {
+        try {
+            return XmlUtil.getDataFromFile(file, XmlEncryptedSerializablePartTimeManager.class);
+        } catch (JAXBException e) {
+            throw new DataConversionException(e);
+        }
+    }
 }

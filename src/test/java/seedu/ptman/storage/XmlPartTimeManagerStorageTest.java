@@ -35,7 +35,8 @@ public class XmlPartTimeManagerStorageTest {
     }
 
     private java.util.Optional<ReadOnlyPartTimeManager> readPartTimeManager(String filePath) throws Exception {
-        return new XmlPartTimeManagerStorage(filePath).readPartTimeManager(addToTestDataPathIfNotNull(filePath));
+        return new XmlPartTimeManagerStorage(filePath).readPartTimeManager(false,
+                addToTestDataPathIfNotNull(filePath));
     }
 
     private String addToTestDataPathIfNotNull(String prefsFileInTestDataFolder) {
@@ -81,20 +82,20 @@ public class XmlPartTimeManagerStorageTest {
 
         //Save in new file and read back
         xmlPartTimeManagerStorage.savePartTimeManager(original, filePath);
-        ReadOnlyPartTimeManager readBack = xmlPartTimeManagerStorage.readPartTimeManager(filePath).get();
+        ReadOnlyPartTimeManager readBack = xmlPartTimeManagerStorage.readPartTimeManager(false, filePath).get();
         assertEquals(original, new PartTimeManager(readBack));
 
         //Modify data, overwrite exiting file, and read back
         original.addEmployee(HOON);
         original.removeEmployee(ALICE);
         xmlPartTimeManagerStorage.savePartTimeManager(original, filePath);
-        readBack = xmlPartTimeManagerStorage.readPartTimeManager(filePath).get();
+        readBack = xmlPartTimeManagerStorage.readPartTimeManager(false, filePath).get();
         assertEquals(original, new PartTimeManager(readBack));
 
         //Save and read without specifying file path
         original.addEmployee(IDA);
         xmlPartTimeManagerStorage.savePartTimeManager(original); //file path not specified
-        readBack = xmlPartTimeManagerStorage.readPartTimeManager().get(); //file path not specified
+        readBack = xmlPartTimeManagerStorage.readPartTimeManager(false).get(); //file path not specified
         assertEquals(original, new PartTimeManager(readBack));
 
     }

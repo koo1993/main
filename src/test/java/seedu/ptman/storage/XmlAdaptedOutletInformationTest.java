@@ -19,13 +19,15 @@ import seedu.ptman.testutil.Assert;
 
 //@@author SunBangjie
 public class XmlAdaptedOutletInformationTest {
+    private static final String DECRYPTED = OutletInformation.DATA_NOT_ENCRYPTED_MESSAGE;
+    private static final String ENCRYPTED = OutletInformation.DATA_ENCRYPTED_MESSAGE;
     private static final String INVALID_OUTLET_NAME = "Awesome@outlet";
-    private static final String INVALID_OPERATING_HOURS = "10:00/20:00";
+    private static final String INVALID_OPERATING_HOURS = "1000/2000";
     private static final String INVALID_OUTLET_CONTACT = "+6591112222";
     private static final String INVALID_OUTLET_EMAIL = "example.com";
 
     private static final String VALID_OUTLET_NAME = "AwesomeOutlet";
-    private static final String VALID_OPERATING_HOURS = "10:00-20:00";
+    private static final String VALID_OPERATING_HOURS = "1000-2000";
     private static final String VALID_OUTLET_CONTACT = "91112222";
     private static final String VALID_OUTLET_EMAIL = "AwesomeOutlet@gmail.com";
     private static final String VALID_ANNOUNCEMENT = "New Announcement";
@@ -41,16 +43,16 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_invalidOutletName_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(INVALID_OUTLET_NAME,
-                VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
-                VALID_ANNOUNCEMENT);
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED,
+                INVALID_OUTLET_NAME, VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL,
+                DEFAULT_PASSWORD_HASH, VALID_ANNOUNCEMENT);
         String expectedMessage = OutletName.MESSAGE_NAME_CONSTRAINTS;
         Assert.assertThrows(IllegalValueException.class, expectedMessage, outletInformation::toModelType);
     }
 
     @Test
     public void toModelType_nullOutletName_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(null,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, null,
                 VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = String.format(FAIL_MESSAGE, OutletName.class.getSimpleName());
@@ -59,16 +61,16 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_invalidOperatingHours_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
-                INVALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
-                VALID_ANNOUNCEMENT);
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED,
+                VALID_OUTLET_NAME, INVALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL,
+                DEFAULT_PASSWORD_HASH, VALID_ANNOUNCEMENT);
         String expectedMessage = OperatingHours.MESSAGE_OPERATING_HOUR_CONSTRAINTS;
         Assert.assertThrows(IllegalValueException.class, expectedMessage, outletInformation::toModelType);
     }
 
     @Test
     public void toModelType_nullOperatingHours_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 null, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = String.format(FAIL_MESSAGE, OperatingHours.class.getSimpleName());
@@ -77,7 +79,7 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_invalidOutletContact_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 VALID_OPERATING_HOURS, INVALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = OutletContact.MESSAGE_OUTLET_CONTACT_CONSTRAINTS;
@@ -86,7 +88,7 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_nullOutletContact_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 VALID_OPERATING_HOURS, null, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = String.format(FAIL_MESSAGE, OutletContact.class.getSimpleName());
@@ -95,7 +97,7 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_invalidOutletEmail_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, INVALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = OutletEmail.MESSAGE_OUTLET_EMAIL_CONSTRAINTS;
@@ -104,7 +106,7 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_nullOutletEmail_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, null, DEFAULT_PASSWORD_HASH,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = String.format(FAIL_MESSAGE, OutletEmail.class.getSimpleName());
@@ -113,7 +115,7 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_nullPasswordHash_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, null,
                 VALID_ANNOUNCEMENT);
         String expectedMessage = String.format(FAIL_MESSAGE, Password.class.getSimpleName());
@@ -122,7 +124,7 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void toModelType_nullAnnouncement_throwsIllegalValueException() {
-        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
+        XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation(DECRYPTED, VALID_OUTLET_NAME,
                 VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
                 null);
         String expectedMessage = String.format(FAIL_MESSAGE, Announcement.class.getSimpleName());
@@ -131,18 +133,18 @@ public class XmlAdaptedOutletInformationTest {
 
     @Test
     public void equals() {
-        XmlAdaptedOutletInformation firstOutletInformation = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
-                VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
-                VALID_ANNOUNCEMENT);
+        XmlAdaptedOutletInformation firstOutletInformation = new XmlAdaptedOutletInformation(DECRYPTED,
+                VALID_OUTLET_NAME, VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL,
+                DEFAULT_PASSWORD_HASH, VALID_ANNOUNCEMENT);
         XmlAdaptedOutletInformation secondOutletInformation = new XmlAdaptedOutletInformation(outlet);
 
         // Same object -> return true
         assertTrue(firstOutletInformation.equals(firstOutletInformation));
 
         // Same values -> return true
-        XmlAdaptedOutletInformation firstOutletInformationCopy = new XmlAdaptedOutletInformation(VALID_OUTLET_NAME,
-                VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL, DEFAULT_PASSWORD_HASH,
-                VALID_ANNOUNCEMENT);
+        XmlAdaptedOutletInformation firstOutletInformationCopy = new XmlAdaptedOutletInformation(DECRYPTED,
+                VALID_OUTLET_NAME, VALID_OPERATING_HOURS, VALID_OUTLET_CONTACT, VALID_OUTLET_EMAIL,
+                DEFAULT_PASSWORD_HASH, VALID_ANNOUNCEMENT);
         assertTrue(firstOutletInformation.equals(firstOutletInformationCopy));
 
         // Different types -> return false
@@ -169,12 +171,12 @@ public class XmlAdaptedOutletInformationTest {
     public void setAttributesFromStrings_validInputs_returnEqualObject() {
         OutletInformation outlet = new OutletInformation();
         XmlAdaptedOutletInformation outletInformation = new XmlAdaptedOutletInformation();
-        outletInformation.setAttributesFromStrings(outlet.getName().toString(), outlet.getOperatingHours().toString(),
-                outlet.getOutletContact().toString(), outlet.getOutletEmail().toString(),
-                outlet.getMasterPassword().getPasswordHash(),
+        outletInformation.setAttributesFromStrings(DECRYPTED, outlet.getName().toString(),
+                outlet.getOperatingHours().toString(), outlet.getOutletContact().toString(),
+                outlet.getOutletEmail().toString(), outlet.getMasterPassword().getPasswordHash(),
                 outlet.getAnnouncement().toString());
         XmlAdaptedOutletInformation sameOutletInformation = new XmlAdaptedOutletInformation();
-        sameOutletInformation.setAttributesFromStrings(outlet.getName().toString(),
+        sameOutletInformation.setAttributesFromStrings(DECRYPTED, outlet.getName().toString(),
                 outlet.getOperatingHours().toString(),
                 outlet.getOutletContact().toString(), outlet.getOutletEmail().toString(),
                 outlet.getMasterPassword().getPasswordHash(),

@@ -11,11 +11,12 @@ import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
 
+//@@author SunBangjie
 /**
  * An Immutable PartTimeManager that is serializable to XML format
  */
 @XmlRootElement(name = "parttimemanager")
-public class XmlSerializablePartTimeManager {
+public class XmlEncryptedSerializablePartTimeManager {
 
     private static final String ENCRYPTED_MESSAGE = "PartTimerManager storage files are encrypted.";
     private static final String DECRYPTED_MESSAGE = "PartTimerManager storage files are not encrypted.";
@@ -23,18 +24,17 @@ public class XmlSerializablePartTimeManager {
     @XmlElement
     private String encryptionMode;
     @XmlElement
-    private List<XmlAdaptedEmployee> employees;
+    private List<XmlEncryptedAdaptedEmployee> employees;
     @XmlElement
-    private List<XmlAdaptedTag> tags;
+    private List<XmlEncryptedAdaptedTag> tags;
     @XmlElement
-    private List<XmlAdaptedShift> shifts;
+    private List<XmlEncryptedAdaptedShift> shifts;
 
     /**
-     * Creates an empty XmlSerializablePartTimeManager.
+     * Creates an empty XmlEncryptedSerializablePartTimeManager.
      * This empty constructor is required for marshalling.
      */
-    public XmlSerializablePartTimeManager() {
-        encryptionMode = null;
+    public XmlEncryptedSerializablePartTimeManager() {
         employees = new ArrayList<>();
         tags = new ArrayList<>();
         shifts = new ArrayList<>();
@@ -43,13 +43,14 @@ public class XmlSerializablePartTimeManager {
     /**
      * Conversion
      */
-    public XmlSerializablePartTimeManager(ReadOnlyPartTimeManager src) {
+    public XmlEncryptedSerializablePartTimeManager(ReadOnlyPartTimeManager src) {
         this();
         this.encryptionMode = src.getOutletInformation().getEncryptionMode()
                 ? ENCRYPTED_MESSAGE : DECRYPTED_MESSAGE;
-        employees.addAll(src.getEmployeeList().stream().map(XmlAdaptedEmployee::new).collect(Collectors.toList()));
-        tags.addAll(src.getTagList().stream().map(XmlAdaptedTag::new).collect(Collectors.toList()));
-        shifts.addAll(src.getShiftList().stream().map(XmlAdaptedShift::new).collect(Collectors.toList()));
+        employees.addAll(src.getEmployeeList().stream().map(XmlEncryptedAdaptedEmployee::new)
+                .collect(Collectors.toList()));
+        tags.addAll(src.getTagList().stream().map(XmlEncryptedAdaptedTag::new).collect(Collectors.toList()));
+        shifts.addAll(src.getShiftList().stream().map(XmlEncryptedAdaptedShift::new).collect(Collectors.toList()));
     }
 
     /**
@@ -60,13 +61,13 @@ public class XmlSerializablePartTimeManager {
      */
     public PartTimeManager toModelType() throws IllegalValueException {
         PartTimeManager partTimeManager = new PartTimeManager();
-        for (XmlAdaptedTag t : tags) {
+        for (XmlEncryptedAdaptedTag t : tags) {
             partTimeManager.addTag(t.toModelType());
         }
-        for (XmlAdaptedEmployee p : employees) {
+        for (XmlEncryptedAdaptedEmployee p : employees) {
             partTimeManager.addEmployee(p.toModelType());
         }
-        for (XmlAdaptedShift s : shifts) {
+        for (XmlEncryptedAdaptedShift s : shifts) {
             partTimeManager.addShift(s.toModelType());
         }
         return partTimeManager;
@@ -78,11 +79,11 @@ public class XmlSerializablePartTimeManager {
             return true;
         }
 
-        if (!(other instanceof XmlSerializablePartTimeManager)) {
+        if (!(other instanceof XmlEncryptedSerializablePartTimeManager)) {
             return false;
         }
 
-        XmlSerializablePartTimeManager otherPtm = (XmlSerializablePartTimeManager) other;
+        XmlEncryptedSerializablePartTimeManager otherPtm = (XmlEncryptedSerializablePartTimeManager) other;
         return employees.equals(otherPtm.employees)
                 && tags.equals(otherPtm.tags)
                 && shifts.equals(otherPtm.shifts);

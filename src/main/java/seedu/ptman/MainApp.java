@@ -97,20 +97,6 @@ public class MainApp extends Application {
         ReadOnlyPartTimeManager initialData;
         OutletInformation outletInformation;
         try {
-            partTimeManagerOptional = storage.readPartTimeManager();
-            if (!partTimeManagerOptional.isPresent()) {
-                logger.info("Data file not found. Will be starting with a sample PartTimeManager");
-            }
-            initialData = partTimeManagerOptional.orElseGet(SampleDataUtil::getSamplePartTimeManager);
-        } catch (DataConversionException e) {
-            logger.warning("Data file not in the correct format. Will be starting with an empty PartTimeManager");
-            initialData = new PartTimeManager();
-        } catch (IOException e) {
-            logger.warning("Problem while reading from the file. Will be starting with an empty PartTimeManager");
-            initialData = new PartTimeManager();
-        }
-
-        try {
             outletInformationOptional = storage.readOutletInformation();
             outletInformation = outletInformationOptional.orElseGet(OutletInformation::new);
             if (!outletInformationOptional.isPresent()) {
@@ -124,6 +110,20 @@ public class MainApp extends Application {
             logger.warning("Problem while reading from the file. "
                     + "Will be starting with an dafault OutletInformation\"");
             outletInformation = new OutletInformation();
+        }
+
+        try {
+            partTimeManagerOptional = storage.readPartTimeManager(outletInformation.getEncryptionMode());
+            if (!partTimeManagerOptional.isPresent()) {
+                logger.info("Data file not found. Will be starting with a sample PartTimeManager");
+            }
+            initialData = partTimeManagerOptional.orElseGet(SampleDataUtil::getSamplePartTimeManager);
+        } catch (DataConversionException e) {
+            logger.warning("Data file not in the correct format. Will be starting with an empty PartTimeManager");
+            initialData = new PartTimeManager();
+        } catch (IOException e) {
+            logger.warning("Problem while reading from the file. Will be starting with an empty PartTimeManager");
+            initialData = new PartTimeManager();
         }
 
         return new ModelManager(initialData, userPrefs, outletInformation);

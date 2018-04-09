@@ -1,14 +1,20 @@
 package seedu.ptman.storage;
 
+import static seedu.ptman.commons.encrypter.DataEncrypter.decrypt;
+import static seedu.ptman.commons.encrypter.DataEncrypter.encrypt;
+
 import javax.xml.bind.annotation.XmlValue;
 
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.model.tag.Tag;
 
+//@@author SunBangjie
 /**
  * JAXB-friendly adapted version of the Tag.
  */
-public class XmlAdaptedTag {
+public class XmlEncryptedAdaptedTag {
+
+    public static final String DECRYPT_FAIL_MESSAGE = "Cannot decrypt %s";
 
     @XmlValue
     private String tagName;
@@ -17,13 +23,17 @@ public class XmlAdaptedTag {
      * Constructs an XmlAdaptedTag.
      * This is the no-arg constructor that is required by JAXB.
      */
-    public XmlAdaptedTag() {}
+    public XmlEncryptedAdaptedTag() {}
 
     /**
      * Constructs a {@code XmlAdaptedTag} with the given {@code tagName}.
      */
-    public XmlAdaptedTag(String tagName) {
-        this.tagName = tagName;
+    public XmlEncryptedAdaptedTag(String tagName) {
+        try {
+            this.tagName = encrypt(tagName);
+        } catch (Exception e) {
+            //Encryption should not fail
+        }
     }
 
     /**
@@ -31,8 +41,12 @@ public class XmlAdaptedTag {
      *
      * @param source future changes to this will not affect the created
      */
-    public XmlAdaptedTag(Tag source) {
-        tagName = source.tagName;
+    public XmlEncryptedAdaptedTag(Tag source) {
+        try {
+            tagName = encrypt(source.tagName);
+        } catch (Exception e) {
+            //Encryption should not fail
+        }
     }
 
     /**
@@ -41,10 +55,16 @@ public class XmlAdaptedTag {
      * @throws IllegalValueException if there were any data constraints violated in the adapted employee
      */
     public Tag toModelType() throws IllegalValueException {
-        if (!Tag.isValidTagName(this.tagName)) {
+        String decryptedTagName;
+        try {
+            decryptedTagName = decrypt(tagName);
+        } catch (Exception e) {
+            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Tag.class.getSimpleName()));
+        }
+        if (!Tag.isValidTagName(decryptedTagName)) {
             throw new IllegalValueException(Tag.MESSAGE_TAG_CONSTRAINTS);
         }
-        return new Tag(this.tagName);
+        return new Tag(decryptedTagName);
     }
 
     @Override
@@ -53,10 +73,10 @@ public class XmlAdaptedTag {
             return true;
         }
 
-        if (!(other instanceof XmlAdaptedTag)) {
+        if (!(other instanceof XmlEncryptedAdaptedTag)) {
             return false;
         }
 
-        return tagName.equals(((XmlAdaptedTag) other).tagName);
+        return tagName.equals(((XmlEncryptedAdaptedTag) other).tagName);
     }
 }

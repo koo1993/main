@@ -31,11 +31,13 @@ import seedu.ptman.logic.commands.ApplyCommand;
 import seedu.ptman.logic.commands.ChangeAdminPasswordCommand;
 import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.logic.commands.ClearCommand;
+import seedu.ptman.logic.commands.DecryptDataCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditCommand.EditEmployeeDescriptor;
 import seedu.ptman.logic.commands.EditOutletCommand;
+import seedu.ptman.logic.commands.EncryptDataCommand;
 import seedu.ptman.logic.commands.ExitCommand;
 import seedu.ptman.logic.commands.ExportCommand;
 import seedu.ptman.logic.commands.FindCommand;
@@ -48,6 +50,7 @@ import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UnapplyCommand;
 import seedu.ptman.logic.commands.UndoCommand;
+import seedu.ptman.logic.commands.ViewOutletCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
 import seedu.ptman.model.employee.Email;
@@ -252,7 +255,7 @@ public class PartTimeManagerParserTest {
     @Test
     public void parseCommand_editoutlet() throws Exception {
         String name = "EditedOutlet";
-        String operatingHours = "10:00-17:00";
+        String operatingHours = "1000-1700";
         String outletContact = "91234567";
         String outletEmail = "EditedOutlet@gmail.com";
         EditOutletCommand command = (EditOutletCommand) parser.parseCommand(EditOutletCommand.COMMAND_WORD
@@ -267,7 +270,7 @@ public class PartTimeManagerParserTest {
     @Test
     public void parseCommand_editoutletAlias() throws Exception {
         String name = "EditedOutlet";
-        String operatingHours = "10:00-17:00";
+        String operatingHours = "1000-1700";
         String outletContact = "91234567";
         String outletEmail = "EditedOutlet@gmail.com";
         EditOutletCommand command = (EditOutletCommand) parser.parseCommand(EditOutletCommand.COMMAND_ALIAS
@@ -293,6 +296,26 @@ public class PartTimeManagerParserTest {
         AnnouncementCommand command = (AnnouncementCommand) parser.parseCommand(AnnouncementCommand.COMMAND_ALIAS
                 + " " + announcement);
         assertEquals(new AnnouncementCommand(new Announcement(announcement)), command);
+    }
+
+    @Test
+    public void parseCommand_encrypt() throws Exception {
+        assertTrue(parser.parseCommand(EncryptDataCommand.COMMAND_WORD) instanceof EncryptDataCommand);
+    }
+
+    @Test
+    public void parseCommand_decrypt() throws Exception {
+        assertTrue(parser.parseCommand(DecryptDataCommand.COMMAND_WORD) instanceof DecryptDataCommand);
+    }
+
+    @Test
+    public void parseCommand_viewoutlet() throws Exception {
+        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_WORD) instanceof ViewOutletCommand);
+    }
+
+    @Test
+    public void parseCommand_viewoutletAlias() throws Exception {
+        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_ALIAS) instanceof ViewOutletCommand);
     }
 
     //@@author hzxcaryn

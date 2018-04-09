@@ -35,15 +35,16 @@ public class ModelManagerTest {
         modelManager.getFilteredEmployeeList().remove(0);
     }
 
+    //@@author SunBangjie
     @Test
-    public void updateOutlet() throws NoOutletInformationFieldChangeException {
+    public void updateOutlet_validCondition_success() throws NoOutletInformationFieldChangeException {
         PartTimeManager partTimeManager = new PartTimeManager();
         PartTimeManager differentPartTimeManager = new PartTimeManager();
         UserPrefs userPrefs = new UserPrefs();
 
-        OutletInformation outlet = new OutletInformation(new OutletName("test"), new OperatingHours("10:00-15:00"),
+        OutletInformation outlet = new OutletInformation(new OutletName("test"), new OperatingHours("1000-1500"),
                 new OutletContact("123"), new OutletEmail("test@test.com"),
-                new Password(), new Announcement("New Announcement."));
+                new Announcement("New Announcement."), new Password(), false);
 
         ModelManager modelManager = new ModelManager(differentPartTimeManager, userPrefs, new OutletInformation());
         ModelManager differentModelManager = new ModelManager(partTimeManager, userPrefs, new OutletInformation());
@@ -52,6 +53,39 @@ public class ModelManagerTest {
         modelManager.updateOutlet(outlet);
         assertNotEquals(modelManager, differentModelManager);
     }
+
+    @Test
+    public void encryptLocalStorage_dataNotEncrypted_success() {
+        PartTimeManager partTimeManager = new PartTimeManager();
+        PartTimeManager differentPartTimeManager = new PartTimeManager();
+        UserPrefs userPrefs = new UserPrefs();
+
+        ModelManager modelManager = new ModelManager(partTimeManager, userPrefs, new OutletInformation());
+        ModelManager differentModelManager = new ModelManager(differentPartTimeManager, userPrefs,
+                new OutletInformation());
+
+        assertEquals(modelManager, differentModelManager);
+        modelManager.encryptLocalStorage();
+        assertNotEquals(modelManager, differentModelManager);
+    }
+
+    @Test
+    public void decryptLocalStorage_dataEncrypted_success() {
+        PartTimeManager partTimeManager = new PartTimeManager();
+        PartTimeManager differentPartTimeManager = new PartTimeManager();
+        UserPrefs userPrefs = new UserPrefs();
+
+        ModelManager modelManager = new ModelManager(partTimeManager, userPrefs, new OutletInformation());
+        ModelManager differentModelManager = new ModelManager(differentPartTimeManager, userPrefs,
+                new OutletInformation());
+
+        modelManager.encryptLocalStorage();
+        differentModelManager.encryptLocalStorage();
+        assertEquals(modelManager, differentModelManager);
+        modelManager.decryptLocalStorage();
+        assertNotEquals(modelManager, differentModelManager);
+    }
+    //@@author
 
     @Test
     public void equals() {

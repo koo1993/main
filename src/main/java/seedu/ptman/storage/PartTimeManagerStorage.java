@@ -22,12 +22,14 @@ public interface PartTimeManagerStorage {
      * @throws DataConversionException if the data in storage is not in the expected format.
      * @throws IOException if there was any problem when reading from the storage.
      */
-    Optional<ReadOnlyPartTimeManager> readPartTimeManager() throws DataConversionException, IOException;
+    Optional<ReadOnlyPartTimeManager> readPartTimeManager(boolean isDataEncrypted)
+            throws DataConversionException, IOException;
 
     /**
      * @see #getPartTimeManagerFilePath()
      */
-    Optional<ReadOnlyPartTimeManager> readPartTimeManager(String filePath) throws DataConversionException, IOException;
+    Optional<ReadOnlyPartTimeManager> readPartTimeManager(boolean isDataEncrypted, String filePath)
+            throws DataConversionException, IOException;
 
     /**
      * Saves the given {@link ReadOnlyPartTimeManager} to the storage.

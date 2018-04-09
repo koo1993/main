@@ -76,7 +76,7 @@ public class XmlOutletInformationStorageTest {
 
         //Modify data, overwrite existing file, and read back
         original.setAnnouncement(new Announcement("new announcement"));
-        original.setOutletInformation(new OutletName("newName"), new OperatingHours("10:00-20:00"),
+        original.setOutletInformation(new OutletName("newName"), new OperatingHours("1000-2000"),
                 new OutletContact("92223333"), new OutletEmail("newOutlet@gmail.com"));
         xmlOutletInformationStorage.saveOutletInformation(original, filePath);
         readBack = xmlOutletInformationStorage.readOutletInformation(filePath).get();
@@ -84,7 +84,7 @@ public class XmlOutletInformationStorageTest {
 
         //Save and read without specifying file path
         original.setAnnouncement(new Announcement("new announcement"));
-        original.setOutletInformation(new OutletName("newName"), new OperatingHours("10:00-20:00"),
+        original.setOutletInformation(new OutletName("newName"), new OperatingHours("1000-2000"),
                 new OutletContact("92223333"), new OutletEmail("newOutlet@gmail.com"));
         xmlOutletInformationStorage.saveOutletInformation(original);
         readBack = xmlOutletInformationStorage.readOutletInformation().get();

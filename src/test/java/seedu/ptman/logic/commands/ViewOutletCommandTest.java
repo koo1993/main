@@ -34,9 +34,11 @@ public class ViewOutletCommandTest {
 
     @Test
     public void execute_validOutletInformation_showsCorrectInformation() {
-        String expectedMessage = "Outlet Name: " + model.getOutletInformation().getName() + " "
-                + model.getOutletInformationMessage() + " Announcement: "
-                + model.getOutletInformation().getAnnouncement();
+        String expectedMessage = "Outlet Name: DefaultOutlet Operating Hours: 09:00-22:00 Contact: 91234567 "
+                + "Email: DefaultOutlet@gmail.com Announcement: No announcement. "
+                + "Please add new announcement "
+                + "with announcement command. "
+                + "Encryption: Outlet information storage files are not encrypted.";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 }

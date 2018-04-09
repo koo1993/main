@@ -76,7 +76,7 @@ public class TestApp extends MainApp {
      */
     public PartTimeManager readStoragePartTimeManager() {
         try {
-            return new PartTimeManager(storage.readPartTimeManager().get());
+            return new PartTimeManager(storage.readPartTimeManager(false).get());
         } catch (DataConversionException dce) {
             throw new AssertionError("Data is not in the PartTimeManager format.");
         } catch (IOException ioe) {

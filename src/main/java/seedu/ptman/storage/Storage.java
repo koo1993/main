@@ -29,7 +29,8 @@ public interface Storage extends PartTimeManagerStorage, UserPrefsStorage, Outle
     String getOutletInformationFilePath();
 
     @Override
-    Optional<ReadOnlyPartTimeManager> readPartTimeManager() throws DataConversionException, IOException;
+    Optional<ReadOnlyPartTimeManager> readPartTimeManager(boolean isDataEncrypted)
+            throws DataConversionException, IOException;
 
     @Override
     void savePartTimeManager(ReadOnlyPartTimeManager partTimeManager) throws IOException;

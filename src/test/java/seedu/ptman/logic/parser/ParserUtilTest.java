@@ -38,7 +38,7 @@ public class ParserUtilTest {
     private static final String INVALID_OUTLET_NAME = "Awesome@Outlet";
     private static final String INVALID_OUTLET_CONTACT = "+1234";
     private static final String INVALID_OPERATING_HOURS = "09:00/18:00";
-    private static final String INVALID_START_END_TIME = "20:00-10:00";
+    private static final String INVALID_START_END_TIME = "2000-1000";
     private static final String INVALID_TIME = "1pm";
     private static final String INVALID_CAPACITY = "one";
     private static final String VALID_NAME = "Rachel Walker";
@@ -49,7 +49,7 @@ public class ParserUtilTest {
     private static final String VALID_TAG_2 = "neighbour";
     private static final String VALID_OUTLET_NAME = "AwesomeOutlet";
     private static final String VALID_OUTLET_CONTACT = "91234567";
-    private static final String VALID_OPERATING_HOURS = "09:00-18:00";
+    private static final String VALID_OPERATING_HOURS = "0900-1800";
     private static final String VALID_TIME = "1300";
     private static final String VALID_CAPACITY = "10";
     private static final String WHITESPACE = " \t\r\n";
@@ -329,6 +329,7 @@ public class ParserUtilTest {
         assertEquals(expectedTagSet, actualTagSet);
     }
 
+    //@@author SunBangjie
     @Test
     public void parseOutletName_null_throwsNullPointerException() {
         Assert.assertThrows(NullPointerException.class, () -> ParserUtil.parseOutletName((String) null));
@@ -441,4 +442,5 @@ public class ParserUtilTest {
         assertEquals(Optional.of(expectedOperatingHours), ParserUtil.parseOperatingHours(
                 Optional.of(operatingHoursWithWhitespace)));
     }
+    //@@author
 }

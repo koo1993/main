@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.ptman.commons.util.AppUtil.checkArgument;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 //@@author SunBangjie
@@ -15,11 +17,9 @@ public class OperatingHours {
 
     public static final String MESSAGE_OPERATING_HOUR_CONSTRAINTS =
             "Operating hours must be in the format of START-END where START and END must be in "
-                    + "the format of hh:mm and in terms of 24 hours. For example, 09:00-22:00";
+                    + "the format of HHMM and in terms of 24 hours. For example, 0900-2200";
     public static final String MESSAGE_START_END_TIME_CONSTRAINTS = "START time must be before END time.";
-    public static final String TIME24HOURS_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
-    public static final String OPERATING_HOUR_VALIDATION_REGEX = TIME24HOURS_PATTERN + "-"
-            + TIME24HOURS_PATTERN;
+    public static final String OPERATING_HOUR_VALIDATION_REGEX = "\\d{4}" + "-" + "\\d{4}";
 
     public final String value;
     private final LocalTime startTime;
@@ -44,9 +44,10 @@ public class OperatingHours {
      * Converts a valid string of time to Local Time
      */
     public static LocalTime convertStringToLocalTime(String time) {
-        String[] splitedTime = time.split(":");
-        int hour = Integer.parseInt(splitedTime[0]);
-        int minute = Integer.parseInt(splitedTime[1]);
+        String hourString = time.substring(0, 2);
+        String minuteString = time.substring(2);
+        int hour = Integer.parseInt(hourString);
+        int minute = Integer.parseInt(minuteString);
         return LocalTime.of(hour, minute);
     }
 
@@ -62,7 +63,17 @@ public class OperatingHours {
      * Returns true if a given string is a valid operating hours of an outlet.
      */
     public static boolean isValidOperatingHours(String test) {
-        return test.matches(OPERATING_HOUR_VALIDATION_REGEX);
+        if (!test.matches(OPERATING_HOUR_VALIDATION_REGEX)) {
+            return false;
+        }
+        String[] splitedTime = test.split("-");
+        try {
+            LocalTime.parse(splitedTime[0], DateTimeFormatter.ofPattern("HHmm"));
+            LocalTime.parse(splitedTime[1], DateTimeFormatter.ofPattern("HHmm"));
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -77,6 +88,10 @@ public class OperatingHours {
 
     @Override
     public String toString() {
+        return value;
+    }
+
+    public String getDisplayedMessage() {
         final StringBuilder builder = new StringBuilder();
         builder.append(getStartTime())
                 .append("-")

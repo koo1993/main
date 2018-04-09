@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <employee>
-    <name>CurU9CCNY0mueTcpOaMg/w==</name>
-    <phone>LIVt1EM/GwQPO8bd0cXzXA==</phone>
-    <email>xgYbk10sXH9mYLdY5vjCosnCKBKliFxVb5mtIZKqV/Y=</email>
-    <address>iILdzzJnLagWRMYjGWeYN0Ued7JOBzsARnYyiG4LYldIcP5RW4qHw8sZztCzv87M</address>
-    <salary>KBPP6vUcTHiVw1/st8SQCw==</salary>
-    <passwordHash>64c46tfd4zPZWWkvFBJjfhV+QfLR+alUL8TbQlcNoNSstyRHiJXD6Jbgi5pYhlhB</passwordHash>
-    <tagged>kVT4ua8Ww7W5G6DWx7oMlQ==</tagged>
+    <name>Alex Yeoh</name>
+    <phone>87438807</phone>
+    <email>alexyeoh@example.com</email>
+    <address>Blk 30 Geylang Street 29, #06-40</address>
+    <salary>0</salary>
+    <passwordHash>wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=</passwordHash>
+    <tagged>barista</tagged>
 </employee>

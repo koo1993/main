@@ -31,6 +31,9 @@ import seedu.ptman.model.tag.UniqueTagList;
  */
 public class PartTimeManager implements ReadOnlyPartTimeManager {
 
+    private static final boolean ENCRYPTED = true;
+    private static final boolean DECRYPTED = false;
+
     private final UniqueEmployeeList employees;
     private final UniqueShiftList shifts;
     private final UniqueTagList tags;
@@ -191,6 +194,15 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     public OutletInformation getOutletInformation() {
         return outlet;
     }
+
+    public void encryptLocalStorage() {
+        outlet.setEncryptionMode(ENCRYPTED);
+    }
+
+    public void decryptLocalStorage() {
+        outlet.setEncryptionMode(DECRYPTED);
+    }
+    //@@author
 
     /**
      *  Updates the master tag list to include tags in {@code employee} that are not in the list.

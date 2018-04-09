@@ -16,11 +16,14 @@ import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeExcepti
 public class OutletInformation {
 
     public static final String DEFAULT_OUTLET_NAME = "DefaultOutlet";
-    public static final String DEFAULT_OPERATING_HOURS = "09:00-22:00";
+    public static final String DEFAULT_OPERATING_HOURS = "0900-2200";
     public static final String DEFAULT_OUTLET_CONTACT = "91234567";
     public static final String DEFAULT_OUTLET_EMAIL = "DefaultOutlet@gmail.com";
     public static final String DEFAULT_ANNOUNCEMENT_MESSAGE = "No announcement. "
             + "Please add new announcement with announcement command.";
+    public static final String DATA_ENCRYPTED_MESSAGE = "Outlet information storage files are encrypted.";
+    public static final String DATA_NOT_ENCRYPTED_MESSAGE =
+            "Outlet information storage files are not encrypted.";
 
     private OutletName name;
     private Password masterPassword;
@@ -28,24 +31,29 @@ public class OutletInformation {
     private OutletContact outletContact;
     private OutletEmail outletEmail;
     private Announcement announcement;
+    private boolean isDataEncrypted;
 
     /**
      * Constructs an {@code OutletInformation}.
-     *
-     * @param name a valid outlet name
-     * @param operatingHours a valid operating hours
      */
     public OutletInformation(OutletName name, OperatingHours operatingHours, OutletContact outletContact,
-                             OutletEmail outletEmail, Password masterPassword, Announcement announcement) {
-        requireAllNonNull(name, operatingHours, outletContact, outletEmail, masterPassword, announcement);
+                             OutletEmail outletEmail, Announcement announcement, Password masterPassword,
+                             boolean isDataEncrypted) {
+        requireAllNonNull(name, operatingHours, outletContact, outletEmail, announcement, masterPassword,
+                isDataEncrypted);
         this.name = name;
         this.operatingHours = operatingHours;
         this.outletContact = outletContact;
         this.outletEmail = outletEmail;
-        this.masterPassword = masterPassword;
         this.announcement = announcement;
+        this.masterPassword = masterPassword;
+        this.isDataEncrypted = isDataEncrypted;
     }
 
+    /**
+     * Constructs a new {@code OutletInformation} from source outlet.
+     * @param outlet source outlet
+     */
     public OutletInformation(OutletInformation outlet) {
         this.name = new OutletName(outlet.getName().toString());
         this.masterPassword = new Password(outlet.getMasterPassword());
@@ -53,6 +61,7 @@ public class OutletInformation {
         this.operatingHours = new OperatingHours(outlet.getOperatingHours().toString());
         this.outletEmail = new OutletEmail(outlet.getOutletEmail().toString());
         this.announcement = new Announcement(outlet.getAnnouncement().toString());
+        this.isDataEncrypted = outlet.getEncryptionMode();
     }
 
     /**
@@ -65,6 +74,7 @@ public class OutletInformation {
         this.outletContact = new OutletContact(DEFAULT_OUTLET_CONTACT);
         this.outletEmail = new OutletEmail(DEFAULT_OUTLET_EMAIL);
         this.announcement = new Announcement(DEFAULT_ANNOUNCEMENT_MESSAGE);
+        this.isDataEncrypted = false;
     }
 
     public OutletName getName() {
@@ -87,8 +97,16 @@ public class OutletInformation {
         return outletEmail;
     }
 
+    public Announcement getAnnouncement() {
+        return announcement;
+    }
+
+    public boolean getEncryptionMode() {
+        return isDataEncrypted;
+    }
+
     /**
-     * Set the outlet password.
+     * Sets the outlet password.
      * only set after checking against outlet password.
      * @param password
      */
@@ -97,10 +115,12 @@ public class OutletInformation {
         this.masterPassword = password;
 
     }
-    public Announcement getAnnouncement() {
-        return announcement;
-    }
 
+    /**
+     * Sets the outlet information attributes.
+     * Some fields can be unspecified.
+     * If all fields are unspecified, NoOutletInformationFieldChangeException will be thrown.
+     */
     public void setOutletInformation(OutletName name, OperatingHours operatingHours, OutletContact outletContact,
                                      OutletEmail outletEmail)
             throws NoOutletInformationFieldChangeException {
@@ -121,11 +141,16 @@ public class OutletInformation {
         }
     }
 
-
+    /**
+     * sets outlet information from source outlet
+     * @param outlet source outlet
+     * @throws NoOutletInformationFieldChangeException
+     */
     public void setOutletInformation(OutletInformation outlet) throws NoOutletInformationFieldChangeException {
         try {
             requireAllNonNull(outlet.getName(), outlet.getOperatingHours(), outlet.getMasterPassword(),
-                    outlet.getOutletEmail(), outlet.getOutletContact(), outlet.getAnnouncement());
+                    outlet.getOutletEmail(), outlet.getOutletContact(), outlet.getAnnouncement(),
+                    outlet.getEncryptionMode());
         } catch (NullPointerException e) {
             throw new NoOutletInformationFieldChangeException();
         }
@@ -135,12 +160,35 @@ public class OutletInformation {
         this.outletEmail = outlet.getOutletEmail();
         this.masterPassword = outlet.getMasterPassword();
         this.announcement = outlet.getAnnouncement();
+        this.isDataEncrypted = outlet.getEncryptionMode();
     }
 
+    /**
+     * Sets encryption mode
+     * @param isEncrypted
+     */
+    public void setEncryptionMode(boolean isEncrypted) {
+        this.isDataEncrypted = isEncrypted;
+    }
+
+    /**
+     * Sets outlet announcement
+     * @param announcement
+     */
     public void setAnnouncement(Announcement announcement) {
         this.announcement = announcement;
     }
 
+    /**
+     * Gets encryption mode message
+     * @return message that decribes whether current local files are encrypted
+     */
+    public String getEncryptionModeMessage() {
+        if (isDataEncrypted) {
+            return DATA_ENCRYPTED_MESSAGE;
+        }
+        return DATA_NOT_ENCRYPTED_MESSAGE;
+    }
 
     @Override
     public boolean equals(Object other) {
@@ -151,25 +199,32 @@ public class OutletInformation {
                 && ((OutletInformation) other).getOperatingHours().equals(this.getOperatingHours())
                 && ((OutletInformation) other).getOutletContact().equals(this.getOutletContact())
                 && ((OutletInformation) other).getOutletEmail().equals(this.getOutletEmail())
-                && ((OutletInformation) other).getAnnouncement().equals(this.getAnnouncement()));
+                && ((OutletInformation) other).getAnnouncement().equals(this.getAnnouncement())
+                && ((OutletInformation) other).getEncryptionMode() == (this.getEncryptionMode()));
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, masterPassword, operatingHours, outletContact, outletEmail, announcement);
+        return Objects.hash(name, masterPassword, operatingHours, outletContact, outletEmail, announcement,
+                isDataEncrypted);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Operating Hours: ")
-                .append(getOperatingHours())
+        builder.append("Outlet Name: ")
+                .append(getName())
+                .append(" Operating Hours: ")
+                .append(getOperatingHours().getDisplayedMessage())
                 .append(" Contact: ")
                 .append(getOutletContact())
                 .append(" Email: ")
-                .append(getOutletEmail());
+                .append(getOutletEmail())
+                .append(" Announcement: ")
+                .append(getAnnouncement())
+                .append(" Encryption: ")
+                .append(getEncryptionModeMessage());
         return builder.toString();
     }
-
 }

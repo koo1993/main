@@ -53,7 +53,7 @@ public class CommandTestUtil {
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
     public static final String VALID_OUTLET_NAME = "ValidOutlet";
-    public static final String VALID_OPERATING_HOURS = "09:00-22:00";
+    public static final String VALID_OPERATING_HOURS = "0900-2200";
     public static final String VALID_OUTLET_CONTACT = "912345678";
     public static final String VALID_OUTLET_EMAIL = "ValidOutlet@gmail.com";
     public static final String DEFAULT1_HASH = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00=";

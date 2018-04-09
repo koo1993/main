@@ -26,7 +26,11 @@ public class XmlAdaptedOutletInformation {
 
     public static final String FAIL_MESSAGE = "Outlet's %s field is missing!";
     public static final String DECRYPT_FAIL_MESSAGE = "Cannot decrypt %s";
+    public static final String ENCRYPTED = OutletInformation.DATA_ENCRYPTED_MESSAGE;
+    public static final String DECRYPTED = OutletInformation.DATA_NOT_ENCRYPTED_MESSAGE;
 
+    @XmlElement(required = true)
+    private String encryptionMode;
     @XmlElement(required = true)
     private String outletName;
     @XmlElement(required = true)
@@ -41,6 +45,7 @@ public class XmlAdaptedOutletInformation {
     private String announcement;
 
     public XmlAdaptedOutletInformation() {
+        this.encryptionMode = null;
         this.outletName = null;
         this.operatingHours = null;
         this.outletContact = null;
@@ -49,20 +54,25 @@ public class XmlAdaptedOutletInformation {
         this.announcement = null;
     }
 
-    public XmlAdaptedOutletInformation(String outletName, String operatingHours, String outletContact,
-                                       String outletEmail, String passwordHash, String announcement) {
-        try {
-            this.outletName = encrypt(outletName);
-            this.operatingHours = encrypt(operatingHours);
-            this.outletContact = encrypt(outletContact);
-            this.outletEmail = encrypt(outletEmail);
-            this.passwordHash = encrypt(passwordHash);
-            this.announcement = encrypt(announcement);
-        } catch (Exception e) {
-            setAttributesFromStrings(outletName, operatingHours, outletContact, outletEmail,
+    public XmlAdaptedOutletInformation(String encryptionMode, String outletName, String operatingHours,
+                                       String outletContact, String outletEmail, String passwordHash,
+                                       String announcement) {
+        if (encryptionMode.equals(ENCRYPTED)) {
+            this.encryptionMode = encryptionMode;
+            try {
+                this.outletName = encrypt(outletName);
+                this.operatingHours = encrypt(operatingHours);
+                this.outletContact = encrypt(outletContact);
+                this.outletEmail = encrypt(outletEmail);
+                this.passwordHash = encrypt(passwordHash);
+                this.announcement = encrypt(announcement);
+            } catch (Exception e) {
+                //encryption should not fail
+            }
+        } else {
+            setAttributesFromStrings(encryptionMode, outletName, operatingHours, outletContact, outletEmail,
                     passwordHash, announcement);
         }
-
     }
 
     /**
@@ -70,21 +80,27 @@ public class XmlAdaptedOutletInformation {
      */
     public XmlAdaptedOutletInformation(OutletInformation source) {
         this();
-        try {
-            outletName = encrypt(source.getName().fullName);
-            operatingHours = encrypt(source.getOperatingHours().value);
-            outletContact = encrypt(source.getOutletContact().value);
-            outletEmail = encrypt(source.getOutletEmail().value);
-            passwordHash = encrypt(source.getMasterPassword().getPasswordHash());
-            announcement = encrypt(source.getAnnouncement().value);
-        } catch (Exception e) {
+        if (source.getEncryptionMode()) {
+            encryptionMode = source.getEncryptionModeMessage();
+            try {
+                outletName = encrypt(source.getName().fullName);
+                operatingHours = encrypt(source.getOperatingHours().value);
+                outletContact = encrypt(source.getOutletContact().value);
+                outletEmail = encrypt(source.getOutletEmail().value);
+                passwordHash = encrypt(source.getMasterPassword().getPasswordHash());
+                announcement = encrypt(source.getAnnouncement().value);
+            } catch (Exception e) {
+                //encryption should not fail
+            }
+        } else {
             setAttributesFromSource(source);
         }
-
     }
 
-    public void setAttributesFromStrings(String outletName, String operatingHours, String outletContact,
-                                          String outletEmail, String passwordHash, String announcement) {
+    public void setAttributesFromStrings(String encryptionMode, String outletName, String operatingHours,
+                                         String outletContact, String outletEmail, String passwordHash,
+                                         String announcement) {
+        this.encryptionMode = encryptionMode;
         this.outletName = outletName;
         this.operatingHours = operatingHours;
         this.outletContact = outletContact;
@@ -94,6 +110,7 @@ public class XmlAdaptedOutletInformation {
     }
 
     public void setAttributesFromSource(OutletInformation source) {
+        encryptionMode = source.getEncryptionModeMessage();
         outletName = source.getName().fullName;
         operatingHours = source.getOperatingHours().value;
         outletContact = source.getOutletContact().value;
@@ -104,11 +121,16 @@ public class XmlAdaptedOutletInformation {
 
     private OutletName setOutletName() throws IllegalValueException {
         String decryptedOutletName;
-        try {
-            decryptedOutletName = decrypt(this.outletName);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, OutletName.class.getSimpleName()));
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            try {
+                decryptedOutletName = decrypt(this.outletName);
+            } catch (Exception e) {
+                throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, OutletName.class.getSimpleName()));
+            }
+        } else {
+            decryptedOutletName = this.outletName;
         }
+
         if (decryptedOutletName == null) {
             throw new IllegalValueException(String.format(FAIL_MESSAGE, OutletName.class.getSimpleName()));
         }
@@ -121,12 +143,17 @@ public class XmlAdaptedOutletInformation {
 
     private OperatingHours setOperatingHours() throws IllegalValueException {
         String decryptedOperatingHours;
-        try {
-            decryptedOperatingHours = decrypt(this.operatingHours);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
-                    OperatingHours.class.getSimpleName()));
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            try {
+                decryptedOperatingHours = decrypt(this.operatingHours);
+            } catch (Exception e) {
+                throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
+                        OperatingHours.class.getSimpleName()));
+            }
+        } else {
+            decryptedOperatingHours = this.operatingHours;
         }
+
         if (decryptedOperatingHours == null) {
             throw new IllegalValueException(String.format(FAIL_MESSAGE, OperatingHours.class.getSimpleName()));
         }
@@ -139,12 +166,17 @@ public class XmlAdaptedOutletInformation {
 
     private OutletContact setOutletContact() throws IllegalValueException {
         String decryptedOutletContact;
-        try {
-            decryptedOutletContact = decrypt(this.outletContact);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
-                    OutletContact.class.getSimpleName()));
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            try {
+                decryptedOutletContact = decrypt(this.outletContact);
+            } catch (Exception e) {
+                throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
+                        OutletContact.class.getSimpleName()));
+            }
+        } else {
+            decryptedOutletContact = this.outletContact;
         }
+
         if (decryptedOutletContact == null) {
             throw new IllegalValueException(String.format(FAIL_MESSAGE, OutletContact.class.getSimpleName()));
         }
@@ -157,12 +189,17 @@ public class XmlAdaptedOutletInformation {
 
     private OutletEmail setOutletEmail() throws IllegalValueException {
         String decryptedOutletEmail;
-        try {
-            decryptedOutletEmail = decrypt(this.outletEmail);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
-                    OutletEmail.class.getSimpleName()));
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            try {
+                decryptedOutletEmail = decrypt(this.outletEmail);
+            } catch (Exception e) {
+                throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
+                        OutletEmail.class.getSimpleName()));
+            }
+        } else {
+            decryptedOutletEmail = this.outletEmail;
         }
+
         if (decryptedOutletEmail == null) {
             throw new IllegalValueException(String.format(FAIL_MESSAGE, OutletEmail.class.getSimpleName()));
         }
@@ -175,11 +212,16 @@ public class XmlAdaptedOutletInformation {
 
     private Password setPassword() throws IllegalValueException {
         String decryptedPasswordHash;
-        try {
-            decryptedPasswordHash = decrypt(this.passwordHash);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Password.class.getSimpleName()));
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            try {
+                decryptedPasswordHash = decrypt(this.passwordHash);
+            } catch (Exception e) {
+                throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Password.class.getSimpleName()));
+            }
+        } else {
+            decryptedPasswordHash = this.passwordHash;
         }
+
         if (decryptedPasswordHash == null) {
             throw new IllegalValueException(String.format(FAIL_MESSAGE, Password.class.getSimpleName()));
         }
@@ -189,12 +231,17 @@ public class XmlAdaptedOutletInformation {
 
     private Announcement setAnnouncement() throws IllegalValueException {
         String decryptedAnnouncement;
-        try {
-            decryptedAnnouncement = decrypt(this.announcement);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
-                    Announcement.class.getSimpleName()));
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            try {
+                decryptedAnnouncement = decrypt(this.announcement);
+            } catch (Exception e) {
+                throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE,
+                        Announcement.class.getSimpleName()));
+            }
+        } else {
+            decryptedAnnouncement = this.announcement;
         }
+
         if (decryptedAnnouncement == null) {
             throw new IllegalValueException(String.format(FAIL_MESSAGE, Announcement.class.getSimpleName()));
         }
@@ -202,10 +249,24 @@ public class XmlAdaptedOutletInformation {
         return announcement;
     }
 
+    private boolean getEncryptionMode() throws IllegalValueException {
+        if (this.encryptionMode == null) {
+            throw new IllegalValueException(String.format(FAIL_MESSAGE, "Encryption Mode"));
+        }
+        if (this.encryptionMode.equals(ENCRYPTED)) {
+            return true;
+        } else if (this.encryptionMode.equals(DECRYPTED)) {
+            return false;
+        } else {
+            throw new IllegalValueException("Invalid encryption mode");
+        }
+    }
+
     /**
      * Converts this jaxb-friendly adapted outlet object into the model's OutletInformation object
      */
     public OutletInformation toModelType() throws IllegalValueException {
+        final boolean isDataEncrypted = getEncryptionMode();
         final OutletName outletName = setOutletName();
         final OperatingHours operatingHours = setOperatingHours();
         final OutletContact outletContact = setOutletContact();
@@ -213,7 +274,7 @@ public class XmlAdaptedOutletInformation {
         final Password masterPassword = setPassword();
         final Announcement announcement = setAnnouncement();
         return new OutletInformation(outletName, operatingHours, outletContact, outletEmail,
-                masterPassword, announcement);
+                announcement, masterPassword, isDataEncrypted);
     }
 
     @Override
@@ -232,6 +293,7 @@ public class XmlAdaptedOutletInformation {
                 && Objects.equals(outletContact, otherOutlet.outletContact)
                 && Objects.equals(outletEmail, otherOutlet.outletEmail)
                 && Objects.equals(passwordHash, otherOutlet.passwordHash)
-                && Objects.equals(announcement, otherOutlet.announcement);
+                && Objects.equals(announcement, otherOutlet.announcement)
+                && Objects.equals(encryptionMode, otherOutlet.encryptionMode);
     }
 }

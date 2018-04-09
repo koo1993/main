@@ -66,7 +66,7 @@ public class StorageManagerTest {
          */
         PartTimeManager original = getTypicalPartTimeManager();
         storageManager.savePartTimeManager(original);
-        ReadOnlyPartTimeManager retrieved = storageManager.readPartTimeManager().get();
+        ReadOnlyPartTimeManager retrieved = storageManager.readPartTimeManager(false).get();
         assertEquals(original, new PartTimeManager(retrieved));
     }
 

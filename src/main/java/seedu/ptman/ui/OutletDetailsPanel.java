@@ -46,7 +46,7 @@ public class OutletDetailsPanel extends UiPart<Region> {
         super(FXML);
         this.outlet = outlet;
         //outletInformation.setWrapText(true);
-        setOutletInformation(outlet.getOperatingHours().toString(),
+        setOutletInformation(outlet.getOperatingHours().getDisplayedMessage(),
                 outlet.getOutletContact().toString(),
                 outlet.getOutletEmail().toString());
         setOutletName(outlet.getName().toString());

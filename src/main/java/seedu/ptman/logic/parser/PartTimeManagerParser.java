@@ -23,10 +23,12 @@ import seedu.ptman.logic.commands.ChangeAdminPasswordCommand;
 import seedu.ptman.logic.commands.ChangePasswordCommand;
 import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.Command;
+import seedu.ptman.logic.commands.DecryptDataCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditOutletCommand;
+import seedu.ptman.logic.commands.EncryptDataCommand;
 import seedu.ptman.logic.commands.ExitCommand;
 import seedu.ptman.logic.commands.ExportCommand;
 import seedu.ptman.logic.commands.FindCommand;
@@ -174,6 +176,12 @@ public class PartTimeManagerParser {
         case AnnouncementCommand.COMMAND_WORD:
         case AnnouncementCommand.COMMAND_ALIAS:
             return new AnnouncementCommandParser().parse(arguments);
+
+        case EncryptDataCommand.COMMAND_WORD:
+            return new EncryptDataCommand();
+
+        case DecryptDataCommand.COMMAND_WORD:
+            return new DecryptDataCommand();
 
         case ExportCommand.COMMAND_WORD:
         case ExportCommand.COMMAND_ALIAS:

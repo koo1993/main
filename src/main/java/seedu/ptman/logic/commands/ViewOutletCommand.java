@@ -9,14 +9,13 @@ public class ViewOutletCommand extends Command {
     public static final String COMMAND_WORD = "viewoutlet";
     public static final String COMMAND_ALIAS = "vo";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": display basic outlet information\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": displays outlet information and "
+            + "encryption mode.\n"
             + "Example: " + COMMAND_WORD;
 
     @Override
     public CommandResult execute() {
-        String messageToDisplay = "Outlet Name: " + model.getOutletInformation().getName() + " "
-                + model.getOutletInformationMessage() + " Announcement: "
-                + model.getOutletInformation().getAnnouncement();
+        String messageToDisplay = model.getOutletInformationMessage();
         return new CommandResult(messageToDisplay);
     }
 }

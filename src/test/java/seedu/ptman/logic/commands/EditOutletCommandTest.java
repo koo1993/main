@@ -34,7 +34,7 @@ public class EditOutletCommandTest {
     @Test
     public void execute_nonAdminMode_failure() {
         OutletName outletName = new OutletName("EditedOutlet");
-        OperatingHours operatingHours = new OperatingHours("10:00-18:00");
+        OperatingHours operatingHours = new OperatingHours("1000-1800");
         OutletContact outletContact = new OutletContact("912345678");
         OutletEmail outletEmail = new OutletEmail("EditedOutlet@gmail.com");
         EditOutletCommand command = prepareCommand(outletName, operatingHours, outletContact, outletEmail);
@@ -45,7 +45,7 @@ public class EditOutletCommandTest {
     public void execute_adminModeAllFieldsValid_success() {
         model.setTrueAdminMode(new Password());
         OutletName outletName = new OutletName("EditedOutlet");
-        OperatingHours operatingHours = new OperatingHours("10:00-18:00");
+        OperatingHours operatingHours = new OperatingHours("1000-1800");
         OutletContact outletContact = new OutletContact("912345678");
         OutletEmail outletEmail = new OutletEmail("EditedOutlet@gmail.com");
         EditOutletCommand command = prepareCommand(outletName, operatingHours, outletContact, outletEmail);
@@ -88,7 +88,7 @@ public class EditOutletCommandTest {
         RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
 
         OutletName outletName = new OutletName("EditedOutlet");
-        OperatingHours operatingHours = new OperatingHours("10:00-18:00");
+        OperatingHours operatingHours = new OperatingHours("1000-1800");
         OutletContact outletContact = new OutletContact("912345678");
         OutletEmail outletEmail = new OutletEmail("EditedOutlet@gmail.com");
         EditOutletCommand command = prepareCommand(outletName, operatingHours, outletContact, outletEmail);
@@ -119,7 +119,7 @@ public class EditOutletCommandTest {
     @Test
     public void equals() throws Exception {
         OutletName outletName = new OutletName("EditedOutlet");
-        OperatingHours operatingHours = new OperatingHours("10:00-18:00");
+        OperatingHours operatingHours = new OperatingHours("1000-1800");
         OutletContact outletContact = new OutletContact("912345678");
         OutletEmail outletEmail = new OutletEmail("EditedOutlet@gmail.com");
         final EditOutletCommand standardCommand = prepareCommand(outletName, operatingHours,
@@ -127,7 +127,7 @@ public class EditOutletCommandTest {
 
         // same values -> returns true
         OutletName sameName = new OutletName("EditedOutlet");
-        OperatingHours sameOperatingHours = new OperatingHours("10:00-18:00");
+        OperatingHours sameOperatingHours = new OperatingHours("1000-1800");
         OutletContact sameOutletContact = new OutletContact("912345678");
         OutletEmail sameOutletEmail = new OutletEmail("EditedOutlet@gmail.com");
         EditOutletCommand commandWithSameValues = prepareCommand(sameName, sameOperatingHours,
@@ -144,7 +144,7 @@ public class EditOutletCommandTest {
         assertFalse(standardCommand.equals(new ClearCommand()));
 
         OutletName differentName = new OutletName("different");
-        OperatingHours differentOperatingHours = new OperatingHours("09:00-10:00");
+        OperatingHours differentOperatingHours = new OperatingHours("0900-1000");
         OutletContact differentOutletContact = new OutletContact("123456789");
         OutletEmail differentOutletEmail = new OutletEmail("different@gmail.com");
 

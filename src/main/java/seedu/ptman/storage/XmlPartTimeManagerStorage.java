@@ -33,17 +33,17 @@ public class XmlPartTimeManagerStorage implements PartTimeManagerStorage {
     }
 
     @Override
-    public Optional<ReadOnlyPartTimeManager> readPartTimeManager() throws DataConversionException, IOException {
-        return readPartTimeManager(filePath);
+    public Optional<ReadOnlyPartTimeManager> readPartTimeManager(boolean isDataEncrypted)
+            throws DataConversionException, IOException {
+        return readPartTimeManager(isDataEncrypted, filePath);
     }
 
     /**
-     * Similar to {@link #readPartTimeManager()}
      * @param filePath location of the data. Cannot be null
      * @throws DataConversionException if the file is not in the correct format.
      */
-    public Optional<ReadOnlyPartTimeManager> readPartTimeManager(String filePath) throws DataConversionException,
-                                                                                 FileNotFoundException {
+    public Optional<ReadOnlyPartTimeManager> readPartTimeManager(boolean isDataEncrypted, String filePath)
+            throws DataConversionException, FileNotFoundException {
         requireNonNull(filePath);
 
         File partTimeManagerFile = new File(filePath);
@@ -53,12 +53,23 @@ public class XmlPartTimeManagerStorage implements PartTimeManagerStorage {
             return Optional.empty();
         }
 
-        XmlSerializablePartTimeManager xmlPartTimeManager = XmlFileStorage.loadDataFromSaveFile(new File(filePath));
-        try {
-            return Optional.of(xmlPartTimeManager.toModelType());
-        } catch (IllegalValueException ive) {
-            logger.info("Illegal values found in " + partTimeManagerFile + ": " + ive.getMessage());
-            throw new DataConversionException(ive);
+        if (isDataEncrypted) {
+            XmlEncryptedSerializablePartTimeManager xmlEncryptedPartTimeManager =
+                    XmlFileStorage.loadEncryptedDataFromSaveFile(new File(filePath));
+            try {
+                return Optional.of(xmlEncryptedPartTimeManager.toModelType());
+            } catch (IllegalValueException ive) {
+                logger.info("Illegal values found in " + partTimeManagerFile + ": " + ive.getMessage());
+                throw new DataConversionException(ive);
+            }
+        } else {
+            XmlSerializablePartTimeManager xmlPartTimeManager = XmlFileStorage.loadDataFromSaveFile(new File(filePath));
+            try {
+                return Optional.of(xmlPartTimeManager.toModelType());
+            } catch (IllegalValueException ive) {
+                logger.info("Illegal values found in " + partTimeManagerFile + ": " + ive.getMessage());
+                throw new DataConversionException(ive);
+            }
         }
     }
 
@@ -77,7 +88,11 @@ public class XmlPartTimeManagerStorage implements PartTimeManagerStorage {
 
         File file = new File(filePath);
         FileUtil.createIfMissing(file);
-        XmlFileStorage.saveDataToFile(file, new XmlSerializablePartTimeManager(partTimeManager));
+        if (partTimeManager.getOutletInformation().getEncryptionMode()) {
+            XmlFileStorage.saveEncryptedDataToFile(file, new XmlEncryptedSerializablePartTimeManager(partTimeManager));
+        } else {
+            XmlFileStorage.saveDataToFile(file, new XmlSerializablePartTimeManager(partTimeManager));
+        }
     }
 
     @Override

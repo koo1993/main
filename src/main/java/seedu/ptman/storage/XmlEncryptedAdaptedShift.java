@@ -1,5 +1,8 @@
 package seedu.ptman.storage;
 
+import static seedu.ptman.commons.encrypter.DataEncrypter.decrypt;
+import static seedu.ptman.commons.encrypter.DataEncrypter.encrypt;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,13 +17,14 @@ import seedu.ptman.model.shift.Date;
 import seedu.ptman.model.shift.Shift;
 import seedu.ptman.model.shift.Time;
 
-//@@author shanwpf
+//@@author SunBangjie
 /**
  * JAXB-friendly version of the Shift.
  */
-public class XmlAdaptedShift {
+public class XmlEncryptedAdaptedShift {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT_SHIFT = "Shifts's %s field is missing!";
+    public static final String DECRYPT_FAIL_MESSAGE = "Cannot decrypt %s.";
 
     @XmlElement(required = true)
     private String date;
@@ -32,23 +36,27 @@ public class XmlAdaptedShift {
     private String capacity;
 
     @XmlElement
-    private List<XmlAdaptedEmployee> employees = new ArrayList<>();
+    private List<XmlEncryptedAdaptedEmployee> employees = new ArrayList<>();
 
     /**
      * Constructs an XmlAdaptedShift.
      * This is the no-arg constructor that is required by JAXB.
      */
-    public XmlAdaptedShift() {}
+    public XmlEncryptedAdaptedShift() {}
 
     /**
      * Constructs an {@code XmlAdaptedShift} with the given shift details.
      */
-    public XmlAdaptedShift(String date, String startTime, String endTime,
-                           String capacity, List<XmlAdaptedEmployee> employees) {
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.capacity = capacity;
+    public XmlEncryptedAdaptedShift(String date, String startTime, String endTime,
+                                    String capacity, List<XmlEncryptedAdaptedEmployee> employees) {
+        try {
+            this.date = encrypt(date);
+            this.startTime = encrypt(startTime);
+            this.endTime = encrypt(endTime);
+            this.capacity = encrypt(capacity);
+        } catch (Exception e) {
+            //Encryption should not fail
+        }
 
         if (employees != null) {
             this.employees = new ArrayList<>(employees);
@@ -60,16 +68,34 @@ public class XmlAdaptedShift {
      *
      * @param source future changes to this will not affect the created XmlAdaptedShift
      */
-    public XmlAdaptedShift(Shift source) {
+    public XmlEncryptedAdaptedShift(Shift source) {
+        try {
+            date = encrypt(source.getDate().toString());
+            startTime = encrypt(source.getStartTime().toString());
+            endTime = encrypt(source.getEndTime().toString());
+            capacity = encrypt(source.getCapacity().toString());
+        } catch (Exception e) {
+            //Encryption should not fail
+        }
+
+        employees = new ArrayList<>();
+        for (Employee employee : source.getEmployeeList()) {
+            employees.add(new XmlEncryptedAdaptedEmployee(employee));
+        }
+    }
+
+    public void setAttributesFromSource(Shift source) {
         date = source.getDate().toString();
         startTime = source.getStartTime().toString();
         endTime = source.getEndTime().toString();
         capacity = source.getCapacity().toString();
+    }
 
-        employees = new ArrayList<>();
-        for (Employee employee : source.getEmployeeList()) {
-            employees.add(new XmlAdaptedEmployee(employee));
-        }
+    public void setAttributesFromStrings(String date, String startTime, String endTime, String capacity) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.capacity = capacity;
     }
 
     /**
@@ -77,15 +103,21 @@ public class XmlAdaptedShift {
      * @return
      * @throws IllegalValueException
      */
-    private Date setDate() throws IllegalValueException {
-        if (this.date == null) {
+    private Date decryptDate() throws IllegalValueException {
+        String decryptedDate;
+        try {
+            decryptedDate = decrypt(this.date);
+        } catch (Exception e) {
+            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Date.class.getSimpleName()));
+        }
+        if (decryptedDate == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
                     Date.class.getSimpleName()));
         }
-        if (!Date.isValidDate(this.date)) {
+        if (!Date.isValidDate(decryptedDate)) {
             throw new IllegalValueException(Date.MESSAGE_DATE_CONSTRAINTS);
         }
-        return new Date(this.date);
+        return new Date(decryptedDate);
     }
 
     /**
@@ -94,15 +126,21 @@ public class XmlAdaptedShift {
      * @return
      * @throws IllegalValueException
      */
-    private Time setTime(String time) throws IllegalValueException {
-        if (time == null) {
+    private Time decryptTime(String time) throws IllegalValueException {
+        String decryptedTime;
+        try {
+            decryptedTime = decrypt(time);
+        } catch (Exception e) {
+            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Time.class.getSimpleName()));
+        }
+        if (decryptedTime == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
                     Time.class.getSimpleName()));
         }
-        if (!Time.isValidTime(time)) {
+        if (!Time.isValidTime(decryptedTime)) {
             throw new IllegalValueException(Time.MESSAGE_TIME_CONSTRAINTS);
         }
-        return new Time(time);
+        return new Time(decryptedTime);
     }
 
     /**
@@ -110,15 +148,21 @@ public class XmlAdaptedShift {
      * @return
      * @throws IllegalValueException
      */
-    private Capacity setCapacity() throws IllegalValueException {
-        if (this.capacity == null) {
+    private Capacity decryptCapacity() throws IllegalValueException {
+        String decryptedCapacity;
+        try {
+            decryptedCapacity = decrypt(this.capacity);
+        } catch (Exception e) {
+            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Capacity.class.getSimpleName()));
+        }
+        if (decryptedCapacity == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
                     Capacity.class.getSimpleName()));
         }
-        if (!Capacity.isValidCapacity(this.capacity)) {
+        if (!Capacity.isValidCapacity(decryptedCapacity)) {
             throw new IllegalValueException(Capacity.MESSAGE_CAPACITY_CONSTRAINTS);
         }
-        return new Capacity(this.capacity);
+        return new Capacity(decryptedCapacity);
     }
 
     /**
@@ -128,14 +172,14 @@ public class XmlAdaptedShift {
      */
     public Shift toModelType() throws IllegalValueException {
         final List<Employee> employees = new ArrayList<>();
-        for (XmlAdaptedEmployee employee : this.employees) {
+        for (XmlEncryptedAdaptedEmployee employee : this.employees) {
             employees.add(employee.toModelType());
         }
 
-        final Date date = setDate();
-        final Time startTime = setTime(this.startTime);
-        final Time endTime = setTime(this.endTime);
-        final Capacity capacity = setCapacity();
+        final Date date = decryptDate();
+        final Time startTime = decryptTime(this.startTime);
+        final Time endTime = decryptTime(this.endTime);
+        final Capacity capacity = decryptCapacity();
 
         return new Shift(date, startTime, endTime, capacity, new HashSet<>(employees));
     }
@@ -146,11 +190,11 @@ public class XmlAdaptedShift {
             return true;
         }
 
-        if (!(other instanceof XmlAdaptedShift)) {
+        if (!(other instanceof XmlEncryptedAdaptedShift)) {
             return false;
         }
 
-        XmlAdaptedShift otherShift = (XmlAdaptedShift) other;
+        XmlEncryptedAdaptedShift otherShift = (XmlEncryptedAdaptedShift) other;
         return Objects.equals(date, otherShift.date)
                 && Objects.equals(startTime, otherShift.startTime)
                 && Objects.equals(endTime, otherShift.endTime)
