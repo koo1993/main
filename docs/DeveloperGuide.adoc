@@ -678,7 +678,7 @@ This section highlights the considerations behind our application's design choic
 
 
 
-
+// tag::accessControl[]
 === Password feature
 
 ==== Reason for implementation
@@ -761,6 +761,8 @@ sendResetPasswordMessage(String name, String email, String newPassword)
 
 [NOTE]
 `EmailService` class is free for extension.
+// end::accessControl[]
+
 
 // tag::dataencryption[]
 === Data encryption
