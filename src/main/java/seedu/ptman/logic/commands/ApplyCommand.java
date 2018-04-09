@@ -29,7 +29,7 @@ public class ApplyCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "apply";
     public static final String COMMAND_ALIAS = "ap";
 
-    public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX (must be a positive integer) "
+    public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX "
             + "SHIFT_INDEX "
             + "[" + PREFIX_PASSWORD + "PASSWORD]";
     public static final String MESSAGE_USAGE = COMMAND_WORD

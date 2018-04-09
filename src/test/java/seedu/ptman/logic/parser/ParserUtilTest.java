@@ -71,6 +71,13 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseSecondIndex_insufficientArgs_throwsIllegalValueException() throws IllegalValueException {
+        thrown.expect(IllegalValueException.class);
+        thrown.expectMessage(MESSAGE_INVALID_INDEX);
+        ParserUtil.parseSecondIndex("1");
+    }
+
+    @Test
     public void parseIndex_validInput_success() throws Exception {
         // No whitespaces
         assertEquals(INDEX_FIRST_EMPLOYEE, ParserUtil.parseIndex("1"));

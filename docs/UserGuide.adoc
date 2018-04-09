@@ -88,7 +88,53 @@ It is crucial to change the default employee password to prevent unauthorized ex
 You may refer to <<Changing employee password: `cp`>> for instructions on how to do so.
 
 === Timetable
-// TODO: Introduce the timetable + screenshot
+PTMan has a timetable that displays all the shifts in a weekly format. There are many interactions between the
+timetable and you, as a user, so this section aims to familiarise you with the timetable.
+
+==== Shift Colors
+
+The shifts in PTMan are color-coded, and here is what the different colors mean:
+
+* Green: Shift is available with multiple slots left.
+* Yellow: Shift is available, but slots are running out.
+* Red: Shift is no longer available, slots for the shift have run out.
+* Blue: Shift is taken up by currently selected employee.
+* Brown: Shift is not taken up by currently selected employee.
+
+_<<fig-Feature_Timetable1>>_ below shows how the default timetable can look like in PTMan. +
+ +
+[[fig-Feature_Timetable1]]
+.A Sample Timetable with Shifts +
+image::Feature_Timetable1.png[width="790"]
+
+PTMan also allows employees to view their own shifts using the <<Displaying an employee’s shifts on the timetable: `select`, `select`>> command.
+_<<fig-Feature_Timetable2>>_ shows how the timetable can look like when an employee is selected.
+ +
+[[fig-Feature_Timetable2]]
+.A Sample Timetable with Shifts after `select` +
+image::Feature_Timetable2.png[width="790"]
+
+==== Timetable Navigation
+
+There are two ways to navigate through the different weeks in the timetable:
+
+. Using Keyboard Shortcuts
++
+* For Windows:
+** kbd:[Ctrl] + kbd:[Shift] + kbd:[->] : Navigates timetable to the next week.
+** kbd:[Ctrl] + kbd:[Shift] + kbd:[<-] : Navigates timetable to the previous week.
+* For Mac:
+** kbd:[Command] + kbd:[Shift] + kbd:[->] : Navigates timetable to the next week.
+** kbd:[Command] + kbd:[Shift] + kbd:[<-] : Navigates timetable to the previous week.
+. Using Mouse Clicks
++
+* At the top of the timetable, there is a navigation bar with two arrow buttons which you can click on.
+These buttons `<` and `>` navigates the timetable to the previous and next week respectively.
+_<<fig-Feature_Timetable3>>_ below shows the navigation bar, with the two arrow buttons circled. +
++
+[[fig-Feature_Timetable3]]
+.Navigation Bar of Timetable +
+image::Feature_Timetable3.png[width="790"]
 
 === Shift Management
 If you are a manager, PTMan allows you to manage your employees' work shifts.
@@ -579,6 +625,7 @@ Resets your employee password. This sends a temporary password to your email add
 * The `INDEX` *must be a positive integer* 1, 2, 3, ...
 ****
 
+// TODO: SCREENSHOT BEFORE + AFTER
 Examples:
 
 * If your index is `5`, type: +
@@ -675,7 +722,8 @@ after using the `select` command. +
 [[Export]]
 ==== Exporting the timetable as image: `export`
 
-Exports the current timetable displayed as an image and either saves it locally, or emails the exported timetable to the input email address. +
+Exports the current timetable displayed as an image and either saves it locally into the location for your jar file,
+ or emails the exported timetable to the input email address. +
 
 *Format:* `export [e/EMAIL]` +
 *Shorthand:* `exp [e/EMAIL]`

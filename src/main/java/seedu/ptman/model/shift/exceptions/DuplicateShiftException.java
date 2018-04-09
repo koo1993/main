@@ -8,6 +8,6 @@ import seedu.ptman.commons.exceptions.DuplicateDataException;
  */
 public class DuplicateShiftException extends DuplicateDataException {
     public DuplicateShiftException() {
-        super("Operation would result in duplicate employees");
+        super("Operation would result in duplicate shifts");
     }
 }

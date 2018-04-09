@@ -7,6 +7,8 @@ import static seedu.ptman.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_END;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_TIME_START;
 
+import java.time.LocalDate;
+
 import seedu.ptman.logic.commands.exceptions.CommandException;
 import seedu.ptman.model.shift.Shift;
 import seedu.ptman.model.shift.exceptions.DuplicateShiftException;
@@ -35,11 +37,12 @@ public class AddShiftCommand extends UndoableCommand {
 
     public static final String MESSAGE_SUCCESS = "New shift added: %1$s";
     public static final String MESSAGE_DUPLICATE_SHIFT = "This shift already exists in PTMan";
+    public static final String MESSAGE_DATE_OVER = "You cannot add a shift to a date that is already over";
 
     private final Shift toAdd;
 
     /**
-     * Creates an AddCommand to add the specified {@code Shift}
+     * Creates an AddShiftCommand to add the specified {@code Shift}
      */
     public AddShiftCommand(Shift shift) {
         requireNonNull(shift);
@@ -54,13 +57,17 @@ public class AddShiftCommand extends UndoableCommand {
             throw new CommandException(MESSAGE_ACCESS_DENIED);
         }
 
+        LocalDate shiftDate = toAdd.getDate().getLocalDate();
+        if (shiftDate.isBefore(LocalDate.now())) {
+            throw new CommandException(MESSAGE_DATE_OVER);
+        }
+
         try {
             model.addShift(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         } catch (DuplicateShiftException e) {
             throw new CommandException(MESSAGE_DUPLICATE_SHIFT);
         }
-
     }
 
     @Override

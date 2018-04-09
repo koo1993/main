@@ -28,11 +28,11 @@ public class ResetPasswordCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Resets password for the chosen employee.\n"
             + "Parameters: "
             + COMMAND_FORMAT
-            + "\nExample: " + COMMAND_WORD + "2";
+            + "\nExample: " + COMMAND_WORD + " 2";
     public static final String MESSAGE_SUCCESS = "Email with the new password is sent to you at: %1$s";
 
-    public static final String MESSAGE_SENTFAIL = "Reset password Fail, please check your internet connection";
-    public static final String MESSAGE_EMAILFAIL = "No such email address %1$s";
+    public static final String MESSAGE_SENT_FAIL = "Reset password Fail, please check your internet connection";
+    public static final String MESSAGE_EMAIL_FAIL = "No such email address %1$s";
 
     private final Index index;
 
@@ -59,11 +59,9 @@ public class ResetPasswordCommand extends Command {
         try {
             newPassword = createAndSendRandomPassword(requestedEmployee);
         } catch (AddressException ae) {
-            System.out.println(ae.toString());
-            return new CommandResult(String.format(MESSAGE_EMAILFAIL, requestedEmployee.getEmail()));
+            return new CommandResult(String.format(MESSAGE_EMAIL_FAIL, requestedEmployee.getEmail()));
         } catch (MessagingException e) {
-            System.out.println(e.toString());
-            return new CommandResult(MESSAGE_SENTFAIL);
+            return new CommandResult(MESSAGE_SENT_FAIL);
         }
 
         model.storeResetPassword(requestedEmployee, newPassword);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.calendarfx.view.CalendarView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- @@author hzxcaryn -->
+
+<?import javafx.scene.control.Button?>
+<StackPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox fx:id="timetableBox">
+        <BorderPane fx:id="navBar">
+            <left><StackPane styleClass="nav-bar-content">
+                <Button fx:id="prevButton" styleClass="nav-bar-button">
+                    <graphic><FontAwesomeIconView fill="#7A8492" glyphName="ANGLE_LEFT" size="17.0" /></graphic>
+                </Button>
+            </StackPane></left>
+
+            <center><StackPane styleClass="nav-bar-content">
+                <Label fx:id="monthDisplay" styleClass="nav-bar-label" />
+            </StackPane></center>
+
+            <right><StackPane styleClass="nav-bar-content">
+                <Button fx:id="nextButton" styleClass="nav-bar-button">
+                    <graphic><FontAwesomeIconView fill="#7A8492" glyphName="ANGLE_RIGHT" size="17.0" /></graphic>
+                </Button>
+            </StackPane></right>
+        </BorderPane>
+        <CalendarView fx:id="timetableView" />
+    </VBox>
+</StackPane>

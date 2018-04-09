@@ -21,7 +21,8 @@ public class ExportCommand extends Command {
     public static final String COMMAND_ALIAS = "exp";
 
     public static final String COMMAND_FORMAT = "[" + PREFIX_EMAIL + "EMAIL]";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Exports timetable as image. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": "
+            + "Exports timetable as image to the folder your jar file is located. "
             + "If email is stated, timetable image will be sent as an attachment to the stated email. "
             + "Else, timetable image will be saved locally.\n"
             + "Parameters: "

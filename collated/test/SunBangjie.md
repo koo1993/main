@@ -4,7 +4,7 @@
     @Test
     public void parseCommand_editoutlet() throws Exception {
         String name = "EditedOutlet";
-        String operatingHours = "10:00-17:00";
+        String operatingHours = "1000-1700";
         String outletContact = "91234567";
         String outletEmail = "EditedOutlet@gmail.com";
         EditOutletCommand command = (EditOutletCommand) parser.parseCommand(EditOutletCommand.COMMAND_WORD
@@ -19,7 +19,7 @@
     @Test
     public void parseCommand_editoutletAlias() throws Exception {
         String name = "EditedOutlet";
-        String operatingHours = "10:00-17:00";
+        String operatingHours = "1000-1700";
         String outletContact = "91234567";
         String outletEmail = "EditedOutlet@gmail.com";
         EditOutletCommand command = (EditOutletCommand) parser.parseCommand(EditOutletCommand.COMMAND_ALIAS
@@ -45,6 +45,26 @@
         AnnouncementCommand command = (AnnouncementCommand) parser.parseCommand(AnnouncementCommand.COMMAND_ALIAS
                 + " " + announcement);
         assertEquals(new AnnouncementCommand(new Announcement(announcement)), command);
+    }
+
+    @Test
+    public void parseCommand_encrypt() throws Exception {
+        assertTrue(parser.parseCommand(EncryptDataCommand.COMMAND_WORD) instanceof EncryptDataCommand);
+    }
+
+    @Test
+    public void parseCommand_decrypt() throws Exception {
+        assertTrue(parser.parseCommand(DecryptDataCommand.COMMAND_WORD) instanceof DecryptDataCommand);
+    }
+
+    @Test
+    public void parseCommand_viewoutlet() throws Exception {
+        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_WORD) instanceof ViewOutletCommand);
+    }
+
+    @Test
+    public void parseCommand_viewoutletAlias() throws Exception {
+        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_ALIAS) instanceof ViewOutletCommand);
     }
 
 ```

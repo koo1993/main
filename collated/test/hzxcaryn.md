@@ -224,7 +224,7 @@ public class MainCommandTest {
     public void execute_main_success() {
         CommandResult result = new MainCommand().execute();
         assertEquals(MESSAGE_SUCCESS, result.feedbackToUser);
-        assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof EmployeePanelSelectionChangedEvent);
+        assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof JumpToListRequestEvent);
         assertTrue(eventsCollectorRule.eventsCollector.getSize() == 1);
     }
 }
@@ -425,6 +425,10 @@ public class OutletDetailsPanelTest extends GuiUnitTest {
      */
     private static String getTagColor(String tagName) {
         switch (tagName) {
+        case "supervisor":
+            return "purple";
+        case "paperwork":
+            return "mint";
         case "classmates":
         case "owesMoney":
             return "salmon";
@@ -433,8 +437,10 @@ public class OutletDetailsPanelTest extends GuiUnitTest {
             return "teal";
         case "family":
         case "friend":
+        case "barista":
             return "pink";
         case "friends":
+        case "bartender":
             return "pale-blue";
         case "husband":
             return "yellow";

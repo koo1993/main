@@ -71,7 +71,7 @@
               </padding>
             </StackPane>
 
-            <StackPane fx:id="timetableViewPlaceholder" prefWidth="340">
+            <StackPane fx:id="timetablePanelPlaceholder" prefWidth="340">
               <padding>
                 <Insets top="5" right="15" bottom="10" left="15" />
               </padding>

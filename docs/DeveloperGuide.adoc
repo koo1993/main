@@ -148,6 +148,7 @@ image::LogicClassDiagram.png[width="800"]
 
 [discrete]
 ==== Events-Driven nature of the design
+
 _<<fig-DeleteSeq1>>_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
 
 [[fig-DeleteSeq1]]
@@ -179,7 +180,6 @@ _<<fig-UI>>_ below shows the structure of the `UI` component.
 image::UiClassDiagram.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/ptman/ui/Ui.java[`Ui.java`]
-
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `EmployeeListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/ptman/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
@@ -372,7 +372,7 @@ The `Shift` class represents a shift in PTMan. +
 It stores:
 
 . The `Date` of the shift.
- `Date` is a class that wraps Java's `LocalDate` class.
+`Date` is a class that wraps Java's `LocalDate` class.
 . The starting and ending `Time` of the shift.
 `Time` is a class that wraps Java's `LocalTime` class.
 . The employee `Capacity` for the shift.

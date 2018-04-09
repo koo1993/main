@@ -183,7 +183,7 @@ public class AddCommandSystemTest extends PartTimeManagerSystemTest {
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         /* Case: invalid keyword -> rejected */
-        command = "adds " + EmployeeUtil.getEmployeeDetails(toAdd);
+        command = "addss " + EmployeeUtil.getEmployeeDetails(toAdd);
         assertCommandFailure(command, Messages.MESSAGE_UNKNOWN_COMMAND);
 
         /* Case: invalid name -> rejected */

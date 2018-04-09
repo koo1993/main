@@ -93,7 +93,6 @@ public class Shift {
         return startTime.equals(shift.startTime)
                 && endTime.equals(shift.endTime)
                 && date.equals(shift.date)
-                && uniqueEmployeeList.equals(shift.uniqueEmployeeList)
                 && capacity.equals(shift.capacity);
     }
 
@@ -135,10 +134,8 @@ public class Shift {
     public int compareTo(Shift other) {
         if (date.equals(other.getDate())) {
             return startTime.compareTo(other.getStartTime());
-        } else if (date.compareTo(other.getDate()) < 0) {
-            return -1;
         } else {
-            return 1;
+            return date.compareTo(other.getDate());
         }
     }
 

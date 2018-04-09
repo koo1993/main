@@ -29,15 +29,22 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.transform.Transform;
 import seedu.ptman.commons.core.LogsCenter;
 import seedu.ptman.commons.events.model.PartTimeManagerChangedEvent;
 import seedu.ptman.commons.events.ui.EmployeePanelSelectionChangedEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageAndEmailRequestEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageRequestEvent;
+import seedu.ptman.commons.events.ui.TimetableWeekChangeRequestEvent;
 import seedu.ptman.commons.services.EmailService;
+import seedu.ptman.commons.util.DateUtil;
+import seedu.ptman.logic.Logic;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.UniqueEmployeeList;
@@ -54,7 +61,7 @@ public class TimetablePanel extends UiPart<Region> {
     public static final String TIMETABLE_IMAGE_FILE_FORMAT = "png";
 
     private static final int TIMETABLE_IMAGE_PIXEL_SCALE = 2;
-    private static final String FXML = "TimetableView.fxml";
+    private static final String FXML = "TimetablePanel.fxml";
     private static final int MAX_SLOTS_LEFT_RUNNING_OUT = 3;
 
     private static final Style ENTRY_GREEN_STYLE = Style.STYLE1;
@@ -69,24 +76,41 @@ public class TimetablePanel extends UiPart<Region> {
     private static Calendar timetableOthers;
     private static Calendar timetableRunningOut;
 
+    protected Logic logic;
+
     private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    @FXML
+    private VBox timetableBox;
 
     @FXML
     private CalendarView timetableView;
 
+    @FXML
+    private BorderPane navBar;
+
+    @FXML
+    private Button prevButton;
+
+    @FXML
+    private Button nextButton;
+
+    @FXML
+    private Label monthDisplay;
+
     private ObservableList<Shift> shiftObservableList;
     private OutletInformation outletInformation;
 
-
     private Employee currentEmployee = null;
 
-    protected TimetablePanel(ObservableList<Shift> shiftObservableList, OutletInformation outletInformation) {
+    public TimetablePanel(Logic logic) {
         super(FXML);
 
-        this.shiftObservableList = shiftObservableList;
-        this.outletInformation = outletInformation;
+        this.logic = logic;
+        this.shiftObservableList = logic.getFilteredShiftList();
+        this.outletInformation = logic.getOutletInformation();
 
-        timetableView = new CalendarView();
+        setUpNavBar();
         setTimetableViewStyle();
         showRelevantViewsOnly();
 
@@ -96,10 +120,6 @@ public class TimetablePanel extends UiPart<Region> {
         updateTimetableView();
 
         registerAsAnEventHandler(this);
-    }
-
-    public CalendarView getRoot() {
-        return this.timetableView;
     }
 
     public static Calendar getTimetableAvail() {
@@ -120,6 +140,30 @@ public class TimetablePanel extends UiPart<Region> {
 
     public static Calendar getTimetableOthers() {
         return timetableOthers;
+    }
+
+    /**
+     * Sets up the navigation bar and its behavior
+     */
+    private void setUpNavBar() {
+        setMonthDisplay(logic.getCurrentDisplayedDate());
+        navBar.setLeft(prevButton);
+        navBar.setRight(nextButton);
+        navBar.setCenter(monthDisplay);
+
+        prevButton.setOnAction(value -> Platform.runLater(() -> navigateToPreviousWeek()));
+        nextButton.setOnAction(value -> Platform.runLater(() -> navigateToNextWeek()));
+    }
+
+    /**
+     * Sets the displayed month on the {@code monthDisplay}.
+     * Month is determined by the majority date displayed in the timetable view.
+     * This means that if there are 4 dates that are of month April and 3 dates that are of month May,
+     * April will be displayed on the {@code monthDisplay}.
+     */
+    private void setMonthDisplay(LocalDate date) {
+        LocalDate thursdayDate = DateUtil.getThursdayOfDate(date);
+        monthDisplay.setText(DateUtil.getMonthYearFromDate(thursdayDate));
     }
 
     /**
@@ -171,8 +215,8 @@ public class TimetablePanel extends UiPart<Region> {
         detailedWeekView.setEnableCurrentTimeMarker(false);
     }
 
-    private void setCurrentTime() {
-        timetableView.setToday(LocalDate.now());
+    private void setCurrentDisplayedDate() {
+        timetableView.setDate(logic.getCurrentDisplayedDate());
     }
 
     /**
@@ -249,6 +293,24 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
+     * Navigates the timetable view to the following week.
+     */
+    private void navigateToNextWeek() {
+        logic.setFilteredShiftListToNextWeek();
+        shiftObservableList = logic.getFilteredShiftList();
+        updateTimetableView();
+    }
+
+    /**
+     * Navigates the timetable view to the previous week.
+     */
+    private void navigateToPreviousWeek() {
+        logic.setFilteredShiftListToPrevWeek();
+        shiftObservableList = logic.getFilteredShiftList();
+        updateTimetableView();
+    }
+
+    /**
      * Replaces the timetable view with a new timetable, with shifts taken by the employee being highlighted
      * @param employee
      */
@@ -259,6 +321,7 @@ public class TimetablePanel extends UiPart<Region> {
 
     private void loadMainTimetable() {
         currentEmployee = null;
+        logic.setFilteredShiftListToCurrentWeek();
         updateTimetableView();
     }
 
@@ -266,7 +329,8 @@ public class TimetablePanel extends UiPart<Region> {
      * Replaces timetableView with a new timetable with updated shift and outlet information
      */
     private void updateTimetableView() {
-        setCurrentTime();
+        setCurrentDisplayedDate();
+        setMonthDisplay(logic.getCurrentDisplayedDate());
         timetableView.getCalendarSources().clear();
         CalendarSource calendarSource = new CalendarSource("Shifts");
         addCalendars(calendarSource);
@@ -310,15 +374,15 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
-     * Takes a snapshot of the timetable view
+     * Takes a snapshot of the timetable panel
      */
     private WritableImage takeSnapshot() {
         WritableImage timetableWritableImage = new WritableImage(
-                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableView.getWidth()),
-                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableView.getHeight()));
+                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableBox.getWidth()),
+                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableBox.getHeight()));
         SnapshotParameters spa = new SnapshotParameters();
         spa.setTransform(Transform.scale(TIMETABLE_IMAGE_PIXEL_SCALE, TIMETABLE_IMAGE_PIXEL_SCALE));
-        WritableImage snapshot = timetableView.snapshot(spa, timetableWritableImage);
+        WritableImage snapshot = timetableBox.snapshot(spa, timetableWritableImage);
         return snapshot;
     }
 
@@ -359,7 +423,7 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     @Subscribe
-    private void handleShiftChangedEvent(PartTimeManagerChangedEvent event) {
+    private void handlePartTimeManagerChangedEvent(PartTimeManagerChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event) + ": Updating timetable view....");
         Platform.runLater(() -> updateTimetableView());
     }
@@ -372,6 +436,21 @@ public class TimetablePanel extends UiPart<Region> {
                 loadEmployeeTimetable(event.getNewSelection().employee);
             } else {
                 loadMainTimetable();
+            }
+        });
+    }
+
+    @Subscribe
+    private void handleTimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent event) {
+        Platform.runLater(() -> {
+            if (event.isNext && !event.isPrev) {
+                logger.info(LogsCenter.getEventHandlingLogMessage(event)
+                        + ": Navigating timetable to the next week....");
+                navigateToNextWeek();
+            } else if (event.isPrev && !event.isNext) {
+                logger.info(LogsCenter.getEventHandlingLogMessage(event)
+                        + ": Navigating timetable to the previous week....");
+                navigateToPreviousWeek();
             }
         });
     }

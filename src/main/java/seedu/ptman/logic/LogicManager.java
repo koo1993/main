@@ -1,7 +1,10 @@
 package seedu.ptman.logic;
 
+import static seedu.ptman.commons.util.DateUtil.getNextWeekDate;
+import static seedu.ptman.commons.util.DateUtil.getPrevWeekDate;
 import static seedu.ptman.logic.parser.CliSyntax.PREFIX_PASSWORD;
 
+import java.time.LocalDate;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -28,11 +31,14 @@ public class LogicManager extends ComponentManager implements Logic {
     private final PartTimeManagerParser partTimeManagerParser;
     private final UndoRedoStack undoRedoStack;
 
+    private LocalDate currentDisplayedDate;
+
     public LogicManager(Model model) {
         this.model = model;
         history = new CommandHistory();
         partTimeManagerParser = new PartTimeManagerParser();
         undoRedoStack = new UndoRedoStack();
+        setFilteredShiftListToCurrentWeek();
     }
 
     @Override
@@ -88,9 +94,39 @@ public class LogicManager extends ComponentManager implements Logic {
         return new ListElementPointer(history.getHistory());
     }
 
+    //@@author hzxcaryn
     @Override
     public OutletInformation getOutletInformation() {
         return model.getOutletInformation();
+    }
+
+    @Override
+    public LocalDate getCurrentDisplayedDate() {
+        return currentDisplayedDate;
+    }
+
+    @Override
+    public void setFilteredShiftListToNextWeek() {
+        currentDisplayedDate = getNextWeekDate(currentDisplayedDate);
+        model.setFilteredShiftListToWeek(currentDisplayedDate);
+    }
+
+    @Override
+    public void setFilteredShiftListToPrevWeek() {
+        currentDisplayedDate = getPrevWeekDate(currentDisplayedDate);
+        model.setFilteredShiftListToWeek(currentDisplayedDate);
+    }
+
+    @Override
+    public void setFilteredShiftListToCurrentWeek() {
+        currentDisplayedDate = LocalDate.now();
+        model.setFilteredShiftListToWeek(currentDisplayedDate);
+    }
+
+    @Override
+    public void setFilteredShiftListToCustomWeek(LocalDate date) {
+        currentDisplayedDate = date;
+        model.setFilteredShiftListToWeek(date);
     }
 
     @Override

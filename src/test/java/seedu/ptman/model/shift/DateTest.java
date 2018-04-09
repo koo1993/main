@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
+
 import org.junit.Test;
 
 import seedu.ptman.testutil.Assert;
@@ -14,7 +16,8 @@ public class DateTest {
 
     @Test
     public void constructor_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> new Date(null));
+        Assert.assertThrows(NullPointerException.class, () -> new Date((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> new Date((LocalDate) null));
     }
 
     @Test

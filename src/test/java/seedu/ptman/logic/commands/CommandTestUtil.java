@@ -33,6 +33,7 @@ import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.employee.Employee;
 import seedu.ptman.model.employee.NameContainsKeywordsPredicate;
 import seedu.ptman.model.employee.exceptions.EmployeeNotFoundException;
+import seedu.ptman.model.shift.Shift;
 import seedu.ptman.testutil.EditEmployeeDescriptorBuilder;
 
 /**
@@ -157,6 +158,7 @@ public class CommandTestUtil {
         // only do so by copying its components.
         PartTimeManager expectedPartTimeManager = new PartTimeManager(actualModel.getPartTimeManager());
         List<Employee> expectedFilteredList = new ArrayList<>(actualModel.getFilteredEmployeeList());
+        List<Shift> expectedFilteredShiftList = new ArrayList<>(actualModel.getFilteredShiftList());
 
         try {
             command.execute();
@@ -165,6 +167,7 @@ public class CommandTestUtil {
             assertEquals(expectedMessage, e.getMessage());
             assertEquals(expectedPartTimeManager, actualModel.getPartTimeManager());
             assertEquals(expectedFilteredList, actualModel.getFilteredEmployeeList());
+            assertEquals(expectedFilteredShiftList, actualModel.getFilteredShiftList());
         }
     }
 

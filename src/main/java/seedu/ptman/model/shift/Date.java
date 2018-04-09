@@ -26,6 +26,11 @@ public class Date {
         this.date = LocalDate.parse(date, DateTimeFormatter.ofPattern(STRING_DATE_PATTERN));
     }
 
+    public Date(LocalDate date) {
+        requireNonNull(date);
+        this.date = date;
+    }
+
     /**
      * Returns true if a given string is a valid date.
      * @param test

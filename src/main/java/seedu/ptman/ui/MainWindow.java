@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -17,6 +19,7 @@ import seedu.ptman.commons.core.GuiSettings;
 import seedu.ptman.commons.core.LogsCenter;
 import seedu.ptman.commons.events.ui.ExitAppRequestEvent;
 import seedu.ptman.commons.events.ui.ShowHelpRequestEvent;
+import seedu.ptman.commons.events.ui.TimetableWeekChangeRequestEvent;
 import seedu.ptman.logic.Logic;
 import seedu.ptman.model.UserPrefs;
 
@@ -30,6 +33,13 @@ public class MainWindow extends UiPart<Stage> {
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
+    //@@author hzxcaryn
+    private final KeyCombination keyCtrlShiftLeft =
+            new KeyCodeCombination(KeyCode.LEFT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
+    private final KeyCombination keyCtrlShiftRight =
+            new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
+
+    //@@author
     private Stage primaryStage;
     private Logic logic;
 
@@ -68,7 +78,7 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane statusbarPlaceholder;
 
     @FXML
-    private StackPane timetableViewPlaceholder;
+    private StackPane timetablePanelPlaceholder;
 
     public MainWindow(Stage primaryStage, Config config, UserPrefs prefs, Logic logic) {
         super(FXML, primaryStage);
@@ -83,6 +93,7 @@ public class MainWindow extends UiPart<Stage> {
         setTitle(config.getAppTitle());
         setWindowDefaultSize(prefs);
 
+        setEventHandlerForTimetableWeekChangeRequestEvent();
         setAccelerators();
         registerAsAnEventHandler(this);
     }
@@ -132,8 +143,8 @@ public class MainWindow extends UiPart<Stage> {
         outletPanel = new OutletDetailsPanel(logic.getOutletInformation());
         outletDetailsPanelPlaceholder.getChildren().add(outletPanel.getRoot());
 
-        timetablePanel = new TimetablePanel(logic.getFilteredShiftList(), logic.getOutletInformation());
-        timetableViewPlaceholder.getChildren().add(timetablePanel.getRoot());
+        timetablePanel = new TimetablePanel(logic);
+        timetablePanelPlaceholder.getChildren().add(timetablePanel.getRoot());
 
         employeeListPanel = new EmployeeListPanel(logic.getFilteredEmployeeList());
         employeeListPanelPlaceholder.getChildren().add(employeeListPanel.getRoot());
@@ -183,6 +194,26 @@ public class MainWindow extends UiPart<Stage> {
                 (int) primaryStage.getX(), (int) primaryStage.getY());
     }
 
+    //@@author hzxcaryn
+    /**
+     * Listens to the {@code keyEvent} that requests to navigate to the prev/next timetable view and handles it.
+     * Windows: Ctrl, Mac: Command
+     */
+    private void setEventHandlerForTimetableWeekChangeRequestEvent() {
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (keyCtrlShiftLeft.match(event)) {
+                event.consume();
+                logger.fine("Timetable view requested to display the previous week.");
+                raise(new TimetableWeekChangeRequestEvent(false, true));
+            } else if (keyCtrlShiftRight.match(event)) {
+                event.consume();
+                logger.fine("Timetable view requested to display the next week.");
+                raise(new TimetableWeekChangeRequestEvent(true, false));
+            }
+        });
+    }
+
+    //@@author
     /**
      * Opens the help window.
      */

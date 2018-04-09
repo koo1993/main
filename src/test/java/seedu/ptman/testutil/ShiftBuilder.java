@@ -1,5 +1,6 @@
 package seedu.ptman.testutil;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +40,14 @@ public class ShiftBuilder {
      * Sets the {@code Date} of the {@code Shift} that we are building.
      */
     public ShiftBuilder withDate(String date) {
+        this.date = new Date(date);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Date} of the {@code Shift} that we are building.
+     */
+    public ShiftBuilder withDate(LocalDate date) {
         this.date = new Date(date);
         return this;
     }
