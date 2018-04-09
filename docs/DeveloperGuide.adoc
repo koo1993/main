@@ -135,7 +135,7 @@ Here is a quick overview of each component:
 * <<Design-Model,*`Model`*>>: Holds the data of the app in-memory.
 * <<Design-Storage,*`Storage`*>>: Reads data from, and writes data to, the hard disk.
 
-The `UI`, `Logic`, `Model` and `Storage` components:
+The API of the `UI`, `Logic`, `Model` and `Storage` components are structured similarly. These components:
 
 * Define their API in an `interface` with the same name as the component.
 * Expose their functionality using a `{Component Name}Manager` class.
@@ -709,7 +709,7 @@ image::PasswordClassDiagram.png[width="700"]
 
 The reason of converting password string to hashCode is to protect user’s password from being seen in the storage file.  Anyone who get hold of the data are not able to convert the hashCode back to the original password string as SHA-256 is a https://en.wikipedia.org/wiki/Collision_resistance[collision resistant] hash.
 
-=== Admin Mode/Admin Command Feature
+=== Admin mode and command feature
 
 ==== Reason for implementation
 Initial startup of PTMan require huge amount of manual input by admin. To promote hassle-free commands, employers can log in to admin mode with `login` command and use the command provided without the need to be autheticated for every command.
@@ -726,7 +726,7 @@ setFalseAdminMode();
 
 `setTrueAdminMode(Password password)` requires a password that will check against the outlet password and set admin mode accordingly. Failing to give the correct password will result in returning false.
 
-==== How it is implemented (Admin Command)
+==== How it is implemented (Admin command)
 In order to enable commands to be usable only in admin mode the code below must be added to the execution() of the command *first*.
 ----
 if (!model.isAdminMode()) {
@@ -739,8 +739,31 @@ _<<fig-DeleteSD>>_ below illustrates how the admin command is generally executed
 .Interactions inside the Logic Component for the `delete 1` Admin Command
 image::DeletePersonSdForLogic.png[width="800"]
 
+
+=== Email service feature
+
+==== Reason for implementation
+Email service can be useful to send reset password and notification to employee. To facilitate easy sending of email, a https://en.wikipedia.org/wiki/Singleton_pattern[singleton] `EmailService` class is introduced.
+
+==== How it is implementation
+To get an instance of the email service the following code can be called anywhere.
+----
+EmailService.getInstance();
+----
+Currently, there are two specialized methods in `EmailService` class that can be used to send email.
+----
+sendTimetableAttachment(String email, String filename)
+sendResetPasswordMessage(String name, String email, String newPassword)
+----
+`sendTimetableAttachment` crafts a specialized email and send to the specified `email` with attachment from `filename` +
+
+`sendResetPasswordMessage` crafts a specialized email and send to the specified `email` to the intended personnel.
+
+[NOTE]
+`EmailService` class is free for extension.
+
 // tag::dataencryption[]
-=== Data Encryption
+=== Data encryption
 
 ==== Reason for implementation
 
@@ -833,7 +856,7 @@ image::chrome_save_as_pdf.png[width="300"]
 [[Testing]]
 == Testing
 
-This section explains how to run tests, the different types of tests and test troubleshooting.
+This section explains how to run the different types of tests and test troubleshooting.
 
 === Running Tests
 
@@ -865,17 +888,17 @@ Thanks to the https://github.com/TestFX/TestFX[TestFX] library, our GUI tests ca
 
 We have two types of tests:
 
-.  *GUI Tests*
-* These are tests involving the GUI. They include:
-.. _System tests_ that test the entire app by simulating user actions on the GUI. These are in the `systemtests` package.
-.. _Unit tests_ that test the individual components. These are in the `seedu.ptman.ui` package.
-.  *Non-GUI Tests*
-* These are tests not involving the GUI. They include:
-..  _Unit tests_ targeting methods/classes at the lowest level. +
+.  *GUI Tests* +
+ These are tests involving the GUI. They include:
+* _System tests_ test the entire app by simulating user actions on the GUI. These are in the `systemtests` package.
+* _Unit tests_ test the individual UI components. These are in the `seedu.ptman.ui` package.
+.  *Non-GUI Tests* +
+ These are tests not involving the GUI. They include:
+*  _Unit tests_ test methods/classes at the lowest level. +
 e.g. `seedu.ptman.commons.StringUtilTest`
-..  _Integration tests_ that are checking the integration of multiple code units. Those code units are assumed to be working. +
+*  _Integration tests_ test the integration of multiple code units. Those code units are assumed to be working. +
 e.g. `seedu.ptman.storage.StorageManagerTest`
-..  Hybrids of _unit_ and _integration tests_. These test are checking multiple code units as well as how they are connected together. +
+*  Hybrids of _unit_ and _integration tests_ test multiple code units as well as how they are connected together. +
 e.g. `seedu.ptman.logic.LogicManagerTest`
 
 
