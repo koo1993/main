@@ -8,8 +8,6 @@ import static seedu.ptman.ui.StatusBarFooter.SYNC_STATUS_INITIAL;
 import static seedu.ptman.ui.StatusBarFooter.SYNC_STATUS_UPDATED;
 import static seedu.ptman.ui.testutil.GuiTestAssert.assertListMatching;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 
 import guitests.guihandles.AdminModeDisplayHandle;
-import guitests.guihandles.BrowserPanelHandle;
 import guitests.guihandles.CommandBoxHandle;
 import guitests.guihandles.EmployeeListPanelHandle;
 import guitests.guihandles.MainMenuHandle;
@@ -40,7 +37,6 @@ import seedu.ptman.model.Model;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.testutil.TypicalEmployees;
 import seedu.ptman.ui.AdminModeDisplay;
-import seedu.ptman.ui.BrowserPanel;
 import seedu.ptman.ui.CommandBox;
 import seedu.ptman.ui.ResultDisplay;
 
@@ -225,35 +221,23 @@ public abstract class PartTimeManagerSystemTest {
     }
 
     /**
-     * Asserts that the previously selected card is now deselected and the browser's url remains displaying the details
-     * of the previously selected employee.
-     * @see BrowserPanelHandle#isUrlChanged()
+     * Asserts that the previously selected card is now deselected.
      */
     protected void assertSelectedCardDeselected() {
         assertFalse(getEmployeeListPanel().isAnyCardSelected());
     }
 
     /**
-     * Asserts that the browser's url is changed to display the details of the employee in the employee list panel at
+     * Asserts that the timetable view is changed to display the details of the employee in the employee list panel at
      * {@code expectedSelectedCardIndex}, and only the card at {@code expectedSelectedCardIndex} is selected.
-     * @see BrowserPanelHandle#isUrlChanged()
      * @see EmployeeListPanelHandle#isSelectedEmployeeCardChanged()
      */
     protected void assertSelectedCardChanged(Index expectedSelectedCardIndex) {
-        String selectedCardName = getEmployeeListPanel().getHandleToSelectedCard().getName();
-        URL expectedUrl;
-        try {
-            expectedUrl = new URL(BrowserPanel.SEARCH_PAGE_URL + selectedCardName.replaceAll(" ", "%20"));
-        } catch (MalformedURLException mue) {
-            throw new AssertionError("URL expected to be valid.");
-        }
-
         assertEquals(expectedSelectedCardIndex.getZeroBased(), getEmployeeListPanel().getSelectedCardIndex());
     }
 
     /**
-     * Asserts that the browser's url and the selected card in the employee list panel remain unchanged.
-     * @see BrowserPanelHandle#isUrlChanged()
+     * Asserts that the selected card in the employee list panel remain unchanged.
      * @see EmployeeListPanelHandle#isSelectedEmployeeCardChanged()
      */
     protected void assertSelectedCardUnchanged() {
