@@ -1,6 +1,7 @@
 package seedu.ptman.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.ptman.commons.core.Messages.MESSAGE_ACCESS_DENIED;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class ChangeAdminPasswordCommand extends Command {
             + COMMAND_FORMAT
             + "\nExample: "
             + "pw/DEFAULT1 "
-            + "pw/hunter1 "  + "pw/hunter1";
+            + "pw/hunter22 "  + "pw/hunter22";
 
 
     public static final String MESSAGE_INVALID_CONFIMREDPASSWORD = "New password entered are not the same.";
@@ -48,6 +49,9 @@ public class ChangeAdminPasswordCommand extends Command {
 
     @Override
     public CommandResult execute() throws CommandException {
+        if (!model.isAdminMode()) {
+            throw new CommandException(MESSAGE_ACCESS_DENIED);
+        }
 
         checkConfirmedPassword(passwords.get(1), passwords.get(2));
 

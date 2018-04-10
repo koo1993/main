@@ -44,7 +44,7 @@ public class ChangePasswordCommand extends Command {
             + "\nExample: "
             + "1 "
             + "pw/DEFAULT1 "
-            + "pw/hunter1 "  + "pw/hunter1";
+            + "pw/hunter22 "  + "pw/hunter22";
 
 
     public static final String MESSAGE_INVALID_CONFIMREDPASSWORD = "New password entered are not the same";

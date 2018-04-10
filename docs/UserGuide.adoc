@@ -207,13 +207,25 @@ eg. `list` and `l` will both show a list of all employees in PTMan.
 As a manager, you are able to access these commands in addition to the <<General Commands, general commands>>.
 These manager commands require logging in to <<Admin Mode, admin mode>> as shown in <<Logging in to admin mode: `login`>>.
 
+// tag::accessControl[]
+
 [[Login]]
 ==== Logging in to admin mode: `login`
 Logs in to <<Admin Mode, admin mode>>, allowing you to use all the manager commands.
 
-*Format:* `login pw/AdminPassword`
 
-// TODO: SCREENSHOT
+*Format:* `login pw/ADMIN_PASSWORD`
+
+You can key in the command with your password as shown in  _<<fig-Login>>_.
+[[fig-Login]]
+.Logging in in PTMan +
+image::loginPassword.png[width="790"]
+
+Once you are logged in, a admin mode icon will appear to indicate that you are in admin mode as shown in  _<<fig-LoginSuccess>>_.
+
+[[fig-LoginSuccess]]
+.logged in in PTMan +
+image::LoginSuccess.png[width="790"]
 
 [IMPORTANT]
 Please remember to logout when you are done to prevent unauthorized access to manager commands. +
@@ -225,26 +237,45 @@ Logs out of <<Admin Mode, admin mode>>, preventing further usage of manager feat
 
 *Format:* `logout`
 
+You can key in the command to log out as shown in _<<fig-loggingOut>>_.
+[[fig-loggingOut]]
+.Logging out in PTMan +
+image::logOut.png[width="790"]
+
+After `logout` is executed, the admin icon will disappear from the command box as shown in _<<fig-logoutSuccess>>_.
+
+[[fig-logoutSuccess]]
+.Logged out in PTMan +
+image::loginNoAdminIcon.png[width="790"]
+
 [[Cap]]
 ==== Changing admin password: `changeadminpw`
 Changes the <<Admin Mode, admin mode>> password.
 
 *Format:* `changeadminpw pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD` +
-*Shorthand:* `cap`
+*Shorthand:* `cap` `pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
 
 [IMPORTANT]
 To prevent unauthorized access to admin mode, managers should execute this command upon running PTMan for the first time.
 
-// TODO: SCREENSHOT
-Examples:
 
-* If the current admin password is `DEFAULT1` and you wish to change it to `hunter2`, type: +
-`changeadminpw pw/DEFAULT1 pw/hunter2 pw/hunter2`
-* If the current admin password is `AdminPw` and you wish to change it to `Iamtheadmin`, type: +
-`changeadminpw pw/AdminPw pw/Iamtheadmin pw/Iamtheadmin`
+
+If the current admin password is `DEFAULT1` and you wish to change it to `hunter2`, type:
+`changeadminpw pw/DEFAULT1 pw/hunter22 pw/hunter22` which will be masked by asterisks in the program as shown in _<<fig-changingAdminPassword>>_.
+
+[[fig-changingAdminPassword]]
+.Changing admin password in PTMan +
+image::changingAdminPassword.png[width="790"]
+
+After password is changed successfully, a notification will be displayed below the command box as shown in _<<fig-changedAdminPassword>>_.
+
+[[fig-changedAdminPassword]]
+.Admin password changed in PTMan +
+image::changedAdminPassword.png[width="790"]
 
 [NOTE]
-The password should be at least 8 characters long.
+The password should be at least 8 characters long. +
+The sequence of current and new password entered must be of the format.
 
 [[Rap]]
 ==== Resetting admin password: `resetadminpw`
@@ -252,12 +283,27 @@ The password should be at least 8 characters long.
 Resets your <<Admin Mode, admin mode>> password and sends a randomly generated password to the outlet's email address. +
 You may use the new password to login to admin mode to change the password.
 
-// TODO: SCREENSHOT + EMAIL SCREENSHOT
 *Format:* `resetadminpw` +
 *Shorthand:* `rap`
 
+You can key in the command to reset admin password as shown in _<<fig-resetAdminPassword>>_
+
+[[fig-resetAdminPassword]]
+.Resetting admin password in PTMan +
+image::resetAdminPassword.png[width="790"]
+
+After the command is executed successfully, a notification will be displayed as shown in _<<fig-resetAdminPasswordSuccess>>_.
+
+
+[[fig-resetAdminPasswordSuccess]]
+.Reset admin password in PTMan +
+image::resetAdminPasswordSuccess.png[width="790"]
+
+
 [NOTE]
-The temporary password will be sent to the outlet's email.
+The temporary password will be sent to the outlet's email stored in PTMan.
+
+// end::accessControl[]
 
 [[Add]]
 ==== Adding an employee: `add`
@@ -282,7 +328,9 @@ image::Ui_add1.png[width="790"]
 
 . Click kbd:[Enter] and you would see a confirmation message below the command bar, and John Doe being added into your Employee list.
 _<<fig-Add2>>_ shows how PTMan should look like after the above command.
+
 +
+
 [[fig-Add2]]
 .Successful addition of employee into PTMan +
 image::Ui_add2.png[width="790"]
@@ -294,6 +342,28 @@ More Examples:
 `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 s/0`  +
 * To add an employee named `Betsy Crowe` with email `betsycrowe@example.com`, address `Newgate Prison`, phone number `1234567`, and salary of $`100`, type: +
 `add n/Betsy Crowe e/betsycrowe@example.com a/Newgate Prison p/1234567 s/100`
+
+[[AddSalary]]
+==== Adding salary to an employee: `addsalary`
+Adds an existing employee's salary by an amount.
+
+*Format:* `addsalary INDEX s/SALARY_INCREASE_BY` +
+*Shorthand:* `adds` `INDEX s/SALARY_INCREASE_BY`
+
+You can increase an employer salary by an amount as shown below in  _<<fig-addingSalary>>_.
+
+[[fig-addingSalary]]
+.Adding salary for employee in PTMan +
+image::addingSalary.png[width="790"]
+
+After you executed the command, you will see the result from the result display and the applied salary as shown in _<<fig-addSalarySuccess>>_.
+
+[[fig-addSalarySuccess]]
+.Adding salary for employee in PTMan +
+image::addSalarySuccess.png[width="790"]
+
+[NOTE]
+An employee's salary can not be deducted from using this command.
 
 [[Edit]]
 ==== Editing an employee: `edit`
@@ -656,11 +726,12 @@ Examples:
 // end::shiftemployee[]
 
 [[Cp]]
-==== Changing your employee password: `cp`
+==== Changing your employee password: `changepw`
 Changes your employee password.
 For security purposes, you are highly encouraged to change your password the moment your account is created. +
 
-*Format:* `cp INDEX pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
+*Format:* `changepw INDEX pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD` +
+*Shorthand:* `cp` `INDEX pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
 
 ****
 * The `INDEX` refers to the index number shown in the most recent employee listing.

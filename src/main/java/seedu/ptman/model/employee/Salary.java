@@ -11,7 +11,7 @@ import static seedu.ptman.commons.util.AppUtil.checkArgument;
 public class Salary {
 
     public static final String MESSAGE_SALARY_CONSTRAINTS =
-            "Salary can only contain positive numbers";
+            "Salary can only contain positive Integer";
     public static final String SALARY_VALIDATION_REGEX = "^[0-9]\\d*$";
     public final String value;
 

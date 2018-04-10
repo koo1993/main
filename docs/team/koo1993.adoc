@@ -15,23 +15,23 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. It
 == Summary of contributions
 
 * *Major enhancement*: Added *access control* that manages functions for employer and employee. [https://github.com/CS2103JAN2018-W14-B2/main/issues/39[Issue #39]]
-** What it does: Each employer and employee is assigned to a password. This restrict employee to use function that are meant for the employe.
+** What it does: Each employer and employee is assigned to a password. This restrict employee to use functions that are meant for the employer.
 ** What it includes:
 *** Admin commands are restricted to employer only.
-*** API for password checking for commands that need password.
-*** Login/Logout to admin mode for employer to use admin command at ease.
-*** Change/reset password are available for both group of user with email service.
+*** API for password checking that need password.
+*** Login/Logout to admin mode for employer to use admin commands at ease.
+*** Change/reset password is available for both group of user with email service.
 ** Justification: This ensure only authenticated personnel can use the system and prevent misuse of PTMan.
 
 
-* *Minor enhancement*: Added salary parameter and add salary command so that employer can manage employees' pay.
+* *Minor enhancement*: Added salary parameter and addsalary command for employer to manage employees' pay.
 
 * *Code contributed*: [https://github.com/CS2103JAN2018-W14-B2/main/blob/master/collated/functional/koo1993.md[Functional code]] [https://github.com/CS2103JAN2018-W14-B2/main/blob/master/collated/test/koo1993.md[Test code]]
 
 * *Other contributions*:
 
 ** Project management:
-*** Constantly collating the update from the team and call for meeting if there is a need to.
+*** Constantly collate updates from the team and call for meeting if there is a need to.
 ** Enhancements to existing features:
 *** Implemented obfuscation for password in input text field and history. (Pull requests https://github.com/CS2103JAN2018-W14-B2/main/pull/132[#132], https://github.com/CS2103JAN2018-W14-B2/main/pull/141[#141], https://github.com/CS2103JAN2018-W14-B2/main/pull/157[#157])
 *** Wrote email service to send reset password to employer and employee via email. (Pull requests https://github.com/CS2103JAN2018-W14-B2/main/pull/113[#113])

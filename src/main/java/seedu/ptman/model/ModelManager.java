@@ -112,10 +112,11 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized boolean setTrueAdminMode(Password password) {
         requireNonNull(password);
-        if (!partTimeManager.isAdminPassword(password)) {
+        if (!partTimeManager.isAdminPassword(password)
+                && !isCorrectTempPwd(partTimeManager.getOutletInformation(), password)) {
             return false;
         }
-        partTimeManager.setAdminMode(partTimeManager.isAdminPassword(password));
+        partTimeManager.setAdminMode(true);
         return true;
     }
 
