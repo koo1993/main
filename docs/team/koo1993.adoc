@@ -1,6 +1,7 @@
 = Koo Chin Chye - Project Portfolio
 :imagesDir: ../images
 :stylesDir: ../stylesheets
+:xrefstyle: short
 
 == PROJECT: Part-time Manager (PTMan)
 

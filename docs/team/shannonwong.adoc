@@ -1,6 +1,7 @@
 = Shannon Wong - Project Portfolio
 :imagesDir: ../images
 :stylesDir: ../stylesheets
+:xrefstyle: short
 
 == PROJECT: Part-Time Manager (PTMan)
 
