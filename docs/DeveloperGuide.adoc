@@ -504,43 +504,114 @@ This results in the desired shift indexing as shown in _<<fig-ShiftIndexGood>>_ 
 image::ShiftIndexGood.png[width=800]
 // end::shifts[]
 
-// tag::timetable
+// tag::timetable[]
 === Timetable feature
+
+We have a timetable that increases interactivity between users and the shifts in PTMan.
+_<<fig-Feature_Timetable1>>_ below shows how the timetable looks like.
+
+[[fig-Feature_Timetable1]]
+.Example of the timetable in PTMan
+image::Feature_Timetable1.png[width=800]
+
 ==== Reason for implementation
 
-A timetable GUI is useful for employers and employees, as it allows them to visualise the shifts and access them via their indexes. +
-This implementation reflects the changes that resulted from the shift commands, such as the adding and removing of shifts, as well
-as the updating of slots left for each shift. +
-On top of this, the selection of each employee will highlight the shifts that they have chosen to work for the week. Users are
-then allowed to export the timetable as an image for future reference without the need for the app.
+A timetable is useful for both employers and employees, as it allows them to visualise the shifts and access them via their indexes.
+The timetable also instantly reflects any changes to the shifts and allows selected employee's shifts to be highlighted.
+On top of these, users are allowed to export the timetable as an image for future reference.
+All in all, the timetable feature improves user experience and brings convenience to the user.
 
 ==== How it is implemented
 
-The timetable GUI is created with the help of the https://github.com/dlemmermann/CalendarFX[CalendarFX] library, and `TimetablePanel`
- is the main class in charge of displaying the timetable.
+The timetable is created with the help of the https://github.com/dlemmermann/CalendarFX[CalendarFX] library, and `TimetablePanel`
+ is the main class in charge of displaying the timetable. +
+
+`TimetablePanel` contains the following JavaFX components:
+
+. A `CalendarView` object.
+`CalendarView` is an object from CalendarFX, and it is responsible for displaying the timetable in the `TimetablePanel`.
+. A `BorderPane` object.
+`BorderPane` is the object in charge of displaying the navigation bar of the timetable.
+. A `Label` object.
+`Label` is the object in charge of displaying the text (in this case, the month) in the navigation bar.
+. Two `Button` objects.
+Each of the `Button` object is in charge of displaying the left/right buttons in the navigation bar.
+It allows users to click on them to navigate through the weeks in the timetable.
+. A `VBox` object.
+`VBox` is in charge of laying `BorderPane` and `CalendarView` out in a vertical column.
+
+_<<fig-TimetablePanelClassDiagram>>_ below shows a class diagram of the `TimetablePanel` and its association with JavaFX components. +
+ +
+[[fig-TimetablePanelClassDiagram]]
+.Overview of the TimetablePanel class in the UI
+image::TimetablePanelClassDiagram.png[width="800"]
 
 A `TimetablePanel` is created with its constructor:
+[source,java]
 ----
-TimetablePanel(ObservableList<Shift> shiftObservableList, OutletInformation outletInformation)
+public TimetablePanel(Logic logic) {
+    // ...
+    this.logic = logic;
+    this.shiftObservableList = logic.getFilteredShiftList();
+    this.outletInformation = logic.getOutletInformation();
+    // ...
+}
 ----
 
-The `TimetablePanel` is initialised in the `MainWindow` class in the following way:
-----
-TimetablePanel timetablePanel = new TimetablePanel(logic.getFilteredShiftList(), logic.getOutletInformation());
-----
+Using the `logic` argument, the `TimetablePanel` constructor initialises `shiftObservableList` and `outletInformation`.
+These pieces of information are important to the `TimetablePanel` because:
 
-`TimetablePanel` takes in:
+* `shiftObservableList` is an `ObservableList<Shift>` object, and is responsible for providing `TimetablePanel` with the shifts required to build the timetable.
+Shifts are added to the timetable in the method `setShifts()`.
+* `outletInformation` is an `OutletInformation` object, and is responsible for providing `TimetablePanel` with the operating hours of the outlet.
+The timetable re-scales according to the operating hours of the outlet, in the method `setTimetableRange()`.
 
- * An `ObservableList<Shift>` object, which is an unmodifiable sorted view of the filtered shifts.
- * An `OutletInformation` object, which contains information of the outlet that is required to build the timetable.
-  In particular, the operating hours of the outlet.
+===== Updating the timetable
 
-`TimetablePanel` then uses the `Shift` objects in the `ObservableList<Shift>` to set the `Entries` in the timetable view, in the method `setShifts()`.
-The operating hours acquired from `OutletInformation` is then used in `setTimetableRange()` to ensure that the timetable
-displays all the time slots within this time range. +
+The main method in charge of updating the timetable is `updateTimetableView()`.
+When this method is called, the `Label` in the navigation bar is set to show the month that is being displayed
+on the timetable, and the timetable is rebuilt with the newly set shifts and operating hours.
+`updateTimetableView()` is called whenever a `PartTimeManagerChangedEvent`, `TimetableWeekChangeRequestEvent` or `EmployeePanelSelectionChangedEvent` is posted. +
+
+We will use `PartTimeManagerChangedEvent` to illustrate `updateTimetableView()` works.
+_<<fig-updateTimetableViewHighLevelSequenceDiagram>>_ below shows a high level sequence diagram of what happens when a `PartTimeManagerChangedEvent`
+ is posted and how it causes the `UI` to call `updateTimetableView()`. +
  +
+[[fig-updateTimetableViewHighLevelSequenceDiagram]]
+.Component interactions for a `PartTimeManagerChangedEvent`
+image::updateTimetableViewHighLevelSequenceDiagram.png[width="800"]
 
-*Viewing of Individual Employee's Shifts*
+_<<fig-updateTimetableViewSequenceDiagram>>_ below shows the sequence diagram of how `TimetablePanel` carries out `updateTimetableView()` to
+respond to a `PartTimeManagerChangedEvent`. +
+ +
+[[fig-updateTimetableViewSequenceDiagram]]
+.Sequence diagram to update timetable
+image::updateTimetableViewSequenceDiagram.png[width="750"]
+
+Here are some examples of when `updateTimetableView()` is called: +
+
+* A `Shift` is added, removed, or altered:
+`PartTimeManagerChangedEvent` is posted which calls `updateTimetableView()` to rebuild the timetable with the changed shifts.
+* `OutletInformation` is edited:
+`PartTimeManagerChangedEvent` is posted which calls `updateTimetableView()` to rebuild the timetable to fit in the updated operating hours.
+* The user wants to navigate the timetable to the next/previous week:
+`TimetableWeekChangeRequestEvent` is posted which calls `navigateToNextWeek()` or `navigateToPreviousWeek()` accordingly.
+Both of these methods call `updateTimetableView()` to rebuild the timetable showing the appropriate weeks.
+* Selection of an employee:
+`EmployeePanelSelectionChangedEvent` is posted which calls `loadEmployeeTimetable` or `loadMainTimetable` accordingly. Both of these
+methods call `updateTimetableView()` to rebuild the timetable with the appropriate colours of the entries.
+
+
+===== Commands
+
+The following are commands that are supported as part of the timetable feature:
+
+. <<Viewing of individual employee's shifts, `SelectCommand`>>: Selects an employee and highlight their shifts on the timetable.
+. <<Returning to main view of timetable , `MainCommand`>>: Returns the timetable back to the default view of the current week.
+. <<Exporting timetable, `ExportCommand`>>: Exports timetable as an image.
+
+
+===== Viewing of individual employee's shifts
 
 PTMan allows employees to highlight their own shifts on the timetable GUI through `SelectCommand`. When a particular employee is
 being selected, an `EmployeePanelSelectionChangedEvent` is posted with the selected employee as the argument to indicate the change. +
@@ -553,7 +624,7 @@ public EmployeePanelSelectionChangedEvent(EmployeeCard newSelection)
 `TimetablePanel` subscribes to this event and handles it by calling the `loadEmployeeTimetable` method for the `newSelection`. +
  +
 
-*Returning to Main View of Timetable GUI*
+===== Returning to main view of timetable
 
 The returning to main timetable view is called through `MainCommand`, which also posts an `EmployeePanelSelectionChangedEvent` event
 with null as the argument.
@@ -561,23 +632,7 @@ with null as the argument.
 `TimetablePanel` subscribes to this event and handles it by calling the `loadMainTimetable` method. +
  +
 
-*Updating of Timetable GUI*
-
-The main method in charge of updating the timetable GUI is the `updateTimetableView()` method. This method is called whenever
-a `PartTimeManagerChangedEvent` or `EmployeePanelSelectionChangedEvent` is posted. +
-
-Here are some examples of how `updateTimetableView()` is called: +
-
-* A `Shift` is added, removed, or altered:
-`PartTimeManagerChangedEvent` is posted which calls `updateTimetableView()` to rebuild the timetable view with the changed shifts.
-* `OutletInformation` is edited:
-`PartTimeManagerChangedEvent` is posted which calls `updateTimetableView()` to rebuild the timetable view to fit in the updated operating hours.
-* Selection of an employee:
-`EmployeePanelSelectionChangedEvent` is posted which calls `loadEmployeeTimetable` or `loadMainTimetable` accordingly. Both of these
-methods call `updateTimetableView()` to rebuild the timetable view with the appropriate `Entry` colors. +
- +
-
-*Exporting Timetable*
+====== Exporting timetable
 
 Exporting of the timetable is triggered by `ExportCommand`, which:
 
@@ -591,8 +646,7 @@ How the exporting works is that a Snapshot is first taken of the `timetableView`
 If `exportTimetableAsImageAndEmail` is called instead of `exportTimetableAsImage`, we will go on further to email this image
 through the `EmailService` class, and then finally delete the local file containing the Snapshot.
 
-
-// end::timetable
+// end::timetable[]
 
 
 // tag::undoredo[]
@@ -1339,7 +1393,17 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user |reset my password |reset when i forget my password.
 
+|`* * *` |user |constantly back up my local files |retrieve important information if some files are corrupted.
+
+|`* * *` |user |navigate through the weeks of the timetable |manage shifts ahead of time, and revisit old shifts.
+
 |`* * *` |employer |add a new employee |store them in the record.
+
+|`* * *` |employer |add an employee to a shift |assign employees to their shifts.
+
+|`* * *` |employer |remove an employee from a shift |reassign employees their shifts.
+
+|`* * *` |employer |view employees working in a shift |keep track of who is working.
 
 |`* * *` |employer |view an employee’s contact |contact them.
 
@@ -1351,6 +1415,8 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |employer |update the schedule |show employees the available slots.
 
+|`* * *` |employer |employer, I want to encrypt and decrypt local storage files on demand |prevent unauthorised users from retrieving local file data.
+
 |`* * *` |employee |view the schedule |choose when I want to work.
 
 |`* * *` |employee |select from the available slots in the schedule |work during that slot.
@@ -1358,7 +1424,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`* *` |employer |edit an employee’s contact |update their outdated contact information.
 
 |`* *` |employer |edit the outlet information |update the outdated outlet information.
-c
+
 |`* *` |employer |sort employees by name |have a clearer view of all employees’ details.
 
 |`* *` |employer |find an employee by name |locate details of employees without having to go through the entire list.

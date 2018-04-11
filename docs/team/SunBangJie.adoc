@@ -6,11 +6,12 @@
 
 == Overview
 
-Part-Time Manager (PTMan) is a desktop human resource application used for managing part-timer employees. +
+Part-Time Manager (PTMan) is a desktop human resource application used for managing part-time employees. +
 
-PTMan aims to give part-time employees the freedom of choosing when they want to work by registering for the available time slots set by the employer. +
+PTMan aims to give part-time employees the freedom of choosing when they want to work by registering for the available shifts set by the employer.
+Thereby reducing the hassle of work scheduling for both employers and employees. +
 
-The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+The user interacts with the application using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
 
 == Summary of contributions
 

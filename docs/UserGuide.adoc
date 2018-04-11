@@ -823,6 +823,7 @@ Shows a list of all employees in PTMan. +
 *Format:* `list` +
 *Shorthand:* `l`
 
+// tag::timetableInteractions[]
 [[Viewshift]]
 ==== Listing all employees: `viewshift`
 
@@ -883,6 +884,7 @@ Examples:
 * To export the timetable with the shifts of employee `1` in PTMan and send the exported timetable as email, type: +
 `select ` +
 `export e/email@example.com`
+// end::timetableInteractions[]
 
 [[History]]
 ==== Listing entered commands: `history`

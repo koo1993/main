@@ -47,7 +47,6 @@ import seedu.ptman.commons.util.DateUtil;
 import seedu.ptman.logic.Logic;
 import seedu.ptman.model.employee.Email;
 import seedu.ptman.model.employee.Employee;
-import seedu.ptman.model.employee.UniqueEmployeeList;
 import seedu.ptman.model.outlet.OutletInformation;
 import seedu.ptman.model.shift.Shift;
 
@@ -251,21 +250,6 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
-     * Checks if currentEmployee is in input shift
-     * @param shift
-     * @return true if currentEmployee is in input shift, false if not.
-     */
-    private boolean isCurrentEmployeeInShift(Shift shift) {
-        UniqueEmployeeList employees = shift.getUniqueEmployeeList();
-        for (Employee employee : employees) {
-            if (employee.equals(currentEmployee)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @return the entryType (a Calendar object) for the shift in the main timetable view, which reflects
      * the color of the shift in the timetableView.
      */
@@ -285,7 +269,7 @@ public class TimetablePanel extends UiPart<Region> {
      * the color of the shift in the timetableView.
      */
     private Calendar getEntryTypeEmployee(Shift shift) {
-        if (isCurrentEmployeeInShift(shift)) {
+        if (shift.containsEmployee(currentEmployee)) {
             return timetableEmployee;
         } else {
             return timetableOthers;
@@ -331,14 +315,20 @@ public class TimetablePanel extends UiPart<Region> {
     private void updateTimetableView() {
         setCurrentDisplayedDate();
         setMonthDisplay(logic.getCurrentDisplayedDate());
+        resetTimetableView();
+        setTimetableRange();
+    }
+
+    /**
+     * Clear current timetable view and resets it to a new timetable view with updated shifts.
+     */
+    private void resetTimetableView() {
         timetableView.getCalendarSources().clear();
         CalendarSource calendarSource = new CalendarSource("Shifts");
         addCalendars(calendarSource);
 
         setShifts();
         timetableView.getCalendarSources().add(calendarSource);
-
-        setTimetableRange();
     }
 
     /**

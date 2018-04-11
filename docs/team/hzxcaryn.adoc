@@ -6,43 +6,55 @@
 
 == Overview
 
-PTMan is a desktop human resource application used for managing part-timer employees. +
+PTMan is a desktop human resource application used for managing part-time employees. +
 
-PTMan aims to give part-time employees the freedom of choosing when they want to work by registering for the available time slots set by the employer. +
+PTMan aims to give part-time employees the freedom of choosing when they want to work by registering for the available shifts set by the employer.
+Thereby reducing the hassle of work scheduling for both employers and employees. +
 
-The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+The user interacts with the application using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
 
 == Summary of contributions
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+* *Major enhancement*: Added an interactive *timetable*.
+** What it does:
+*** Provides a sophisticated timetable which displays the shifts added by employers.
+*** Instantly reflects any changes to shifts on the timetable. This includes the addition/deletion of a shift, and the application/removal of an employee to/from a shift.
+*** Allows easy navigation across the different weeks through keyboard shortcuts and mouse clicks.
+*** Allows employees to view the shifts they are assigned to on the timetable.
+*** Allows users to view which employees are working in any particular shift.
+*** Supports the exporting of timetable as image to be saved as a file locally, or forwarded to users through our email service.
+** Justification: This feature improves the user experience of PTMan significantly because a user can get helpful visual feedback whenever changes are made to the shifts in PTMan.
+Convenience is also brought to employees through the ability to export their work timetable, allowing them to refer to it in the future without the need to access the app.
+** Highlights:
+This enhancement puts user experience in high regard.
+Lots of consideration is put into making the feature easy to use and useful for users.
+The implementation too was challenging as it required changes to existing commands.
+** Credits: https://github.com/dlemmermann/CalendarFX[CalendarFX]
 
-* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
+* *Minor enhancement*: Allocated different colors for different tags that are assigned to employees. This allows user to easily classify and identify the different tags.
 
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Code contributed*: [https://github.com/CS2103JAN2018-W14-B2/main/blob/master/collated/functional/hzxcaryn.md[Functional code]]
+ [https://github.com/CS2103JAN2018-W14-B2/main/blob/master/collated/test/hzxcaryn.md[Test code]]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+*** Managed releases `v1.2`, `v1.4`, `v1.4.1`, `v1.5rc` and `v1.5` on GitHub
 ** Enhancements to existing features:
-*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+*** Updated the GUI theme. https://github.com/CS2103JAN2018-W14-B2/main/pull/150[#150], https://github.com/CS2103JAN2018-W14-B2/main/pull/166[#166]
+*** Add an `Admin Mode` label when user enters admin mode. https://github.com/CS2103JAN2018-W14-B2/main/pull/125[#125]
 ** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** Added screenshots and examples to the User Guide.
+*** Added user stories and use cases for the Developer Guide. https://github.com/CS2103JAN2018-W14-B2/main/pull/9[#9]
 ** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
-*** Contributed to forum discussions (examples:  https://github.com[1], https://github.com[2], https://github.com[3], https://github.com[4])
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
-*** Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
+*** Reported bugs and suggestions for other teams in the class.
+https://github.com/CS2103JAN2018-F09-B3/main/issues/148[#148],
+https://github.com/CS2103JAN2018-F09-B3/main/issues/178[#178]
+https://github.com/CS2103JAN2018-F09-B3/main/issues/153[#153],
+https://github.com/CS2103JAN2018-F09-B3/main/issues/164[#164]
 ** Tools:
-*** Integrated a third party library (Natty) to the project (https://github.com[#42])
-*** Integrated a new Github plugin (CircleCI) to the team repo
+*** Integrated a third party library (https://github.com/dlemmermann/CalendarFX[CalendarFX]) to the project (https://github.com/CS2103JAN2018-W14-B2/main/pull/116[#116])
 
-_{you can add/remove categories in the list above}_
 
 == Contributions to the User Guide
 
@@ -51,9 +63,8 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=undoredo]
+include::../UserGuide.adoc[tag=timetableInteractions]
 
-include::../UserGuide.adoc[tag=dataencryption]
 
 == Contributions to the Developer Guide
 
@@ -61,6 +72,4 @@ include::../UserGuide.adoc[tag=dataencryption]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=undoredo]
-
-include::../DeveloperGuide.adoc[tag=dataencryption]
+include::../DeveloperGuide.adoc[tag=timetable]
