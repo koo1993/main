@@ -175,6 +175,6 @@ public class Shift {
     }
 
     public boolean isOver() {
-        return date.isOver() && startTime.isOver();
+        return date.isOver() || (date.isCurrentDate() && startTime.isOver());
     }
 }

@@ -17,7 +17,7 @@ import seedu.ptman.model.shift.Time;
  */
 public class ShiftBuilder {
 
-    public static final LocalDate DEFAULT_DATE = LocalDate.now();
+    public static final LocalDate DEFAULT_DATE = LocalDate.now().plusDays(1);
     public static final String DEFAULT_TIME_START = "0900";
     public static final String DEFAULT_TIME_END = "1600";
     public static final String DEFAULT_CAPACITY = "5";

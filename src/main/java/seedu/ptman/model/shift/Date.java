@@ -78,4 +78,8 @@ public class Date {
     public boolean isOver() {
         return date.isBefore(LocalDate.now());
     }
+
+    public boolean isCurrentDate() {
+        return date.isEqual(LocalDate.now());
+    }
 }
