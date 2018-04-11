@@ -229,7 +229,7 @@ Once you are logged in, a admin mode icon will appear to indicate that you are i
 
 [[fig-LoginSuccess]]
 .logged in in PTMan +
-image::LoginSuccess.png[width="790"]
+image::LoginSuccess.PNG[width="790"]
 
 [IMPORTANT]
 Please remember to logout when you are done to prevent unauthorized access to manager commands. +
@@ -244,7 +244,7 @@ Logs out of <<Admin Mode, admin mode>>, preventing further usage of manager feat
 You can key in the command to log out as shown in _<<fig-loggingOut>>_.
 [[fig-loggingOut]]
 .Logging out in PTMan +
-image::logOut.png[width="790"]
+image::logOut.PNG[width="790"]
 
 After `logout` is executed, the admin icon will disappear from the command box as shown in _<<fig-logoutSuccess>>_.
 
