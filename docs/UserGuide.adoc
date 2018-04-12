@@ -737,38 +737,69 @@ For security purposes, you are highly encouraged to change your password the mom
 *Format:* `changepw INDEX pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD` +
 *Shorthand:* `cp` `INDEX pw/CURRENT_PASSWORD pw/NEW_PASSWORD pw/CONFIRM_NEW_PASSWORD`
 
-****
-* The `INDEX` refers to the index number shown in the most recent employee listing.
-* The `INDEX` *must be a positive integer* 1, 2, 3, ...
-****
+Your `INDEX` will be displayed at the right side panel of PTMan. For example, if you are Asther toh, you can execute the command as shown in _<<fig-changingpw>>_.
 
-Examples:
+[[fig-changingpw]]
+.Resetting password in PTMan
+image::changingpw.png[width="790"]
 
-* If your index is `5`, your current password is `DEFAULT1`, and you wish to change it to `hunter2`, type: +
-`cp 5 pw/DEFAULT1 pw/hunter2 pw/hunter2`
-* If your index is `2`, your current password is `mypassword`, and you wish to change it to `NewPassw0rd`, type: +
-`cp 2 pw/mypassword pw/NewPassw0rd pw/NewPassw0rd`
+After executing `changepw` successfully, a notification will be displayed below the command box as shown in _<<fig-changepw>>_.
+
+[[fig-changepw]]
+.Resetting password in PTMan
+image::changepw.png[width="790"]
+
+[NOTE]
+The password should be at least 8 characters long. +
+The sequence of current and new password entered must be of the format.
+
+//****
+//* The `INDEX` refers to the index number shown in the most recent employee listing.
+//* The `INDEX` *must be a positive integer* 1, 2, 3, ...
+//****
+
+//Examples:
+
+//* If your index is `5`, your current password is `DEFAULT1`, and you wish to change it to `hunter2`, type: +
+//`cp 5 pw/DEFAULT1 pw/hunter2 pw/hunter2`
+//* If your index is `2`, your current password is `mypassword`, and you wish to change it to `NewPassw0rd`, type: +
+//`cp 2 pw/mypassword pw/NewPassw0rd pw/NewPassw0rd`
 
 [[Rp]]
-==== Resetting your employee password: `rp`
+==== Resetting your employee password: `resetpw`
 
 Resets your employee password. This sends a temporary password to your email address.
 
-*Format:* `rp INDEX` +
+*Format:* `resetpw INDEX` +
+*Shorthand:* `rp` `INDEX` +
 
-// TODO: SCREENSHOT + EMAIL SCREENSHOT
-****
-* The `INDEX` refers to the index number shown in the most recent employee listing.
-* The `INDEX` *must be a positive integer* 1, 2, 3, ...
-****
+If you forgot your password, you can simply reset your password with your `INDEX` displayed at the right panel as shown in _<<fig-resetPw>>_.
+[[fig-resetPw]]
+.Resetting password in PTMan
+image::resettingpw.png[width="790"]
 
-// TODO: SCREENSHOT BEFORE + AFTER
-Examples:
+//****
+//* The `INDEX` refers to the index number shown in the most recent employee listing.
+//* The `INDEX` *must be a positive integer* 1, 2, 3, ...
+//****
 
-* If your index is `5`, type: +
-`rp 5`
-* If your index is `3`, type: +
-`rp 3`
+After executing `resetpw`, a temporarily password  will be sent to your email registered with your outlet manager as shown in _<<fig-resetPw>>_.
+
+[[fig-resetPw]]
+.Reset password in PTMan
+image::resetpw.png[width="790"]
+
+[NOTE]
+Temporary password should be changed immediately after resetting.
+
+
+
+//Examples:
+
+//* If your index is `5`, type: +
+//`rp 5`
+//* If your index is `3`, type: +
+//`rp 3`
 
 
 === General Commands
