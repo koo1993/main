@@ -876,7 +876,7 @@ Currently, there are two specialized methods in `EmailService` class that can be
 sendTimetableAttachment(String email, String filename)
 sendResetPasswordMessage(String name, String email, String newPassword)
 ----
-`sendTimetableAttachment` crafts a specialized email and send to the specified `email` with attachment from `filename` +
+`sendTimetableAttachment` crafts a specialized email and send to the specified `email` with attachment from `filename`. +
 
 `sendResetPasswordMessage` crafts a specialized email and send to the specified `email` to the intended personnel.
 

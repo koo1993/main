@@ -34,7 +34,7 @@ public class DateUtilTest {
         thrown.expect(NullPointerException.class);
         DateUtil.getMondayOfDate(null);
     }
-}
+
 ```
 ###### \java\seedu\ptman\logic\commands\AddShiftCommandIntegrationTest.java
 ``` java
@@ -48,14 +48,18 @@ public class AddShiftCommandIntegrationTest {
     @Before
     public void setUp() {
         model = new ModelManager(getTypicalPartTimeManagerWithShifts(), new UserPrefs(), new OutletInformation());
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         model.setTrueAdminMode(new Password());
     }
 
     @Test
     public void execute_newShift_success() throws Exception {
-        Shift validShift = new ShiftBuilder().build();
+        Shift validShift = new ShiftBuilder().withDate(LocalDate.now()).build();
 
-        Model expectedModel = new ModelManager(model.getPartTimeManager(), new UserPrefs(), new OutletInformation());
+        Model expectedModel =
+                new ModelManager(getTypicalPartTimeManagerWithShifts(), new UserPrefs(), new OutletInformation());
+        expectedModel.setTrueAdminMode(new Password());
+        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         expectedModel.addShift(validShift);
 
         assertCommandSuccess(prepareCommand(validShift, model), model,
@@ -63,13 +67,26 @@ public class AddShiftCommandIntegrationTest {
     }
 
     @Test
-    public void execute_duplicateShift_throwsCommandException() {
-        Shift shiftInList = model.getPartTimeManager().getShiftList().get(0);
-        assertCommandFailure(prepareCommand(shiftInList, model), model, AddShiftCommand.MESSAGE_DUPLICATE_SHIFT);
+    public void execute_duplicateShift_throwsCommandException() throws DuplicateShiftException {
+        Shift shift = new ShiftBuilder().withDate(LocalDate.now()).build();
+        model.addShift(shift);
+        assertCommandFailure(prepareCommand(shift, model), model, AddShiftCommand.MESSAGE_DUPLICATE_SHIFT);
+    }
+
+    @Test
+    public void execute_invalidShiftDate_throwsCommandException() {
+        Shift shift = new ShiftBuilder().withDate("01-01-10").build();
+        assertCommandFailure(prepareCommand(shift, model), model, AddShiftCommand.MESSAGE_DATE_OVER);
+    }
+
+    @Test
+    public void execute_startTimeAfterEndTime_throwsCommandException() {
+        Shift shift = new ShiftBuilder().withStartTime("1000").withEndTime("0800").build();
+        assertCommandFailure(prepareCommand(shift, model), model, AddShiftCommand.MESSAGE_INVALID_TIME);
     }
 
     /**
-     * Generates a new {@code AddCommand} which upon execution, adds {@code employee} into the {@code model}.
+     * Generates a new {@code AddShiftCommand} which upon execution, adds {@code shift} into the {@code model}.
      */
     private AddShiftCommand prepareCommand(Shift shift, Model model) {
         AddShiftCommand command = new AddShiftCommand(shift);
@@ -96,7 +113,7 @@ public class AddShiftCommandTest {
         ModelStubAcceptingShiftAdded modelStub = new ModelStubAcceptingShiftAdded();
         modelStub.setTrueAdminMode(new Password());
 
-        Shift validShift = new ShiftBuilder().build();
+        Shift validShift = new ShiftBuilder().withDate(LocalDate.now()).build();
         CommandResult commandResult = getAddShiftCommandForShift(validShift, modelStub).execute();
 
         assertEquals(String.format(AddShiftCommand.MESSAGE_SUCCESS, validShift), commandResult.feedbackToUser);
@@ -107,7 +124,7 @@ public class AddShiftCommandTest {
     public void execute_duplicateShift_throwsCommandException() throws Exception {
         ModelStub modelStub = new ModelStubThrowingDuplicateShiftException();
         modelStub.setTrueAdminMode(new Password());
-        Shift validShift = new ShiftBuilder().build();
+        Shift validShift = new ShiftBuilder().withDate(LocalDate.now()).build();
 
         thrown.expect(CommandException.class);
         thrown.expectMessage(AddShiftCommand.MESSAGE_DUPLICATE_SHIFT);
@@ -117,14 +134,14 @@ public class AddShiftCommandTest {
 
     @Test
     public void equals() {
-        AddShiftCommand addMondayAmCommand = new AddShiftCommand(MONDAY_AM);
-        AddShiftCommand addMondayPmCommand = new AddShiftCommand(MONDAY_PM);
+        AddShiftCommand addMondayAmCommand = new AddShiftCommand(SHIFT_MONDAY_AM);
+        AddShiftCommand addMondayPmCommand = new AddShiftCommand(SHIFT_MONDAY_PM);
 
         // same object -> returns true
         assertTrue(addMondayAmCommand.equals(addMondayAmCommand));
 
         // same values -> returns true
-        AddShiftCommand addMondayAmCommandCopy = new AddShiftCommand(MONDAY_AM);
+        AddShiftCommand addMondayAmCommandCopy = new AddShiftCommand(SHIFT_MONDAY_AM);
         assertTrue(addMondayAmCommand.equals(addMondayAmCommandCopy));
 
         // different types -> returns false
@@ -204,7 +221,6 @@ public class AddShiftCommandTest {
             return false;
         }
 
-
         @Override
         public boolean isCorrectTempPwd(Employee employee, Password tempPassword) {
             fail("This method should not be called.");
@@ -269,6 +285,11 @@ public class AddShiftCommandTest {
 
         @Override
         public void updateFilteredEmployeeList(Predicate<Employee> predicate) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void setFilteredShiftListToWeek(LocalDate date) {
             fail("This method should not be called.");
         }
 
@@ -379,33 +400,11 @@ public class ApplyCommandTest {
     }
 
     @Test
-    public void execute_userModeEmployeeNotInShift_success() throws Exception {
-        Employee employee = new EmployeeBuilder().build();
-        ApplyCommand applyCommand = prepareCommandWithPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
-
-        String expectedMessage = String.format(ApplyCommand.MESSAGE_APPLY_SHIFT_SUCCESS,
-                employee.getName(), INDEX_FIRST_SHIFT.getOneBased());
-
-        Model expectedModel = new ModelManager(new PartTimeManager(model.getPartTimeManager()), new UserPrefs(),
-                new OutletInformation());
-        expectedModel.setTrueAdminMode(new Password());
-        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
-
-        Shift editedShift = new Shift(MONDAY_AM);
-        editedShift.addEmployee(ALICE);
-        expectedModel.updateShift(model.getFilteredShiftList().get(0), editedShift);
-        assertCommandSuccess(applyCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
     public void execute_userModeNoPassword_throwsMissingPasswordException() throws Exception {
-        Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
-        model.setFalseAdminMode();
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         Employee employee = new EmployeeBuilder().withName("Present").build();
         Shift shift = new ShiftBuilder().build();
-        model.addEmployee(employee);
-        model.addShift(shift);
+        Model model = prepareModel(false, shift, employee);
+
         ApplyCommand applyCommand = prepareCommandWithoutPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
         thrown.expect(MissingPasswordException.class);
         applyCommand.execute();
@@ -413,13 +412,10 @@ public class ApplyCommandTest {
 
     @Test
     public void execute_userModeIncorrectPassword_throwsInvalidPasswordException() throws Exception {
-        Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
-        model.setFalseAdminMode();
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
         Employee employee = new EmployeeBuilder().withName("Present").withPassword("incorrect").build();
         Shift shift = new ShiftBuilder().build();
-        model.addEmployee(employee);
-        model.addShift(shift);
+        Model model = prepareModel(false, shift, employee);
+
         ApplyCommand applyCommand = prepareCommandWithPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
         thrown.expect(InvalidPasswordException.class);
         applyCommand.execute();
@@ -427,23 +423,16 @@ public class ApplyCommandTest {
 
     @Test
     public void execute_adminModeEmployeeNotInShift_success() throws Exception {
-        Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
-        Model expectedModel = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
-        expectedModel.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
-        model.setTrueAdminMode(new Password());
-        expectedModel.setTrueAdminMode(new Password());
         Employee employee = new EmployeeBuilder().withName("Present").build();
         Employee expectedEmployee = new EmployeeBuilder().withName("Present").build();
         Shift shift = new ShiftBuilder().build();
         Shift expectedShift = new ShiftBuilder().build();
-        model.addEmployee(employee);
-        model.addShift(shift);
         expectedShift.addEmployee(expectedEmployee);
-        expectedModel.addShift(expectedShift);
-        expectedModel.addEmployee(expectedEmployee);
-        ApplyCommand applyCommand = prepareCommandWithoutPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
 
+        Model model = prepareModel(true, shift, employee);
+        Model expectedModel = prepareModel(true, expectedShift, expectedEmployee);
+
+        ApplyCommand applyCommand = prepareCommandWithoutPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
         String expectedMessage =
                 String.format(ApplyCommand.MESSAGE_APPLY_SHIFT_SUCCESS, expectedEmployee.getName(), 1);
 
@@ -452,16 +441,13 @@ public class ApplyCommandTest {
 
     @Test
     public void execute_shiftFull_throwsCommandException()
-            throws ShiftFullException, DuplicateEmployeeException, DuplicateShiftException {
-        Model model = new ModelManager();
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
+            throws ShiftFullException, DuplicateEmployeeException {
         Employee employee1 = new EmployeeBuilder().withName("first").build();
         Employee employee2 = new EmployeeBuilder().withName("second").build();
         Shift shift = new ShiftBuilder().withCapacity("1").build();
         shift.addEmployee(employee1);
-        model.addEmployee(employee1);
-        model.addEmployee(employee2);
-        model.addShift(shift);
+        Model model = prepareModel(false, shift, employee1, employee2);
+
         String expectedMessage = String.format(MESSAGE_SHIFT_FULL, INDEX_FIRST_SHIFT.getOneBased());
         ApplyCommand applyCommand = prepareCommandWithPassword(INDEX_SECOND_EMPLOYEE, INDEX_FIRST_SHIFT, model);
         assertCommandFailure(applyCommand, model, expectedMessage);
@@ -469,18 +455,26 @@ public class ApplyCommandTest {
 
     @Test
     public void execute_duplicateEmployee_throwsCommandException()
-            throws ShiftFullException, DuplicateEmployeeException, DuplicateShiftException {
-        Model model = new ModelManager();
-        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
+            throws ShiftFullException, DuplicateEmployeeException {
         Employee employee1 = new EmployeeBuilder().withName("first").build();
         Shift shift = new ShiftBuilder().withCapacity("2").build();
         shift.addEmployee(employee1);
-        model.addEmployee(employee1);
-        model.addShift(shift);
+        Model model = prepareModel(false, shift, employee1);
+
         ApplyCommand applyCommand = prepareCommandWithPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
         assertCommandFailure(applyCommand, model, MESSAGE_DUPLICATE_EMPLOYEE);
     }
 
+    @Test
+    public void execute_shiftOver_throwsCommandException() {
+        Shift shift = new ShiftBuilder().withDate("01-01-10").withCapacity("3").build();
+        Employee employee = new EmployeeBuilder().build();
+        Model model = prepareModel(false, shift, employee);
+
+        String expectedMessage = String.format(MESSAGE_SHIFT_OVER, INDEX_FIRST_SHIFT.getOneBased());
+        ApplyCommand applyCommand = prepareCommandWithPassword(INDEX_FIRST_EMPLOYEE, INDEX_FIRST_SHIFT, model);
+        assertCommandFailure(applyCommand, model, expectedMessage);
+    }
 
     @Test
     public void equals_sameObject_returnsTrue() {
@@ -565,6 +559,31 @@ public class ApplyCommandTest {
         ApplyCommand applyCommand = new ApplyCommand(employeeIndex, shiftIndex, Optional.empty());
         applyCommand.setData(model, new CommandHistory(), new UndoRedoStack());
         return applyCommand;
+    }
+
+    /**
+     * Returns a {@Code Model} with parameters {@code shift} and {@code employees}.
+     */
+    private Model prepareModel(boolean isAdmin, Shift shift, Employee... employees) {
+        Model model = new ModelManager(new PartTimeManager(), new UserPrefs(), new OutletInformation());
+        if (isAdmin) {
+            model.setTrueAdminMode(new Password());
+        } else {
+            model.setFalseAdminMode();
+        }
+        model.updateFilteredShiftList(Model.PREDICATE_SHOW_ALL_SHIFTS);
+
+        try {
+            model.addShift(shift);
+            for (final Employee employee: employees) {
+                model.addEmployee(employee);
+            }
+        } catch (DuplicateShiftException e) {
+            throw new AssertionError("Shift should not be a duplicate");
+        } catch (DuplicateEmployeeException e) {
+            throw new AssertionError("Employees should not be duplicates");
+        }
+        return model;
     }
 }
 ```
@@ -1241,7 +1260,7 @@ public class UnapplyCommandParserTest {
     @Test
     public void resetData_withDuplicateShifts_throwsAssertionError() {
         List<Employee> newEmployees = Arrays.asList(ALICE);
-        List<Shift> newShifts = Arrays.asList(MONDAY_AM, MONDAY_AM);
+        List<Shift> newShifts = Arrays.asList(SHIFT_MONDAY_AM, SHIFT_MONDAY_AM);
         List<Tag> newTags = new ArrayList<>(ALICE.getTags());
         OutletInformation outlet = new OutletInformation();
         PartTimeManagerStub newData = new PartTimeManagerStub(newEmployees, newTags, newShifts, outlet);
@@ -1318,7 +1337,8 @@ public class DateTest {
 
     @Test
     public void constructor_null_throwsNullPointerException() {
-        Assert.assertThrows(NullPointerException.class, () -> new Date(null));
+        Assert.assertThrows(NullPointerException.class, () -> new Date((String) null));
+        Assert.assertThrows(NullPointerException.class, () -> new Date((LocalDate) null));
     }
 
     @Test
@@ -1393,13 +1413,6 @@ public class DateTest {
 public class ShiftTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void constructor_illegalTime_throwsIllegalArgumentException() {
-        Assert.assertThrows(IllegalArgumentException.class, () ->
-                new Shift(new Date("19-03-18"), new Time("2200"), new Time("1000"), new Capacity("4"))
-        );
-    }
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -1559,7 +1572,7 @@ public class UniqueShiftListTest {
     public void setShift_shiftDoesNotExist_throwsShiftNotFoundException() {
         UniqueShiftList uniqueShiftList = new UniqueShiftList();
         assertThrows(ShiftNotFoundException.class, () -> {
-            uniqueShiftList.setShift(MONDAY_AM, MONDAY_PM);
+            uniqueShiftList.setShift(SHIFT_MONDAY_AM, SHIFT_MONDAY_PM);
         });
     }
 
@@ -1567,10 +1580,10 @@ public class UniqueShiftListTest {
     public void setShift_editedShiftExists_throwsDuplicateShiftException()
             throws DuplicateShiftException {
         UniqueShiftList uniqueShiftList = new UniqueShiftList();
-        uniqueShiftList.add(MONDAY_AM);
-        uniqueShiftList.add(MONDAY_PM);
+        uniqueShiftList.add(SHIFT_MONDAY_AM);
+        uniqueShiftList.add(SHIFT_MONDAY_PM);
         assertThrows(DuplicateShiftException.class, () -> {
-            uniqueShiftList.setShift(MONDAY_AM, MONDAY_PM);
+            uniqueShiftList.setShift(SHIFT_MONDAY_AM, SHIFT_MONDAY_PM);
         });
     }
 
@@ -1578,32 +1591,32 @@ public class UniqueShiftListTest {
     public void setShift_validShifts_shiftReplaced()
             throws DuplicateShiftException, ShiftNotFoundException {
         UniqueShiftList uniqueShiftList = new UniqueShiftList();
-        uniqueShiftList.add(MONDAY_AM);
-        uniqueShiftList.add(MONDAY_PM);
-        uniqueShiftList.setShift(MONDAY_AM, TUESDAY_AM);
-        assertFalse(uniqueShiftList.contains(MONDAY_AM));
-        assertTrue(uniqueShiftList.contains(TUESDAY_AM));
+        uniqueShiftList.add(SHIFT_MONDAY_AM);
+        uniqueShiftList.add(SHIFT_MONDAY_PM);
+        uniqueShiftList.setShift(SHIFT_MONDAY_AM, SHIFT_TUESDAY_AM);
+        assertFalse(uniqueShiftList.contains(SHIFT_MONDAY_AM));
+        assertTrue(uniqueShiftList.contains(SHIFT_TUESDAY_AM));
     }
 
     @Test
     public void setShifts_validShifts_shiftsReplaced() throws DuplicateShiftException {
         UniqueShiftList uniqueShiftList = new UniqueShiftList();
         List<Shift> shiftList = new ArrayList<>();
-        shiftList.add(MONDAY_AM);
-        shiftList.add(MONDAY_PM);
-        shiftList.add(TUESDAY_AM);
+        shiftList.add(SHIFT_MONDAY_AM);
+        shiftList.add(SHIFT_MONDAY_PM);
+        shiftList.add(SHIFT_TUESDAY_AM);
         uniqueShiftList.setShifts(shiftList);
-        assertTrue(uniqueShiftList.contains(MONDAY_AM));
-        assertTrue(uniqueShiftList.contains(MONDAY_PM));
-        assertTrue(uniqueShiftList.contains(TUESDAY_AM));
+        assertTrue(uniqueShiftList.contains(SHIFT_MONDAY_AM));
+        assertTrue(uniqueShiftList.contains(SHIFT_MONDAY_PM));
+        assertTrue(uniqueShiftList.contains(SHIFT_TUESDAY_AM));
     }
 
     @Test
     public void equals_sameUniqueShiftLists_returnsTrue() throws DuplicateShiftException {
         UniqueShiftList uniqueShiftList1 = new UniqueShiftList();
         UniqueShiftList uniqueShiftList2 = new UniqueShiftList();
-        uniqueShiftList1.add(MONDAY_AM);
-        uniqueShiftList2.add(MONDAY_AM);
+        uniqueShiftList1.add(SHIFT_MONDAY_AM);
+        uniqueShiftList2.add(SHIFT_MONDAY_AM);
         assertTrue(uniqueShiftList1.equals(uniqueShiftList2));
     }
 
@@ -1617,7 +1630,7 @@ public class UniqueShiftListTest {
     @Test
     public void remove_shiftDoesNotExist_throwsShiftNotFoundException() {
         UniqueShiftList uniqueShiftList = new UniqueShiftList();
-        assertThrows(ShiftNotFoundException.class, () -> uniqueShiftList.remove(MONDAY_AM));
+        assertThrows(ShiftNotFoundException.class, () -> uniqueShiftList.remove(SHIFT_MONDAY_AM));
     }
 }
 ```
@@ -1628,7 +1641,7 @@ public class UniqueShiftListTest {
  */
 public class ShiftBuilder {
 
-    public static final String DEFAULT_DATE = "04-03-18";
+    public static final LocalDate DEFAULT_DATE = LocalDate.now().plusDays(1);
     public static final String DEFAULT_TIME_START = "0900";
     public static final String DEFAULT_TIME_END = "1600";
     public static final String DEFAULT_CAPACITY = "5";
@@ -1651,6 +1664,14 @@ public class ShiftBuilder {
      * Sets the {@code Date} of the {@code Shift} that we are building.
      */
     public ShiftBuilder withDate(String date) {
+        this.date = new Date(date);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Date} of the {@code Shift} that we are building.
+     */
+    public ShiftBuilder withDate(LocalDate date) {
         this.date = new Date(date);
         return this;
     }
@@ -1736,47 +1757,48 @@ public class ShiftUtil {
  */
 public class TypicalShifts {
 
-    public static final Shift MONDAY_AM = new ShiftBuilder().withDate("19-03-18")
+    public static final Shift SHIFT_MONDAY_AM = new ShiftBuilder().withDate("19-03-18")
             .withStartTime("0800")
             .withEndTime("1300")
             .withCapacity("4").build();
-    public static final Shift MONDAY_PM = new ShiftBuilder().withDate("19-03-18")
+    public static final Shift SHIFT_MONDAY_PM = new ShiftBuilder().withDate("19-03-18")
             .withStartTime("1300")
             .withEndTime("2200")
             .withCapacity("4").build();
-    public static final Shift TUESDAY_AM = new ShiftBuilder().withDate("20-03-18")
+    public static final Shift SHIFT_TUESDAY_AM = new ShiftBuilder().withDate("20-03-18")
             .withStartTime("0900")
             .withEndTime("1200")
             .withCapacity("5").build();
-    public static final Shift TUESDAY_PM = new ShiftBuilder().withDate("20-03-18")
+    public static final Shift SHIFT_TUESDAY_PM = new ShiftBuilder().withDate("20-03-18")
             .withStartTime("1200")
             .withEndTime("2200")
             .withCapacity("3").build();
-    public static final Shift SUNDAY_AM = new ShiftBuilder().withDate("25-03-18")
+    public static final Shift SHIFT_SUNDAY_AM = new ShiftBuilder().withDate("25-03-18")
             .withStartTime("1000")
             .withEndTime("1300")
             .withCapacity("4").build();
-    public static final Shift SUNDAY_PM = new ShiftBuilder().withDate("25-03-18")
+    public static final Shift SHIFT_SUNDAY_PM = new ShiftBuilder().withDate("25-03-18")
             .withStartTime("1300")
             .withEndTime("1700")
             .withCapacity("4").build();
-    public static final Shift WEDNESDAY_AM = new ShiftBuilder().withDate("21-03-18")
+    public static final Shift SHIFT_WEDNESDAY_AM = new ShiftBuilder().withDate("21-03-18")
             .withStartTime("0900")
             .withEndTime("1200")
             .withCapacity("5").build();
-    public static final Shift WEDNESDAY_PM = new ShiftBuilder().withDate("21-03-18")
+    public static final Shift SHIFT_WEDNESDAY_PM = new ShiftBuilder().withDate("21-03-18")
             .withStartTime("1200")
             .withEndTime("2200")
             .withCapacity("3").build();
-    public static final Shift THURSDAY_AM = new ShiftBuilder().withDate("22-03-18")
+    public static final Shift SHIFT_THURSDAY_AM = new ShiftBuilder().withDate("22-03-18")
             .withStartTime("0900")
             .withEndTime("1200")
             .withCapacity("5")
             .withEmployees(new EmployeeBuilder().build()).build();
-    public static final Shift THURSDAY_PM = new ShiftBuilder().withDate("22-03-18")
+    public static final Shift SHIFT_THURSDAY_PM = new ShiftBuilder().withDate("22-03-18")
             .withStartTime("1200")
             .withEndTime("2200")
-            .withCapacity("3").build();
+            .withCapacity("3")
+            .withEmployees(ALICE, BENSON, CARL).build();
 
     public static final Shift SHIFT_RUNNING_OUT = new ShiftBuilder().withDate("22-03-18")
             .withStartTime("0900")
@@ -1804,35 +1826,9 @@ public class TypicalShifts {
         return ptman;
     }
 
-    // TODO: Update this when new structure of Shifts (with dates) is out.
-    // Created because Sunday is causing some problems for the UI tests
-    public static PartTimeManager getTypicalPartTimeManagerWithShiftsWithoutSunday() {
-        PartTimeManager ptman = new PartTimeManager();
-        for (Employee employee : getTypicalEmployees()) {
-            try {
-                ptman.addEmployee(employee);
-            } catch (DuplicateEmployeeException e) {
-                throw new AssertionError("not possible");
-            }
-        }
-        for (Shift shift : getTypicalShiftsWithoutSunday()) {
-            try {
-                ptman.addShift(shift);
-            } catch (DuplicateShiftException e) {
-                throw new AssertionError("not possible");
-            }
-        }
-        return ptman;
-    }
-
     public static List<Shift> getTypicalShifts() {
-        return new ArrayList<>(Arrays.asList(MONDAY_AM, MONDAY_PM, TUESDAY_AM, TUESDAY_PM,
-                WEDNESDAY_AM, WEDNESDAY_PM, SUNDAY_PM, SUNDAY_AM));
-    }
-
-    public static List<Shift> getTypicalShiftsWithoutSunday() {
-        return new ArrayList<>(Arrays.asList(MONDAY_AM, MONDAY_PM, TUESDAY_AM, TUESDAY_PM,
-                WEDNESDAY_AM, WEDNESDAY_PM, SHIFT_RUNNING_OUT));
+        return new ArrayList<>(Arrays.asList(SHIFT_MONDAY_AM, SHIFT_MONDAY_PM, SHIFT_TUESDAY_AM, SHIFT_TUESDAY_PM,
+                SHIFT_WEDNESDAY_AM, SHIFT_WEDNESDAY_PM, SHIFT_THURSDAY_PM, SHIFT_SUNDAY_AM, SHIFT_SUNDAY_PM));
     }
 }
 ```

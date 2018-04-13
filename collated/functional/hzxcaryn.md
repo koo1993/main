@@ -138,6 +138,52 @@ public class OutletNameChangedEvent extends BaseEvent {
 
 }
 ```
+###### \java\seedu\ptman\commons\util\DateUtil.java
+``` java
+    /**
+     * Given a {@code date}, returns the date of the week's Thursday
+     */
+    public static LocalDate getThursdayOfDate(LocalDate date) {
+        requireNonNull(date);
+        int week = getWeekFromDate(date);
+        WeekFields weekFields = WeekFields.of(Locale.FRANCE);
+        return LocalDate.now()
+                .withYear(date.getYear())
+                .with(weekFields.weekOfYear(), week)
+                .with(weekFields.dayOfWeek(), 4);
+    }
+
+
+    /**
+     * Given {@code currDate}, returns the date one week later
+     */
+    public static LocalDate getNextWeekDate(LocalDate currDate) {
+        requireNonNull(currDate);
+        LocalDate nextWeekDate = currDate.plusDays(NUM_DAYS_IN_WEEK);
+        return nextWeekDate;
+    }
+
+    /**
+     * Given {@code currDate}, returns the date one week before
+     */
+    public static LocalDate getPrevWeekDate(LocalDate currDate) {
+        requireNonNull(currDate);
+        LocalDate prevWeekDate = currDate.minusDays(NUM_DAYS_IN_WEEK);
+        return prevWeekDate;
+    }
+
+    /**
+     * Given {@code date}, returns the month and year as a string
+     */
+    public static String getMonthYearFromDate(LocalDate date) {
+        requireNonNull(date);
+        Month month = date.getMonth();
+        int year = date.getYear();
+        return month.name() + " " + year;
+    }
+
+}
+```
 ###### \java\seedu\ptman\logic\commands\ExportCommand.java
 ``` java
 /**
@@ -149,7 +195,8 @@ public class ExportCommand extends Command {
     public static final String COMMAND_ALIAS = "exp";
 
     public static final String COMMAND_FORMAT = "[" + PREFIX_EMAIL + "EMAIL]";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Exports timetable as image. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": "
+            + "Exports timetable as image to the folder your jar file is located. "
             + "If email is stated, timetable image will be sent as an attachment to the stated email. "
             + "Else, timetable image will be saved locally.\n"
             + "Parameters: "
@@ -209,6 +256,96 @@ public class ExportCommand extends Command {
 
 }
 ```
+###### \java\seedu\ptman\logic\commands\ViewShiftCommand.java
+``` java
+/**
+ * Lists all employees in PTMan that belongs to the input shift to the user.
+ */
+public class ViewShiftCommand extends Command {
+
+    public static final String COMMAND_WORD = "viewshift";
+    public static final String COMMAND_ALIAS = "vs";
+
+    public static final String COMMAND_FORMAT = "SHIFT_INDEX";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Lists the employees that belongs to the input shift index.\n"
+            + "Parameters: "
+            + COMMAND_FORMAT
+            + " (must be a positive integer)"
+            + "\nExample: " + COMMAND_WORD + " 2";
+
+    public static final String MESSAGE_SUCCESS = "Listed all employees in shift %1$s.";
+
+    private final Index targetIndex;
+    private Shift targetShift;
+
+    public ViewShiftCommand(Index targetIndex) {
+        this.targetIndex = targetIndex;
+    }
+
+    @Override
+    public CommandResult execute() throws CommandException {
+        List<Shift> shiftList = model.getFilteredShiftList();
+        if (targetIndex.getZeroBased() >= shiftList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_SHIFT_DISPLAYED_INDEX);
+        }
+
+        targetShift = shiftList.get(targetIndex.getZeroBased());
+
+        model.updateFilteredEmployeeList(employee -> targetShift.containsEmployee(employee));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, targetIndex.getOneBased()));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ViewShiftCommand // instanceof handles nulls
+                && this.targetIndex.equals(((ViewShiftCommand) other).targetIndex)); // state check
+    }
+}
+```
+###### \java\seedu\ptman\logic\LogicManager.java
+``` java
+    @Override
+    public OutletInformation getOutletInformation() {
+        return model.getOutletInformation();
+    }
+
+    @Override
+    public LocalDate getCurrentDisplayedDate() {
+        return currentDisplayedDate;
+    }
+
+    @Override
+    public void setFilteredShiftListToNextWeek() {
+        currentDisplayedDate = getNextWeekDate(currentDisplayedDate);
+        model.setFilteredShiftListToWeek(currentDisplayedDate);
+    }
+
+    @Override
+    public void setFilteredShiftListToPrevWeek() {
+        currentDisplayedDate = getPrevWeekDate(currentDisplayedDate);
+        model.setFilteredShiftListToWeek(currentDisplayedDate);
+    }
+
+    @Override
+    public void setFilteredShiftListToCurrentWeek() {
+        currentDisplayedDate = LocalDate.now();
+        model.setFilteredShiftListToWeek(currentDisplayedDate);
+    }
+
+    @Override
+    public void setFilteredShiftListToCustomWeek(LocalDate date) {
+        currentDisplayedDate = date;
+        model.setFilteredShiftListToWeek(date);
+    }
+
+    @Override
+    public boolean isAdminMode() {
+        return model.isAdminMode();
+    }
+}
+```
 ###### \java\seedu\ptman\logic\parser\ExportCommandParser.java
 ``` java
 /**
@@ -239,6 +376,38 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         }
     }
 }
+```
+###### \java\seedu\ptman\logic\parser\ViewShiftCommandParser.java
+``` java
+/**
+ * Parses input arguments and creates a new ViewShiftCommand object
+ */
+public class ViewShiftCommandParser implements Parser<ViewShiftCommand> {
+
+    /**
+     * Parses the given {@code String} of arguments in the context of the ViewShiftCommand
+     * and returns an ViewShiftCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public ViewShiftCommand parse(String args) throws ParseException {
+        try {
+            Index index = ParserUtil.parseIndex(args);
+            return new ViewShiftCommand(index);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewShiftCommand.MESSAGE_USAGE));
+        }
+    }
+}
+```
+###### \java\seedu\ptman\model\ModelManager.java
+``` java
+    @Override
+    public void setFilteredShiftListToWeek(LocalDate date) {
+        updateFilteredShiftList(shift ->
+                getWeekFromDate(shift.getDate().getLocalDate()) == getWeekFromDate(date));
+    }
+
 ```
 ###### \java\seedu\ptman\ui\AdminModeDisplay.java
 ``` java
@@ -305,6 +474,35 @@ public class AdminModeDisplay extends UiPart<Region> {
         } else {
             scrollToTopAndDeselect();
         }
+    }
+
+```
+###### \java\seedu\ptman\ui\MainWindow.java
+``` java
+    private final KeyCombination keyCtrlShiftLeft =
+            new KeyCodeCombination(KeyCode.LEFT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
+    private final KeyCombination keyCtrlShiftRight =
+            new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
+
+```
+###### \java\seedu\ptman\ui\MainWindow.java
+``` java
+    /**
+     * Listens to the {@code keyEvent} that requests to navigate to the prev/next timetable view and handles it.
+     * Windows: Ctrl, Mac: Command
+     */
+    private void setEventHandlerForTimetableWeekChangeRequestEvent() {
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (keyCtrlShiftLeft.match(event)) {
+                event.consume();
+                logger.fine("Timetable view requested to display the previous week.");
+                raise(new TimetableWeekChangeRequestEvent(false, true));
+            } else if (keyCtrlShiftRight.match(event)) {
+                event.consume();
+                logger.fine("Timetable view requested to display the next week.");
+                raise(new TimetableWeekChangeRequestEvent(true, false));
+            }
+        });
     }
 
 ```
@@ -417,7 +615,7 @@ public class TimetablePanel extends UiPart<Region> {
     public static final String TIMETABLE_IMAGE_FILE_FORMAT = "png";
 
     private static final int TIMETABLE_IMAGE_PIXEL_SCALE = 2;
-    private static final String FXML = "TimetableView.fxml";
+    private static final String FXML = "TimetablePanel.fxml";
     private static final int MAX_SLOTS_LEFT_RUNNING_OUT = 3;
 
     private static final Style ENTRY_GREEN_STYLE = Style.STYLE1;
@@ -432,24 +630,41 @@ public class TimetablePanel extends UiPart<Region> {
     private static Calendar timetableOthers;
     private static Calendar timetableRunningOut;
 
+    protected Logic logic;
+
     private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    @FXML
+    private VBox timetableBox;
 
     @FXML
     private CalendarView timetableView;
 
+    @FXML
+    private BorderPane navBar;
+
+    @FXML
+    private Button prevButton;
+
+    @FXML
+    private Button nextButton;
+
+    @FXML
+    private Label monthDisplay;
+
     private ObservableList<Shift> shiftObservableList;
     private OutletInformation outletInformation;
 
-
     private Employee currentEmployee = null;
 
-    protected TimetablePanel(ObservableList<Shift> shiftObservableList, OutletInformation outletInformation) {
+    public TimetablePanel(Logic logic) {
         super(FXML);
 
-        this.shiftObservableList = shiftObservableList;
-        this.outletInformation = outletInformation;
+        this.logic = logic;
+        this.shiftObservableList = logic.getFilteredShiftList();
+        this.outletInformation = logic.getOutletInformation();
 
-        timetableView = new CalendarView();
+        setUpNavBar();
         setTimetableViewStyle();
         showRelevantViewsOnly();
 
@@ -459,10 +674,6 @@ public class TimetablePanel extends UiPart<Region> {
         updateTimetableView();
 
         registerAsAnEventHandler(this);
-    }
-
-    public CalendarView getRoot() {
-        return this.timetableView;
     }
 
     public static Calendar getTimetableAvail() {
@@ -483,6 +694,30 @@ public class TimetablePanel extends UiPart<Region> {
 
     public static Calendar getTimetableOthers() {
         return timetableOthers;
+    }
+
+    /**
+     * Sets up the navigation bar and its behavior
+     */
+    private void setUpNavBar() {
+        setMonthDisplay(logic.getCurrentDisplayedDate());
+        navBar.setLeft(prevButton);
+        navBar.setRight(nextButton);
+        navBar.setCenter(monthDisplay);
+
+        prevButton.setOnAction(value -> Platform.runLater(() -> navigateToPreviousWeek()));
+        nextButton.setOnAction(value -> Platform.runLater(() -> navigateToNextWeek()));
+    }
+
+    /**
+     * Sets the displayed month on the {@code monthDisplay}.
+     * Month is determined by the majority date displayed in the timetable view.
+     * This means that if there are 4 dates that are of month April and 3 dates that are of month May,
+     * April will be displayed on the {@code monthDisplay}.
+     */
+    private void setMonthDisplay(LocalDate date) {
+        LocalDate thursdayDate = DateUtil.getThursdayOfDate(date);
+        monthDisplay.setText(DateUtil.getMonthYearFromDate(thursdayDate));
     }
 
     /**
@@ -534,8 +769,8 @@ public class TimetablePanel extends UiPart<Region> {
         detailedWeekView.setEnableCurrentTimeMarker(false);
     }
 
-    private void setCurrentTime() {
-        timetableView.setToday(LocalDate.now());
+    private void setCurrentDisplayedDate() {
+        timetableView.setDate(logic.getCurrentDisplayedDate());
     }
 
     /**
@@ -570,21 +805,6 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
-     * Checks if currentEmployee is in input shift
-     * @param shift
-     * @return true if currentEmployee is in input shift, false if not.
-     */
-    private boolean isCurrentEmployeeInShift(Shift shift) {
-        UniqueEmployeeList employees = shift.getUniqueEmployeeList();
-        for (Employee employee : employees) {
-            if (employee.equals(currentEmployee)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @return the entryType (a Calendar object) for the shift in the main timetable view, which reflects
      * the color of the shift in the timetableView.
      */
@@ -604,11 +824,29 @@ public class TimetablePanel extends UiPart<Region> {
      * the color of the shift in the timetableView.
      */
     private Calendar getEntryTypeEmployee(Shift shift) {
-        if (isCurrentEmployeeInShift(shift)) {
+        if (shift.containsEmployee(currentEmployee)) {
             return timetableEmployee;
         } else {
             return timetableOthers;
         }
+    }
+
+    /**
+     * Navigates the timetable view to the following week.
+     */
+    private void navigateToNextWeek() {
+        logic.setFilteredShiftListToNextWeek();
+        shiftObservableList = logic.getFilteredShiftList();
+        updateTimetableView();
+    }
+
+    /**
+     * Navigates the timetable view to the previous week.
+     */
+    private void navigateToPreviousWeek() {
+        logic.setFilteredShiftListToPrevWeek();
+        shiftObservableList = logic.getFilteredShiftList();
+        updateTimetableView();
     }
 
     /**
@@ -622,6 +860,7 @@ public class TimetablePanel extends UiPart<Region> {
 
     private void loadMainTimetable() {
         currentEmployee = null;
+        logic.setFilteredShiftListToCurrentWeek();
         updateTimetableView();
     }
 
@@ -629,15 +868,22 @@ public class TimetablePanel extends UiPart<Region> {
      * Replaces timetableView with a new timetable with updated shift and outlet information
      */
     private void updateTimetableView() {
-        setCurrentTime();
+        setCurrentDisplayedDate();
+        setMonthDisplay(logic.getCurrentDisplayedDate());
+        resetTimetableView();
+        setTimetableRange();
+    }
+
+    /**
+     * Clear current timetable view and resets it to a new timetable view with updated shifts.
+     */
+    private void resetTimetableView() {
         timetableView.getCalendarSources().clear();
         CalendarSource calendarSource = new CalendarSource("Shifts");
         addCalendars(calendarSource);
 
         setShifts();
         timetableView.getCalendarSources().add(calendarSource);
-
-        setTimetableRange();
     }
 
     /**
@@ -673,15 +919,15 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
-     * Takes a snapshot of the timetable view
+     * Takes a snapshot of the timetable panel
      */
     private WritableImage takeSnapshot() {
         WritableImage timetableWritableImage = new WritableImage(
-                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableView.getWidth()),
-                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableView.getHeight()));
+                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableBox.getWidth()),
+                (int) (TIMETABLE_IMAGE_PIXEL_SCALE * timetableBox.getHeight()));
         SnapshotParameters spa = new SnapshotParameters();
         spa.setTransform(Transform.scale(TIMETABLE_IMAGE_PIXEL_SCALE, TIMETABLE_IMAGE_PIXEL_SCALE));
-        WritableImage snapshot = timetableView.snapshot(spa, timetableWritableImage);
+        WritableImage snapshot = timetableBox.snapshot(spa, timetableWritableImage);
         return snapshot;
     }
 
@@ -722,7 +968,7 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     @Subscribe
-    private void handleShiftChangedEvent(PartTimeManagerChangedEvent event) {
+    private void handlePartTimeManagerChangedEvent(PartTimeManagerChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event) + ": Updating timetable view....");
         Platform.runLater(() -> updateTimetableView());
     }
@@ -735,6 +981,21 @@ public class TimetablePanel extends UiPart<Region> {
                 loadEmployeeTimetable(event.getNewSelection().employee);
             } else {
                 loadMainTimetable();
+            }
+        });
+    }
+
+    @Subscribe
+    private void handleTimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent event) {
+        Platform.runLater(() -> {
+            if (event.isNext && !event.isPrev) {
+                logger.info(LogsCenter.getEventHandlingLogMessage(event)
+                        + ": Navigating timetable to the next week....");
+                navigateToNextWeek();
+            } else if (event.isPrev && !event.isNext) {
+                logger.info(LogsCenter.getEventHandlingLogMessage(event)
+                        + ": Navigating timetable to the previous week....");
+                navigateToPreviousWeek();
             }
         });
     }
@@ -805,7 +1066,7 @@ public class TimetablePanel extends UiPart<Region> {
               </padding>
             </StackPane>
 
-            <StackPane fx:id="timetableViewPlaceholder" prefWidth="340">
+            <StackPane fx:id="timetablePanelPlaceholder" prefWidth="340">
               <padding>
                 <Insets top="5" right="15" bottom="10" left="15" />
               </padding>
@@ -1058,6 +1319,19 @@ public class TimetablePanel extends UiPart<Region> {
     -fx-text-fill: #010504;
 }
 
+.nav-bar-content {
+    -fx-padding: 6 15 6 15;
+}
+
+.nav-bar-label {
+    -fx-font-family: "Gotham Rounded Medium";
+    -fx-font-size: 16px;
+}
+
+.nav-bar-button {
+    -fx-font-size: 17px;
+}
+
 .anchor-pane {
      -fx-background-color: #FFFFFF;
 }
@@ -1161,32 +1435,26 @@ public class TimetablePanel extends UiPart<Region> {
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
 .button {
-    -fx-padding: 5 22 5 22;
-    -fx-border-color: #e2e2e2;
-    -fx-border-width: 2;
+    -fx-border-width: 0;
     -fx-background-radius: 0;
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: transparent;
     -fx-font-family: "Proxima Nova Alt", "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: #7A8492;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .button:hover {
-    -fx-background-color: #3a3a3a;
-}
-
-.button:pressed, .button:default:hover:pressed {
-  -fx-background-color: white;
-  -fx-text-fill: #FFFFFF;
+    -fx-cursor: hand;
+    -fx-text-fill: #8E9AAA;
 }
 
 .button:focused {
-    -fx-border-color: white, white;
-    -fx-border-width: 1, 1;
-    -fx-border-style: solid, segments(1, 1);
-    -fx-border-radius: 0, 0;
-    -fx-border-insets: 1 1 1 1, 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0, 0;
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-text-fill: #8E9AAAF;
 }
 
 .button:disabled, .button:default:disabled {
@@ -1267,13 +1535,13 @@ public class TimetablePanel extends UiPart<Region> {
 
 #outletInformation .label {
     -fx-font-family: "Gotham Rounded Book";
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-text-fill: #7A8492;
 }
 
 #announcement {
     -fx-font-family: "Gotham Rounded Book";
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-text-fill: #7A8492;
     -fx-padding: 0 5 10 20;
 }
@@ -1362,11 +1630,30 @@ public class TimetablePanel extends UiPart<Region> {
     -fx-background-color: #FFC107;
 }
 ```
-###### \resources\view\TimetableView.fxml
+###### \resources\view\TimetablePanel.fxml
 ``` fxml
-<StackPane xmlns="http://javafx.com/javafx/8.0.111">
-    <children>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" />
-    </children>
+
+<?import javafx.scene.control.Button?>
+<StackPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox fx:id="timetableBox">
+        <BorderPane fx:id="navBar">
+            <left><StackPane styleClass="nav-bar-content">
+                <Button fx:id="prevButton" styleClass="nav-bar-button">
+                    <graphic><FontAwesomeIconView fill="#7A8492" glyphName="ANGLE_LEFT" size="17.0" /></graphic>
+                </Button>
+            </StackPane></left>
+
+            <center><StackPane styleClass="nav-bar-content">
+                <Label fx:id="monthDisplay" styleClass="nav-bar-label" />
+            </StackPane></center>
+
+            <right><StackPane styleClass="nav-bar-content">
+                <Button fx:id="nextButton" styleClass="nav-bar-button">
+                    <graphic><FontAwesomeIconView fill="#7A8492" glyphName="ANGLE_RIGHT" size="17.0" /></graphic>
+                </Button>
+            </StackPane></right>
+        </BorderPane>
+        <CalendarView fx:id="timetableView" />
+    </VBox>
 </StackPane>
 ```

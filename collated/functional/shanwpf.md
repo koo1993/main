@@ -5,6 +5,9 @@
  * Utility methods for handling dates
  */
 public class DateUtil {
+
+    private static final int NUM_DAYS_IN_WEEK = 7;
+
     /**
      * Returns the week number for {@code date} from the start of the year
      */
@@ -28,7 +31,7 @@ public class DateUtil {
                 .with(weekFields.weekOfYear(), week)
                 .with(weekFields.dayOfWeek(), 1);
     }
-}
+
 ```
 ###### \java\seedu\ptman\logic\commands\AddShiftCommand.java
 ``` java
@@ -55,11 +58,13 @@ public class AddShiftCommand extends UndoableCommand {
 
     public static final String MESSAGE_SUCCESS = "New shift added: %1$s";
     public static final String MESSAGE_DUPLICATE_SHIFT = "This shift already exists in PTMan";
+    public static final String MESSAGE_DATE_OVER = "You cannot add a shift to a date that is already over";
+    public static final String MESSAGE_INVALID_TIME = "The start time of the shift must be before the end time";
 
     private final Shift toAdd;
 
     /**
-     * Creates an AddCommand to add the specified {@code Shift}
+     * Creates an AddShiftCommand to add the specified {@code Shift}
      */
     public AddShiftCommand(Shift shift) {
         requireNonNull(shift);
@@ -74,13 +79,23 @@ public class AddShiftCommand extends UndoableCommand {
             throw new CommandException(MESSAGE_ACCESS_DENIED);
         }
 
+        LocalDate shiftDate = toAdd.getDate().getLocalDate();
+        if (shiftDate.isBefore(LocalDate.now())) {
+            throw new CommandException(MESSAGE_DATE_OVER);
+        }
+
+        Time startTime = toAdd.getStartTime();
+        Time endTime = toAdd.getEndTime();
+        if (startTime.isAfter(endTime)) {
+            throw new CommandException(MESSAGE_INVALID_TIME);
+        }
+
         try {
             model.addShift(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         } catch (DuplicateShiftException e) {
             throw new CommandException(MESSAGE_DUPLICATE_SHIFT);
         }
-
     }
 
     @Override
@@ -101,7 +116,7 @@ public class ApplyCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "apply";
     public static final String COMMAND_ALIAS = "ap";
 
-    public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX (must be a positive integer) "
+    public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX "
             + "SHIFT_INDEX "
             + "[" + PREFIX_PASSWORD + "PASSWORD]";
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -113,6 +128,7 @@ public class ApplyCommand extends UndoableCommand {
     public static final String MESSAGE_APPLY_SHIFT_SUCCESS = "Employee %1$s applied for shift %2$s";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE = "Employee is already in the shift";
     public static final String MESSAGE_SHIFT_FULL = "Shift %1$s is full";
+    public static final String MESSAGE_SHIFT_OVER = "Shift %1$s has already passed";
 
     private final Index employeeIndex;
     private final Index shiftIndex;
@@ -169,6 +185,11 @@ public class ApplyCommand extends UndoableCommand {
 
         applicant = lastShownList.get(employeeIndex.getZeroBased());
         shiftToApply = shiftList.get(shiftIndex.getZeroBased());
+
+        if (shiftToApply.isOver()) {
+            throw new CommandException(String.format(MESSAGE_SHIFT_OVER, shiftIndex.getOneBased()));
+        }
+
         editedShift = new Shift(shiftToApply);
         try {
             editedShift.addEmployee(applicant);
@@ -660,6 +681,11 @@ public class Date {
         this.date = LocalDate.parse(date, DateTimeFormatter.ofPattern(STRING_DATE_PATTERN));
     }
 
+    public Date(LocalDate date) {
+        requireNonNull(date);
+        this.date = date;
+    }
+
     /**
      * Returns true if a given string is a valid date.
      * @param test
@@ -703,6 +729,14 @@ public class Date {
     public LocalDate getLocalDate() {
         return date;
     }
+
+    public boolean isOver() {
+        return date.isBefore(LocalDate.now());
+    }
+
+    public boolean isCurrentDate() {
+        return date.isEqual(LocalDate.now());
+    }
 }
 ```
 ###### \java\seedu\ptman\model\shift\exceptions\DuplicateShiftException.java
@@ -712,7 +746,7 @@ public class Date {
  */
 public class DuplicateShiftException extends DuplicateDataException {
     public DuplicateShiftException() {
-        super("Operation would result in duplicate employees");
+        super("Operation would result in duplicate shifts");
     }
 }
 ```
@@ -736,7 +770,6 @@ public class ShiftNotFoundException extends Exception {}
  * Represents a shift that employees can work in.
  */
 public class Shift {
-    public static final String MESSAGE_SHIFT_CONSTRAINTS = "Start time should be after the end time.";
     private Time startTime;
     private Time endTime;
     private Date date;
@@ -745,7 +778,6 @@ public class Shift {
 
     public Shift(Date date, Time startTime, Time endTime, Capacity capacity) {
         requireAllNonNull(startTime, endTime, capacity);
-        checkArgument(endTime.isAfter(startTime), MESSAGE_SHIFT_CONSTRAINTS);
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -764,7 +796,6 @@ public class Shift {
 
     public Shift(Date date, Time startTime, Time endTime, Capacity capacity, Set<Employee> employees) {
         requireAllNonNull(date, startTime, endTime, capacity, employees);
-        checkArgument(endTime.isAfter(startTime), MESSAGE_SHIFT_CONSTRAINTS);
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;
@@ -808,7 +839,6 @@ public class Shift {
         return startTime.equals(shift.startTime)
                 && endTime.equals(shift.endTime)
                 && date.equals(shift.date)
-                && uniqueEmployeeList.equals(shift.uniqueEmployeeList)
                 && capacity.equals(shift.capacity);
     }
 
@@ -850,10 +880,8 @@ public class Shift {
     public int compareTo(Shift other) {
         if (date.equals(other.getDate())) {
             return startTime.compareTo(other.getStartTime());
-        } else if (date.compareTo(other.getDate()) < 0) {
-            return -1;
         } else {
-            return 1;
+            return date.compareTo(other.getDate());
         }
     }
 
@@ -894,6 +922,10 @@ public class Shift {
 
     public Set<Employee> getEmployees() {
         return Collections.unmodifiableSet(uniqueEmployeeList.toSet());
+    }
+
+    public boolean isOver() {
+        return date.isOver() || (date.isCurrentDate() && startTime.isOver());
     }
 }
 ```
@@ -961,6 +993,10 @@ public class Time {
 
     public LocalTime getLocalTime() {
         return time;
+    }
+
+    public boolean isOver() {
+        return time.isBefore(LocalTime.now());
     }
 }
 ```

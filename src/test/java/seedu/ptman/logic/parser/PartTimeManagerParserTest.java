@@ -244,7 +244,7 @@ public class PartTimeManagerParserTest {
         assertEquals(new ChangeAdminPasswordCommand(default1PasswordsTodefault2), command);
     }
 
-    //@@author SunBangJie
+    //@@author SunBangjie
     @Test
     public void parseCommand_editoutlet() throws Exception {
         String name = "EditedOutlet";

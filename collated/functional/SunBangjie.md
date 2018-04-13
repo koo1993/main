@@ -986,6 +986,8 @@ public interface OutletInformationStorage {
     void saveOutletInformation(OutletInformation outletInformation) throws IOException;
 
     void saveOutletInformation(OutletInformation outletInformation, String filePath) throws IOException;
+
+    void backupOutletInformation(OutletInformation outletInformation) throws IOException;
 }
 ```
 ###### \java\seedu\ptman\storage\StorageManager.java
@@ -1027,6 +1029,21 @@ public interface OutletInformationStorage {
         } catch (IOException e) {
             raise(new DataSavingExceptionEvent(e));
         }
+    }
+
+    // ================ backup methods ==============================
+
+```
+###### \java\seedu\ptman\storage\StorageManager.java
+``` java
+    @Override
+    public void backupPartTimeManager(ReadOnlyPartTimeManager partTimeManager) throws IOException {
+        partTimeManagerStorage.backupPartTimeManager(partTimeManager);
+    }
+
+    @Override
+    public void backupOutletInformation(OutletInformation outletInformation) throws IOException {
+        outletInformationStorage.backupOutletInformation(outletInformation);
     }
 }
 ```
@@ -1928,6 +1945,7 @@ public class XmlOutletFileStorage {
 public class XmlOutletInformationStorage implements OutletInformationStorage {
 
     private static final Logger logger = LogsCenter.getLogger(XmlOutletInformationStorage.class);
+    private static final String BACKUP_FILE_EXTENSION = ".backup";
 
     private String filePath;
 
@@ -1990,6 +2008,24 @@ public class XmlOutletInformationStorage implements OutletInformationStorage {
         File file = new File(filePath);
         FileUtil.createIfMissing(file);
         XmlOutletFileStorage.saveDataToFile(file, new XmlAdaptedOutletInformation(outletInformation));
+    }
+
+    @Override
+    public void backupOutletInformation(OutletInformation outletInformation) throws IOException {
+        saveOutletInformation(outletInformation, addFileNameExtentionIfNotNull(filePath));
+    }
+
+    /**
+     *
+     * @param filePath location of data.
+     * @return
+     */
+    private String addFileNameExtentionIfNotNull(String filePath) {
+        if (filePath == null) {
+            return null;
+        } else {
+            return filePath + BACKUP_FILE_EXTENSION;
+        }
     }
 }
 ```
