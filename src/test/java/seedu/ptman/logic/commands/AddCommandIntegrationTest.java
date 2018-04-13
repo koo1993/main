@@ -33,7 +33,7 @@ public class AddCommandIntegrationTest {
     }
 
     @Test
-    public void execute_newEmployeeNotAdminMode_accessDenied() throws Exception {
+    public void execute_notInAdminModeNewEmployee_accessDenied() throws Exception {
         model.setFalseAdminMode();
         Employee validEmployee = new EmployeeBuilder().build();
 

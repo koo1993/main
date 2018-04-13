@@ -35,31 +35,43 @@ public class ChangeAdminPasswordCommandTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
+    private ArrayList<String> default1PasswordsTodefault2 = new ArrayList<>();
 
     @Before
     public void setup() {
         model.setTrueAdminMode(new Password());
+        default1PasswordsTodefault2.add("DEFAULT1");
+        default1PasswordsTodefault2.add("DEFAULT2");
+        default1PasswordsTodefault2.add("DEFAULT2");
     }
 
     @Test
-    public void execute_notAdminModeValidInputs_accessDenied() {
+    public void constructor_nullPassword_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        new ChangeAdminPasswordCommand(null);
+    }
+
+    @Test
+    public void constructor_passwordsNotFullyTabulated_throwsNullPointerException() {
+        ArrayList<String> incompletePasswords  = new ArrayList<>();
+        incompletePasswords.add("DEFAULT1");
+        incompletePasswords.add("DEFAULT2");
+        thrown.expect(IndexOutOfBoundsException.class);
+        new ChangeAdminPasswordCommand(incompletePasswords);
+    }
+
+    @Test
+    public void execute_notInAdminModeValidInputs_accessDenied() {
         model.setFalseAdminMode();
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
-        assertCommandFailure(prepareCommand(passwords), model, MESSAGE_ACCESS_DENIED);
+        assertCommandFailure(prepareCommand(default1PasswordsTodefault2), model, MESSAGE_ACCESS_DENIED);
     }
 
     @Test
     public void execute_validInputs_success() throws Exception {
         Employee employeeToEdit = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
 
-        ChangeAdminPasswordCommand changePwCommand = prepareCommand(passwords);
+
+        ChangeAdminPasswordCommand changePwCommand = prepareCommand(default1PasswordsTodefault2);
 
         String expectedMessage = String.format(ChangeAdminPasswordCommand.MESSAGE_SUCCESS, employeeToEdit.getName());
 
@@ -68,56 +80,50 @@ public class ChangeAdminPasswordCommandTest {
         expectedModel.setTrueAdminMode(new Password());
 
         Password newPassword = new Password();
-        newPassword.createPassword(passwords.get(1));
+        newPassword.createPassword(default1PasswordsTodefault2.get(1));
 
         expectedModel.setAdminPassword(newPassword);
-
 
         assertCommandSuccess(changePwCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_invalidPassword_throwsInvalidPasswordException() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("wrongpassword");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
+        ArrayList<String> wrongPasswords = new ArrayList<>();
+        wrongPasswords.add("wrongpassword");
+        wrongPasswords.add("DEFAULT2");
+        wrongPasswords.add("DEFAULT2");
         thrown.expect(InvalidPasswordException.class);
-        prepareCommand(passwords).execute();
+        prepareCommand(wrongPasswords).execute();
     }
 
     @Test
     public void execute_unmatchedNewPassword_throwsCommandException() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT3");
-        passwords.add("DEFAULT4");
+        ArrayList<String> unmatchNewpasswords = new ArrayList<>();
+        unmatchNewpasswords.add("DEFAULT1");
+        unmatchNewpasswords.add("DEFAULT3");
+        unmatchNewpasswords.add("DEFAULT4");
 
-        ChangeAdminPasswordCommand changePwCommand = prepareCommand(passwords);
+        ChangeAdminPasswordCommand changePwCommand = prepareCommand(unmatchNewpasswords);
         assertCommandFailure(changePwCommand, model, ChangeAdminPasswordCommand.MESSAGE_INVALID_CONFIMREDPASSWORD);
     }
 
 
     @Test
     public void equals() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        ArrayList<String> passwords2 = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
+        ArrayList<String> default1PasswordsTodefault3 = new ArrayList<>();
+        default1PasswordsTodefault3.add("DEFAULT1");
+        default1PasswordsTodefault3.add("DEFAULT3");
+        default1PasswordsTodefault3.add("DEFAULT3");
 
-        passwords2.add("DEFAULT1");
-        passwords2.add("DEFAULT3");
-        passwords2.add("DEFAULT3");
-
-        ChangeAdminPasswordCommand changePwFirstCommand = prepareCommand(passwords);
-        ChangeAdminPasswordCommand changePwSecondCommand = prepareCommand(passwords2);
+        ChangeAdminPasswordCommand changePwFirstCommand = prepareCommand(default1PasswordsTodefault2);
+        ChangeAdminPasswordCommand changePwSecondCommand = prepareCommand(default1PasswordsTodefault3);
 
         // same object -> returns true
         assertTrue(changePwFirstCommand.equals(changePwFirstCommand));
 
         // same values -> returns true
-        ChangeAdminPasswordCommand changePwFirstCommandCopy = prepareCommand(passwords);
+        ChangeAdminPasswordCommand changePwFirstCommandCopy = prepareCommand(default1PasswordsTodefault2);
         assertTrue(changePwFirstCommand.equals(changePwFirstCommandCopy));
 
         // different types -> returns false

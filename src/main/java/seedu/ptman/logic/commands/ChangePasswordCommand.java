@@ -65,6 +65,9 @@ public class ChangePasswordCommand extends Command {
     public ChangePasswordCommand(Index index, ArrayList<String> passwords) {
         requireNonNull(index);
         requireNonNull(passwords);
+        if (passwords.size() < 3) {
+            throw new IndexOutOfBoundsException();
+        }
         this.index = index;
         this.passwords = passwords;
     }
@@ -89,11 +92,10 @@ public class ChangePasswordCommand extends Command {
         try {
             model.updateEmployee(employeeToEdit, editedEmployee);
         } catch (DuplicateEmployeeException dpe) {
-            throw new CommandException("MESSAGE_DUPLICATE_EMPLOYEE");
+            throw new AssertionError("The target employee should not be duplicated");
         } catch (EmployeeNotFoundException pnfe) {
             throw new AssertionError("The target employee cannot be missing");
         }
-
         return new CommandResult(String.format(MESSAGE_SUCCESS, editedEmployee.getName()));
     }
 

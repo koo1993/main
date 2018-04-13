@@ -11,6 +11,9 @@ import seedu.ptman.model.ModelManager;
 import seedu.ptman.model.Password;
 
 //@@author koo1993
+/**
+ * Contains integration tests (interaction with the Model) for {@code LogOutAdminCommand}.
+ */
 public class LogOutAdminCommandTest {
     private final Password defaultPassword = new Password();
 

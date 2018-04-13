@@ -11,6 +11,7 @@ import static seedu.ptman.testutil.TypicalIndexes.INDEX_SECOND_EMPLOYEE;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -39,68 +40,97 @@ import seedu.ptman.model.tag.Tag;
  * {@code ChangePasswordCommand}.
  */
 public class ChangePasswordCommandTest {
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
 
+    private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
+    private ArrayList<String> default1PasswordsTodefault2 = new ArrayList<>();
+
+    @Before
+    public void setUpPassword() {
+        default1PasswordsTodefault2.add("DEFAULT1");
+        default1PasswordsTodefault2.add("DEFAULT2");
+        default1PasswordsTodefault2.add("DEFAULT2");
+    }
+
+    @Test
+    public void constructor_nullPassword_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, null);
+
+    }
+
+    @Test
+    public void constructor_nullIndex_throwsNullPointerException() {
+        thrown.expect(NullPointerException.class);
+        new ChangePasswordCommand(null, default1PasswordsTodefault2);
+    }
+
+    @Test
+    public void constructor_passwordsNotFullyTabulated_throwsNullPointerException() {
+        ArrayList<String> incompletePasswords  = new ArrayList<>();
+        incompletePasswords.add("DEFAULT1");
+        incompletePasswords.add("DEFAULT2");
+        thrown.expect(IndexOutOfBoundsException.class);
+        new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, incompletePasswords);
+    }
 
     @Test
     public void execute_validInputs_success() throws Exception {
         Employee employeeToEdit = model.getFilteredEmployeeList().get(INDEX_FIRST_EMPLOYEE.getZeroBased());
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
 
-        ChangePasswordCommand changePwCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, passwords);
+
+        ChangePasswordCommand changePwCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, default1PasswordsTodefault2);
 
         String expectedMessage = String.format(ChangePasswordCommand.MESSAGE_SUCCESS, employeeToEdit.getName());
 
         ModelManager expectedModel = new ModelManager(model.getPartTimeManager(),
                 new UserPrefs(), new OutletInformation());
         expectedModel.updateEmployee(employeeToEdit, createNewPasswordEmployee(employeeToEdit,
-                ParserUtil.parsePassword(passwords.get(1))));
+                ParserUtil.parsePassword(default1PasswordsTodefault2.get(1))));
 
         assertCommandSuccess(changePwCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_invalidPassword_throwsInvalidPasswordException() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("wrongpassword");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
+        ArrayList<String> wrongPasswords = new ArrayList<>();
+        wrongPasswords.add("wrongpassword");
+        wrongPasswords.add("DEFAULT2");
+        wrongPasswords.add("DEFAULT2");
         thrown.expect(InvalidPasswordException.class);
-        prepareCommand(INDEX_FIRST_EMPLOYEE, passwords).execute();
+        prepareCommand(INDEX_FIRST_EMPLOYEE, wrongPasswords).execute();
     }
 
 
     @Test
     public void execute_unmatchedNewPassword_throwsCommandException() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT3");
-        passwords.add("DEFAULT4");
+        ArrayList<String> unmatchConfirmPasswords = new ArrayList<>();
+        unmatchConfirmPasswords.add("DEFAULT1");
+        unmatchConfirmPasswords.add("DEFAULT3");
+        unmatchConfirmPasswords.add("DEFAULT4");
 
-        ChangePasswordCommand changePwCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, passwords);
+        ChangePasswordCommand changePwCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, unmatchConfirmPasswords);
         assertCommandFailure(changePwCommand, model, ChangePasswordCommand.MESSAGE_INVALID_CONFIMREDPASSWORD);
     }
 
     @Test
     public void equals() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
-        ChangePasswordCommand changePwFirstCommand = prepareCommand(INDEX_FIRST_EMPLOYEE, passwords);
-        ChangePasswordCommand changePwSecondCommand = prepareCommand(INDEX_SECOND_EMPLOYEE, passwords);
+        ArrayList<String> default1PasswordsTodefault3 = new ArrayList<>();
+        default1PasswordsTodefault3.add("DEFAULT1");
+        default1PasswordsTodefault3.add("DEFAULT3");
+        default1PasswordsTodefault3.add("DEFAULT3");
+        ChangePasswordCommand changePwFirstCommand =
+                prepareCommand(INDEX_FIRST_EMPLOYEE, default1PasswordsTodefault2);
+        ChangePasswordCommand changePwSecondCommand =
+                prepareCommand(INDEX_SECOND_EMPLOYEE, default1PasswordsTodefault3);
 
         // same object -> returns true
         assertTrue(changePwFirstCommand.equals(changePwFirstCommand));
 
         // same values -> returns true
-        ChangePasswordCommand changePwFirstCommandCopy = prepareCommand(INDEX_FIRST_EMPLOYEE, passwords);
+        ChangePasswordCommand changePwFirstCommandCopy =
+                prepareCommand(INDEX_FIRST_EMPLOYEE, default1PasswordsTodefault2);
         assertTrue(changePwFirstCommand.equals(changePwFirstCommandCopy));
 
         // different types -> returns false

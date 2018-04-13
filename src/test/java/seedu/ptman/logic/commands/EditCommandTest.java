@@ -149,6 +149,7 @@ public class EditCommandTest {
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
     }
 
+    //@@author koo1993
     @Test
     public void execute_notInAdminMode_accessDenied() throws Exception {
         model.setFalseAdminMode();
@@ -159,6 +160,7 @@ public class EditCommandTest {
         assertCommandFailure(editCommand, model, Messages.MESSAGE_ACCESS_DENIED);
     }
 
+    //@@author
     /**
      * Edit filtered list where index is larger than size of filtered list,
      * but smaller than size of ptman book

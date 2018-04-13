@@ -75,13 +75,4 @@ public class PasswordTest {
 
     }
 
-    @Test
-    public void changeHash() {
-        String encodedHash = "wkqTFuX6NX3hucWqn2ZxB24cRo73LssRq7IDOk6Zx00="; // hash code for DEFAULT1
-        Password password = new Password(encodedHash);
-
-        assertFalse(password.isCorrectPassword("newPassword"));
-        assertTrue(password.isCorrectPassword("DEFAULT1"));
-    }
-
 }

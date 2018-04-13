@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -72,8 +73,15 @@ import seedu.ptman.testutil.ShiftUtil;
 public class PartTimeManagerParserTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
+    private ArrayList<String> default1PasswordsTodefault2 = new ArrayList<>();
     private final PartTimeManagerParser parser = new PartTimeManagerParser();
+
+    @Before
+    public void setUpPasswords() {
+        default1PasswordsTodefault2.add("DEFAULT1");
+        default1PasswordsTodefault2.add("DEFAULT2");
+        default1PasswordsTodefault2.add("DEFAULT2");
+    }
 
     @Test
     public void parseCommand_logOut() throws Exception {
@@ -204,52 +212,36 @@ public class PartTimeManagerParserTest {
     //@@author koo1993
     @Test
     public void parseCommand_changePassword() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
         ChangePasswordCommand command =
                 (ChangePasswordCommand) parser.parseCommand(ChangePasswordCommand.COMMAND_WORD
                         + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + " pw/DEFAULT1 " + " pw/DEFAULT2 "
                         + " pw/DEFAULT2 ");
-        assertEquals(new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, passwords), command);
+        assertEquals(new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, default1PasswordsTodefault2), command);
     }
 
     @Test
     public void parseCommand_changePasswordAlias() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
         ChangePasswordCommand command =
                 (ChangePasswordCommand) parser.parseCommand(ChangePasswordCommand.COMMAND_ALIAS
                         + " " + INDEX_FIRST_EMPLOYEE.getOneBased() + " " + " pw/DEFAULT1 " + " pw/DEFAULT2 "
                         + " pw/DEFAULT2 ");
-        assertEquals(new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, passwords), command);
+        assertEquals(new ChangePasswordCommand(INDEX_FIRST_EMPLOYEE, default1PasswordsTodefault2), command);
     }
 
     @Test
     public void parseCommand_changeMasterPassword() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
         ChangeAdminPasswordCommand command =
                 (ChangeAdminPasswordCommand) parser.parseCommand(ChangeAdminPasswordCommand.COMMAND_WORD
                         + " pw/DEFAULT1 " + " pw/DEFAULT2 " + " pw/DEFAULT2 ");
-        assertEquals(new ChangeAdminPasswordCommand(passwords), command);
+        assertEquals(new ChangeAdminPasswordCommand(default1PasswordsTodefault2), command);
     }
 
     @Test
     public void parseCommand_changeMasterPasswordAlias() throws Exception {
-        ArrayList<String> passwords = new ArrayList<>();
-        passwords.add("DEFAULT1");
-        passwords.add("DEFAULT2");
-        passwords.add("DEFAULT2");
         ChangeAdminPasswordCommand command =
                 (ChangeAdminPasswordCommand) parser.parseCommand(ChangeAdminPasswordCommand.COMMAND_ALIAS
                         + " pw/DEFAULT1 " + " pw/DEFAULT2 " + " pw/DEFAULT2 ");
-        assertEquals(new ChangeAdminPasswordCommand(passwords), command);
+        assertEquals(new ChangeAdminPasswordCommand(default1PasswordsTodefault2), command);
     }
 
     //@@author SunBangJie

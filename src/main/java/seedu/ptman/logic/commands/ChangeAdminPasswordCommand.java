@@ -44,6 +44,9 @@ public class ChangeAdminPasswordCommand extends Command {
      */
     public ChangeAdminPasswordCommand(ArrayList<String> passwords) {
         requireNonNull(passwords);
+        if (passwords.size() < 3) {
+            throw new IndexOutOfBoundsException();
+        }
         this.passwords = passwords;
     }
 

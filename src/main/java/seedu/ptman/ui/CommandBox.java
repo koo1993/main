@@ -195,7 +195,7 @@ public class CommandBox extends UiPart<Region> {
 
     //@@author koo1993
     /**
-     * class to set up caret colour for textField and skinning of password
+     * TextFieldSkin class to set up caret colour for textField and skinning of password
      */
     public class PasswordFieldSkinAndCaret extends TextFieldSkin {
         public static final String ASTERISK = "*";

@@ -31,6 +31,10 @@ import seedu.ptman.model.tag.Tag;
 
 
 //@@author koo1993
+
+/**
+ * Test behaviour of LogInAdminCommand with a studmodel.
+ */
 public class LogInAdminCommandTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -52,7 +56,6 @@ public class LogInAdminCommandTest {
     }
 
     @Test
-
     public void execute_correctPassword_alreadyLoggedIn() throws Exception {
         ModelStubAcceptingAllPassword modelStub = new ModelStubAcceptingAllPassword();
         modelStub.setIsAdminMode(true); // already in adminMode
