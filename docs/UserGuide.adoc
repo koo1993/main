@@ -85,7 +85,7 @@ The default employee password is `DEFAULT1`.
 
 [IMPORTANT]
 It is crucial to change the default employee password to prevent unauthorized execution of employee commands.
-You may refer to <<Changing your employee password: `cp`>> for instructions on how to do so.
+You may refer to <<Changing your employee password: `changepw`>> for instructions on how to do so.
 
 === Shift Management
 If you are a manager, PTMan allows you to manage your employees' work shifts.
@@ -264,7 +264,7 @@ To prevent unauthorized access to admin mode, managers should execute this comma
 
 
 
-If the current admin password is `DEFAULT1` and you wish to change it to `hunter2`, type:
+If the current admin password is `DEFAULT1` and you wish to change it to `hunter22`, type:
 `changeadminpw pw/DEFAULT1 pw/hunter22 pw/hunter22` which will be masked by asterisks in the program as shown in _<<fig-changingAdminPassword>>_.
 
 [[fig-changingAdminPassword]]
@@ -347,6 +347,9 @@ More Examples:
 * To add an employee named `Betsy Crowe` with email `betsycrowe@example.com`, address `Newgate Prison`, phone number `1234567`, and salary of $`100`, type: +
 `add n/Betsy Crowe e/betsycrowe@example.com a/Newgate Prison p/1234567 s/100`
 
+
+// tag::accessControl[]
+
 [[AddSalary]]
 ==== Adding salary to an employee: `addsalary`
 Adds an existing employee's salary by an amount.
@@ -363,11 +366,13 @@ image::addingSalary.png[width="790"]
 After you executed the command, you will see the result from the result display and the applied salary as shown in _<<fig-addSalarySuccess>>_.
 
 [[fig-addSalarySuccess]]
-.Adding salary for employee in PTMan +
+.Added salary for employee in PTMan +
 image::addSalarySuccess.png[width="790"]
 
 [NOTE]
 An employee's salary can not be deducted from using this command.
+
+// end::accessControl[]
 
 [[Edit]]
 ==== Editing an employee: `edit`
@@ -729,6 +734,8 @@ Examples:
 `unapply 2 1 pw/YOUR_PASSWORD`
 // end::shiftemployee[]
 
+
+
 [[Cp]]
 ==== Changing your employee password: `changepw`
 Changes your employee password.
@@ -773,8 +780,8 @@ Resets your employee password. This sends a temporary password to your email add
 *Format:* `resetpw INDEX` +
 *Shorthand:* `rp` `INDEX` +
 
-If you forgot your password, you can simply reset your password with your `INDEX` displayed at the right panel as shown in _<<fig-resetPw>>_.
-[[fig-resetPw]]
+If you forgot your password, you can simply reset your password with your `INDEX` displayed at the right panel as shown in _<<fig-resetingPw>>_.
+[[fig-resetingPw]]
 .Resetting password in PTMan
 image::resettingpw.png[width="790"]
 
@@ -791,7 +798,6 @@ image::resetpw.png[width="790"]
 
 [NOTE]
 Temporary password should be changed immediately after resetting.
-
 
 
 //Examples:

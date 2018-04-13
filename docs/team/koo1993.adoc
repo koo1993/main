@@ -12,17 +12,17 @@ PTMan is a desktop human resource application used for managing part-time employ
 PTMan aims to give part-time employees the freedom of choosing when they want to work by registering for the available shifts set by the employer.
 Thereby reducing the hassle of work scheduling for both employers and employees. +
 
-The user interacts with the application using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
 
 == Summary of contributions
 
 * *Major enhancement*: Added *access control* that manages functions for employer and employee. [https://github.com/CS2103JAN2018-W14-B2/main/issues/39[Issue #39]]
 ** What it does: Each employer and employee is assigned to a password. This restrict employee to use functions that are meant for the employer.
 ** What it includes:
-*** Admin commands are restricted to employer only.
-*** API for password checking that need password.
+*** Separation of employer and employee command.
+*** API for password checking that needs password.
 *** Login/Logout to admin mode for employer to use admin commands at ease.
-*** Change/reset password is available for both group of user with email service.
+*** Change/reset password for both group of user with email service.
 ** Justification: This ensure only authenticated personnel can use the system and prevent misuse of PTMan.
 
 
