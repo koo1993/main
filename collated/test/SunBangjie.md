@@ -122,6 +122,9 @@ public class DecryptDataCommandTest {
 ```
 ###### \java\seedu\ptman\logic\commands\EditOutletCommandTest.java
 ``` java
+/**
+ * Contains integration tests (interaction with the Model) for {@code EditOutletCommand}.
+ */
 public class EditOutletCommandTest {
 
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());
@@ -316,13 +319,13 @@ public class EncryptDataCommandTest {
     }
 }
 ```
-###### \java\seedu\ptman\logic\commands\ViewOutletCommandTest.java
+###### \java\seedu\ptman\logic\commands\ViewEncryptionCommandTest.java
 ``` java
 /**
  * Contains integration tests (interaction with the Model) for {@code ViewOutletCommand}.
  */
-public class ViewOutletCommandTest {
-    private ViewOutletCommand command;
+public class ViewEncryptionCommandTest {
+    private ViewEncryptionCommand command;
     private Model model;
     private Model expectedModel;
 
@@ -332,17 +335,13 @@ public class ViewOutletCommandTest {
                 new OutletInformation());
         expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(),
                 new OutletInformation());
-        command = new ViewOutletCommand();
+        command = new ViewEncryptionCommand();
         command.setData(model, new CommandHistory(), new UndoRedoStack());
     }
 
     @Test
     public void execute_validOutletInformation_showsCorrectInformation() {
-        String expectedMessage = "Outlet Name: DefaultOutlet Operating Hours: 09:00-22:00 Contact: 91234567 "
-                + "Email: DefaultOutlet@gmail.com Announcement: No announcement. "
-                + "Please add new announcement "
-                + "with announcement command. "
-                + "Encryption: Outlet information storage files are not encrypted.";
+        String expectedMessage = "Local storage files are not encrypted.";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 }
@@ -576,12 +575,12 @@ public class EditOutletCommandParserTest {
 
     @Test
     public void parseCommand_viewoutlet() throws Exception {
-        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_WORD) instanceof ViewOutletCommand);
+        assertTrue(parser.parseCommand(ViewEncryptionCommand.COMMAND_WORD) instanceof ViewEncryptionCommand);
     }
 
     @Test
     public void parseCommand_viewoutletAlias() throws Exception {
-        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_ALIAS) instanceof ViewOutletCommand);
+        assertTrue(parser.parseCommand(ViewEncryptionCommand.COMMAND_ALIAS) instanceof ViewEncryptionCommand);
     }
 
 ```
@@ -603,6 +602,38 @@ public class EditOutletCommandParserTest {
         assertEquals(modelManager, differentModelManager);
         modelManager.updateOutlet(outlet);
         assertNotEquals(modelManager, differentModelManager);
+    }
+
+    @Test
+    public void getEncryptionMode_defaultData_returnsFalse() {
+        ModelManager modelManager = new ModelManager();
+        assertFalse(modelManager.getEncryptionMode());
+    }
+
+    @Test
+    public void getEncryptionModeMessage_defaultData_returnsCorrectMessage() {
+        ModelManager modelManager = new ModelManager();
+        String actualMessage = modelManager.getEncryptionModeMessage();
+        String expectedMessage = new OutletInformation().getEncryptionModeMessage();
+        assertEquals(actualMessage, expectedMessage);
+    }
+
+    @Test
+    public void getEncryptionMode_encryptedData_returnsTrue() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.encryptLocalStorage();
+        assertTrue(modelManager.getEncryptionMode());
+    }
+
+    @Test
+    public void getEncryptionModeMessage_encryptedData_returnsCorrectMessage() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.encryptLocalStorage();
+        String actualMessage = modelManager.getEncryptionModeMessage();
+        OutletInformation outletInformation = new OutletInformation();
+        outletInformation.setEncryptionMode(true);
+        String expectedMessage = outletInformation.getEncryptionModeMessage();
+        assertEquals(actualMessage, expectedMessage);
     }
 
     @Test
@@ -662,42 +693,42 @@ public class NameTest {
         assertFalse(OutletName.isValidName("")); // empty string
         assertFalse(OutletName.isValidName(" ")); // spaces only
         assertFalse(OutletName.isValidName("^")); // only non-alphanumeric characters
-        assertFalse(OutletName.isValidName("peter*")); // contains non-alphanumeric characters
+        assertFalse(OutletName.isValidName("coffee*")); // contains non-alphanumeric characters
     }
 
     @Test
     public void isValidName_validName_returnsTrue() {
-        assertTrue(OutletName.isValidName("peter jack")); // alphabets only
+        assertTrue(OutletName.isValidName("cool coffee")); // alphabets only
         assertTrue(OutletName.isValidName("12345")); // numbers only
-        assertTrue(OutletName.isValidName("peter the 2nd")); // alphanumeric characters
-        assertTrue(OutletName.isValidName("Capital Tan")); // with capital letters
-        assertTrue(OutletName.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(OutletName.isValidName("cool coffee 3rd branch")); // alphanumeric characters
+        assertTrue(OutletName.isValidName("Cool Coffee")); // with capital letters
+        assertTrue(OutletName.isValidName("The Best and Coolest Coffee in the World")); // long names
     }
 
     @Test
     public void toString_sameValue_returnsTrue() {
-        OutletName test = new OutletName("valid name");
-        assertEquals(test.toString(), "valid name");
+        OutletName test = new OutletName("Cool Coffee");
+        assertEquals(test.toString(), "Cool Coffee");
     }
 
     @Test
     public void equals_sameValue_returnsTrue() {
-        OutletName test = new OutletName("valid name");
-        OutletName other = new OutletName("valid name");
+        OutletName test = new OutletName("Cool Coffee");
+        OutletName other = new OutletName("Cool Coffee");
         assertTrue(test.equals(other));
     }
 
     @Test
     public void equals_differentValue_returnsFalse() {
-        OutletName test = new OutletName("valid name");
-        OutletName other = new OutletName("another valid name");
+        OutletName test = new OutletName("Cool Coffee");
+        OutletName other = new OutletName("Coolest Coffee");
         assertFalse(test.equals(other));
     }
 
     @Test
     public void hashCode_sameFullName_returnsTrue() {
-        OutletName test = new OutletName("valid name");
-        assertEquals(test.hashCode(), "valid name".hashCode());
+        OutletName test = new OutletName("Cool Coffee");
+        assertEquals(test.hashCode(), "Cool Coffee".hashCode());
     }
 }
 ```
@@ -827,6 +858,110 @@ public class OperatingHoursTest {
         String expected = "09:00-22:00";
         OperatingHours test = new OperatingHours(operatingHours);
         assertEquals(test.getDisplayedMessage(), expected);
+    }
+}
+```
+###### \java\seedu\ptman\model\outlet\OutletContactTest.java
+``` java
+public class OutletContactTest {
+
+    @Test
+    public void constructor_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> new OutletContact(null));
+    }
+
+    @Test
+    public void constructor_invalidPhone_throwsIllegalArgumentException() {
+        String invalidPhone = "";
+        Assert.assertThrows(IllegalArgumentException.class, () -> new OutletContact(invalidPhone));
+    }
+
+    @Test
+    public void isValidOutletContact_nullValue_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> OutletContact.isValidOutletContact(null));
+    }
+
+    @Test
+    public void isValidOutletContact_invalidValues_returnsFalse() {
+        assertFalse(OutletContact.isValidOutletContact("")); // empty string
+        assertFalse(OutletContact.isValidOutletContact(" ")); // spaces only
+        assertFalse(OutletContact.isValidOutletContact("91")); // less than 3 numbers
+        assertFalse(OutletContact.isValidOutletContact("phone")); // non-numeric
+        assertFalse(OutletContact.isValidOutletContact("9011p041")); // alphabets within digits
+        assertFalse(OutletContact.isValidOutletContact("9312 1534")); // spaces within digits
+    }
+
+    @Test
+    public void isValidOutletContact_validValues_returnsTrue() {
+        assertTrue(OutletContact.isValidOutletContact("911")); // exactly 3 numbers
+        assertTrue(OutletContact.isValidOutletContact("93121534"));
+        assertTrue(OutletContact.isValidOutletContact("124293842033123")); // long phone numbers
+    }
+}
+```
+###### \java\seedu\ptman\model\outlet\OutletEmailTest.java
+``` java
+public class OutletEmailTest {
+
+    @Test
+    public void constructor_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> new OutletEmail(null));
+    }
+
+    @Test
+    public void constructor_invalidEmail_throwsIllegalArgumentException() {
+        String invalidEmail = "";
+        Assert.assertThrows(IllegalArgumentException.class, () -> new OutletEmail(invalidEmail));
+    }
+
+    @Test
+    public void isValidOutletEmail_nullValue_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> OutletEmail.isValidOutletEmail(null));
+    }
+
+    @Test
+    public void isValidOutletEmail_blankEmails_returnsFalse() {
+        assertFalse(OutletEmail.isValidOutletEmail("")); // empty string
+        assertFalse(OutletEmail.isValidOutletEmail(" ")); // spaces only
+    }
+
+    @Test
+    public void isValidOutletEmail_missingParts_returnsFalse() {
+        assertFalse(OutletEmail.isValidOutletEmail("@example.com")); // missing local part
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee.com")); // missing '@' symbol
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@")); // missing domain name
+    }
+
+    @Test
+    public void isValidOutletEmail_invalidParts_returnsFalse() {
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@-")); // invalid domain name
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@exam_ple.com")); // underscore in domain name
+        assertFalse(OutletEmail.isValidOutletEmail("cool coffee@example.com")); // spaces in local part
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@exam ple.com")); // spaces in domain name
+        assertFalse(OutletEmail.isValidOutletEmail(" coolcoffee@example.com")); // leading space
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@example.com ")); // trailing space
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@@example.com")); // double '@' symbol
+        assertFalse(OutletEmail.isValidOutletEmail("cool@coffee@example.com")); // '@' symbol in local part
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@example@com")); // '@' symbol in domain name
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@.example.com")); // domain starts with period
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@example.com.")); // domain ends with a period
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@-example.com")); // domain starts with a hyphen
+        assertFalse(OutletEmail.isValidOutletEmail("coolcoffee@example.com-")); // domain ends with a hyphen
+    }
+
+    @Test
+    public void isValidOutletEmail_validEmail_returnsTrue() {
+        assertTrue(OutletEmail.isValidOutletEmail("CoolCoffee_3433@example.com"));
+        assertTrue(OutletEmail.isValidOutletEmail("a@bc"));  // minimal
+        assertTrue(OutletEmail.isValidOutletEmail("test@localhost"));   // alphabets only
+        assertTrue(OutletEmail.isValidOutletEmail("!#$%&'*+/=?`{|}~^.-@example.org")); // special characters
+        assertTrue(OutletEmail.isValidOutletEmail("123@145"));  // numeric local part and domain name
+        // mixture of alphanumeric and special characters
+        assertTrue(OutletEmail.isValidOutletEmail("a1+be!@example1.com"));
+        // long domain name
+        assertTrue(OutletEmail.isValidOutletEmail("cool_coffee@very-very-very-long-example.com"));
+        // long local part
+        assertTrue(OutletEmail.isValidOutletEmail("if.you.dream.it_you.can.do.it@example.com"));
     }
 }
 ```
@@ -970,20 +1105,13 @@ public class OutletInformationTest {
                 announcement, password, false);
         String expected = "Outlet Name: outlet Operating Hours: 09:00-22:00 "
                 + "Contact: 91234567 Email: outlet@gmail.com Announcement: New announcement. "
-                + "Encryption: Outlet information storage files are not encrypted.";
+                + "Encryption: Local storage files are not encrypted.";
         assertEquals(outlet.toString(), expected);
     }
 }
 ```
 ###### \java\seedu\ptman\model\PartTimeManagerTest.java
 ``` java
-    @Test
-    public void getOutletInformationMessage_defaultData_returnCorrectMessage() {
-        String actualMessage = partTimeManager.getOutletInformationMessage();
-        String expectedMessage = new OutletInformation().toString();
-        assertEquals(actualMessage, expectedMessage);
-    }
-
     @Test
     public void encryptLocalStorage_dataNotEncrypted_encryptSuccessfully() {
         partTimeManager.encryptLocalStorage();
@@ -1000,6 +1128,19 @@ public class OutletInformationTest {
 ###### \java\seedu\ptman\storage\StorageManagerTest.java
 ``` java
     @Test
+    public void outletInformationReadSave() throws Exception {
+        /*
+         * Note: This is an integration test that verifies the StorageManager is properly wired to the
+         * {@link XmlOutletInformationStorage} class.
+         * More extensive testing of UserPref saving/reading is done in {@link XmlOutletInformationStorageTest} class.
+         */
+        OutletInformation original = new OutletInformation();
+        storageManager.saveOutletInformation(original);
+        OutletInformation retrieved = storageManager.readOutletInformation().get();
+        assertEquals(original, retrieved);
+    }
+
+    @Test
     public void getOutletInformationFilePath() {
         assertNotNull(storageManager.getOutletInformationFilePath());
     }
@@ -1012,6 +1153,19 @@ public class OutletInformationTest {
                 new XmlOutletInformationStorageExceptionThrowingStub("dummy"));
         storage.handleOutletDataChangedEvent(new OutletDataChangedEvent(new OutletInformation()));
         assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof DataSavingExceptionEvent);
+    }
+
+    @Test
+    public void handleOutletDataChangedEvent_validInput_eventRaised() throws Exception {
+        OutletInformation original = new OutletInformation();
+        XmlOutletInformationStorage outletInformationStorage = new XmlOutletInformationStorage("dummy");
+        Storage storage = new StorageManager(new XmlPartTimeManagerStorage("dummy"),
+                new JsonUserPrefsStorage("dummy"),
+                outletInformationStorage);
+        storage.handleOutletDataChangedEvent(new OutletDataChangedEvent(original));
+        OutletInformation readBack = outletInformationStorage
+                .readOutletInformation("dummy").get();
+        assertEquals(original, readBack);
     }
 
     @Test
@@ -1214,392 +1368,6 @@ public class XmlAdaptedOutletInformationTest {
                 outlet.getMasterPassword().getPasswordHash(),
                 outlet.getAnnouncement().toString());
         assertEquals(outletInformation, sameOutletInformation);
-    }
-}
-```
-###### \java\seedu\ptman\storage\XmlEncryptedAdaptedEmployeeTest.java
-``` java
-public class XmlEncryptedAdaptedEmployeeTest {
-    private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
-    private static final String INVALID_ADDRESS = " ";
-    private static final String INVALID_EMAIL = "example.com";
-    private static final String INVALID_SALARY = "-2030";
-    private static final String INVALID_TAG = "#friend";
-
-    private static final String VALID_NAME = BENSON.getName().toString();
-    private static final String VALID_PHONE = BENSON.getPhone().toString();
-    private static final String VALID_EMAIL = BENSON.getEmail().toString();
-    private static final String VALID_ADDRESS = BENSON.getAddress().toString();
-    private static final String VALID_SALARY = BENSON.getSalary().toString();
-    private static final String DEFAULT1_HASH = BENSON.getPassword().getPasswordHash();
-
-    private static final List<XmlEncryptedAdaptedTag> VALID_TAGS = BENSON.getTags().stream()
-            .map(XmlEncryptedAdaptedTag::new)
-            .collect(Collectors.toList());
-
-    @Test
-    public void toModelType_validEmployeeDetails_returnsEmployee() throws Exception {
-        XmlEncryptedAdaptedEmployee employee = new XmlEncryptedAdaptedEmployee(BENSON);
-        assertEquals(BENSON, employee.toModelType());
-    }
-
-    @Test
-    public void toModelType_invalidName_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee =
-                new XmlEncryptedAdaptedEmployee(INVALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = Name.MESSAGE_NAME_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullName_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee = new XmlEncryptedAdaptedEmployee(null, VALID_PHONE, VALID_EMAIL,
-                VALID_ADDRESS, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidPhone_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee =
-                new XmlEncryptedAdaptedEmployee(VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = Phone.MESSAGE_PHONE_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullPhone_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee = new XmlEncryptedAdaptedEmployee(VALID_NAME, null, VALID_EMAIL,
-                VALID_ADDRESS, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Phone.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidEmail_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee =
-                new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, INVALID_EMAIL, VALID_ADDRESS,
-                        VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = Email.MESSAGE_EMAIL_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullEmail_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee = new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, null,
-                VALID_ADDRESS, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidAddress_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee =
-                new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, VALID_EMAIL, INVALID_ADDRESS,
-                        VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = Address.MESSAGE_ADDRESS_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullAddress_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee = new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, VALID_EMAIL,
-                null, VALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidSalary_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee =
-                new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                        INVALID_SALARY, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = Salary.MESSAGE_SALARY_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullSalary_throwsIllegalValueException() {
-        XmlEncryptedAdaptedEmployee employee = new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, VALID_EMAIL,
-                VALID_ADDRESS, null, DEFAULT1_HASH, VALID_TAGS);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Salary.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, employee::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidTags_throwsIllegalValueException() {
-        List<XmlEncryptedAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
-        invalidTags.add(new XmlEncryptedAdaptedTag(INVALID_TAG));
-        XmlEncryptedAdaptedEmployee employee =
-                new XmlEncryptedAdaptedEmployee(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_SALARY,
-                        DEFAULT1_HASH, invalidTags);
-        Assert.assertThrows(IllegalValueException.class, employee::toModelType);
-    }
-
-    @Test
-    public void setAttributesFromSource_validInputs_returnsEqualObject() {
-        Employee employee = new Employee(new Name(VALID_NAME), new Phone(VALID_PHONE), new Email(VALID_EMAIL),
-                new Address(VALID_ADDRESS), new Salary(VALID_SALARY), new Password(DEFAULT1_HASH),
-                BENSON.getTags());
-        XmlEncryptedAdaptedEmployee adaptedEmployee = new XmlEncryptedAdaptedEmployee();
-        adaptedEmployee.setAttributesFromSource(employee);
-        XmlEncryptedAdaptedEmployee sameAdaptedEmployee = new XmlEncryptedAdaptedEmployee();
-        sameAdaptedEmployee.setAttributesFromSource(employee);
-        assertEquals(adaptedEmployee, sameAdaptedEmployee);
-    }
-
-    @Test
-    public void setAttributesFromStrings_validInputs_returnEqualObject() {
-        XmlEncryptedAdaptedEmployee adaptedEmployee = new XmlEncryptedAdaptedEmployee();
-        XmlEncryptedAdaptedEmployee sameAdaptedEmployee = new XmlEncryptedAdaptedEmployee();
-        adaptedEmployee.setAttributesFromStrings(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                VALID_SALARY, DEFAULT1_HASH);
-        sameAdaptedEmployee.setAttributesFromStrings(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
-                VALID_SALARY, DEFAULT1_HASH);
-        assertEquals(adaptedEmployee, sameAdaptedEmployee);
-    }
-}
-```
-###### \java\seedu\ptman\storage\XmlEncryptedAdaptedShiftTest.java
-``` java
-public class XmlEncryptedAdaptedShiftTest {
-    private static final String INVALID_DATE = "1-1-18";
-    private static final String INVALID_START_TIME = "asd";
-    private static final String INVALID_END_TIME = "2500";
-    private static final String INVALID_CAPACITY = "two";
-
-    private static final String VALID_DATE = "01-01-18";
-    private static final String VALID_CAPACITY = SHIFT_THURSDAY_AM.getCapacity().toString();
-    private static final String VALID_START_TIME = SHIFT_THURSDAY_AM.getStartTime().toString();
-    private static final String VALID_END_TIME = SHIFT_THURSDAY_AM.getEndTime().toString();
-
-    private static final List<XmlEncryptedAdaptedEmployee> VALID_EMPLOYEES =
-            SHIFT_THURSDAY_AM.getEmployeeList().stream()
-            .map(XmlEncryptedAdaptedEmployee::new)
-            .collect(Collectors.toList());
-
-    @Test
-    public void toModelType_validShiftDetails_returnsShift() throws Exception {
-        XmlEncryptedAdaptedShift shift = new XmlEncryptedAdaptedShift(SHIFT_THURSDAY_AM);
-        assertEquals(SHIFT_THURSDAY_AM, shift.toModelType());
-    }
-
-    @Test
-    public void toModelType_invalidDate_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(INVALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = Date.MESSAGE_DATE_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullDate_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(null, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Date.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidStartTime_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, INVALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = Time.MESSAGE_TIME_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullPhone_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, null, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Time.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidEndTime_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, INVALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = Time.MESSAGE_TIME_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullEndTime_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, null, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Time.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidCapacity_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, INVALID_CAPACITY,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = Capacity.MESSAGE_CAPACITY_CONSTRAINTS;
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_nullAddress_throwsIllegalValueException() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, null,
-                        VALID_EMPLOYEES);
-
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Capacity.class.getSimpleName());
-        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
-    }
-
-    @Test
-    public void toModelType_invalidTags_throwsIllegalValueException() {
-        List<XmlEncryptedAdaptedEmployee> invalidEmployees = new ArrayList<>();
-        invalidEmployees.add(new XmlEncryptedAdaptedEmployee(
-                null, null, null, null, null, null, null));
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, null,
-                        invalidEmployees);
-
-        Assert.assertThrows(IllegalValueException.class, shift::toModelType);
-    }
-
-    @Test
-    public void equals_sameObject_returnsTrue() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-        assertTrue(shift.equals(shift));
-    }
-
-    @Test
-    public void equals_sameShift_returnsTrue() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-        XmlEncryptedAdaptedShift shift1 =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-        assertTrue(shift.equals(shift1));
-    }
-
-    @Test
-    public void equals_differentShift_returnsTrue() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-        XmlEncryptedAdaptedShift shift1 =
-                new XmlEncryptedAdaptedShift("02-14-18", VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-        assertFalse(shift.equals(shift1));
-    }
-
-    @Test
-    public void equals_null_returnsFalse() {
-        XmlEncryptedAdaptedShift shift =
-                new XmlEncryptedAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
-                        VALID_EMPLOYEES);
-        assertFalse(shift.equals(null));
-    }
-
-    @Test
-    public void setAttributesFromSource_validInputs_returnsSameObject() {
-        Shift shift = new Shift(new Date(VALID_DATE), new Time(VALID_START_TIME), new Time(VALID_END_TIME),
-                new Capacity(VALID_CAPACITY), SHIFT_THURSDAY_AM.getEmployees());
-        XmlEncryptedAdaptedShift xmlAdaptedShift = new XmlEncryptedAdaptedShift();
-        XmlEncryptedAdaptedShift sameXmlAdaptedShift = new XmlEncryptedAdaptedShift();
-        xmlAdaptedShift.setAttributesFromSource(shift);
-        sameXmlAdaptedShift.setAttributesFromSource(shift);
-        assertEquals(xmlAdaptedShift, sameXmlAdaptedShift);
-    }
-
-    @Test
-    public void setAttributesFromStrings_validInputs_returnsSameObject() {
-        XmlEncryptedAdaptedShift xmlAdaptedShift = new XmlEncryptedAdaptedShift();
-        XmlEncryptedAdaptedShift sameXmlAdaptedShift = new XmlEncryptedAdaptedShift();
-        xmlAdaptedShift.setAttributesFromStrings(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY);
-        sameXmlAdaptedShift.setAttributesFromStrings(VALID_DATE, VALID_START_TIME, VALID_END_TIME,
-                VALID_CAPACITY);
-        assertEquals(xmlAdaptedShift, sameXmlAdaptedShift);
-    }
-
-}
-```
-###### \java\seedu\ptman\storage\XmlEncryptedSerializablePartTimeManagerTest.java
-``` java
-public class XmlEncryptedSerializablePartTimeManagerTest {
-
-    private static final String TEST_DATA_FOLDER =
-            FileUtil.getPath("src/test/data/XmlSerializablePartTimeManagerTest/");
-    private static final File TYPICAL_EMPLOYEES_FILE =
-            new File(TEST_DATA_FOLDER + "typicalEncryptedEmployeesPartTimeManager.xml");
-    private static final File INVALID_EMPLOYEE_FILE =
-            new File(TEST_DATA_FOLDER + "invalidEmployeePartTimeManager.xml");
-    private static final File INVALID_TAG_FILE = new File(TEST_DATA_FOLDER + "invalidTagPartTimeManager.xml");
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void toModelType_typicalEmployeesFile_success() throws Exception {
-        XmlEncryptedSerializablePartTimeManager dataFromFile = XmlUtil.getDataFromFile(TYPICAL_EMPLOYEES_FILE,
-                XmlEncryptedSerializablePartTimeManager.class);
-        PartTimeManager partTimeManagerFromFile = dataFromFile.toModelType();
-        assertEquals(partTimeManagerFromFile.getEmployeeList(), SampleDataUtil.getSamplePartTimeManager()
-                .getEmployeeList());
-    }
-
-    @Test
-    public void toModelType_invalidEmployeeFile_throwsIllegalValueException() throws Exception {
-        XmlEncryptedSerializablePartTimeManager dataFromFile = XmlUtil.getDataFromFile(INVALID_EMPLOYEE_FILE,
-                XmlEncryptedSerializablePartTimeManager.class);
-        thrown.expect(IllegalValueException.class);
-        dataFromFile.toModelType();
-    }
-
-    @Test
-    public void toModelType_invalidTagFile_throwsIllegalValueException() throws Exception {
-        XmlEncryptedSerializablePartTimeManager dataFromFile = XmlUtil.getDataFromFile(INVALID_TAG_FILE,
-                XmlEncryptedSerializablePartTimeManager.class);
-        thrown.expect(IllegalValueException.class);
-        dataFromFile.toModelType();
-    }
-
-    @Test
-    public void equals() throws Exception {
-        XmlEncryptedSerializablePartTimeManager object = XmlUtil.getDataFromFile(TYPICAL_EMPLOYEES_FILE,
-                XmlEncryptedSerializablePartTimeManager.class);
-        XmlEncryptedSerializablePartTimeManager other = XmlUtil.getDataFromFile(TYPICAL_EMPLOYEES_FILE,
-                XmlEncryptedSerializablePartTimeManager.class);
-        assertEquals(object, other);
-        assertTrue(object.equals(object));
-        assertFalse(object.equals(null));
-        assertFalse(object.equals(1));
     }
 }
 ```

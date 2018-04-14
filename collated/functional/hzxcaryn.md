@@ -60,41 +60,29 @@ public class ExportTimetableAsImageRequestEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\ptman\commons\events\ui\OutletInformationChangedEvent.java
+###### \java\seedu\ptman\commons\events\ui\TimetableWeekChangeRequestEvent.java
 ``` java
 /**
- * Represents an information change in the Outlet Information
+ * Indicates a request to change the timetable view to the next or previous week.
  */
-public class OutletInformationChangedEvent extends BaseEvent {
-
-    public final String operatingHours;
-    public final String outletContact;
-    public final String outletEmail;
-
-    public OutletInformationChangedEvent(String operatingHours, String outletContact, String outletEmail) {
-        this.operatingHours = operatingHours;
-        this.outletContact = outletContact;
-        this.outletEmail = outletEmail;
+public class TimetableWeekChangeRequestEvent extends BaseEvent {
+    /**
+     * This represents the different week change requests that can be made to the timetable
+     */
+    public enum WeekChangeRequest {
+        NEXT,
+        PREVIOUS,
+        CURRENT
     }
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
+    private WeekChangeRequest request;
+
+    public TimetableWeekChangeRequestEvent(WeekChangeRequest request) {
+        this.request = request;
     }
 
-}
-```
-###### \java\seedu\ptman\commons\events\ui\OutletNameChangedEvent.java
-``` java
-/**
- * Represents an information change in the Outlet Information
- */
-public class OutletNameChangedEvent extends BaseEvent {
-
-    public final String message;
-
-    public OutletNameChangedEvent(String message) {
-        this.message = message;
+    public WeekChangeRequest getRequest() {
+        return request;
     }
 
     @Override
@@ -409,6 +397,188 @@ public class ViewShiftCommandParser implements Parser<ViewShiftCommand> {
     }
 
 ```
+###### \java\seedu\ptman\model\util\SampleDataUtil.java
+``` java
+/**
+ * Contains utility methods for populating {@code PartTimeManager} with sample data.
+ */
+public class SampleDataUtil {
+
+    public static Employee[] getSampleEmployees() {
+        return new Employee[] {
+            new Employee(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
+                new Address("Blk 30 Geylang Street 29, #06-40"), new Salary("300"), new Password(),
+                getTagSet("barista", "cashier")),
+            new Employee(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
+                new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"), new Salary("0"), new Password(),
+                getTagSet("barista", "supervisor")),
+            new Employee(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
+                new Address("Blk 11 Ang Mo Kio Street 74, #11-04"), new Salary("100"), new Password(),
+                getTagSet("bartender")),
+            new Employee(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
+                new Address("Blk 436 Serangoon Gardens Street 26, #16-43"), new Salary("450"), new Password(),
+                getTagSet("paperwork")),
+            new Employee(new Name("Eden Lim"), new Phone("92624417"), new Email("eden123@example.com"),
+                new Address("Blk 25 Aljunied Street 85, #10-10"), new Salary("250"), new Password(),
+                getTagSet("supervisor", "bartender")),
+            new Employee(new Name("Emelia Tan"), new Phone("91275306"), new Email("tanmeme@example.com"),
+                new Address("Blk 45 Bras Basah Rd 55, #11-11"), new Salary("60"), new Password(),
+                getTagSet("paperwork", "barista")),
+            new Employee(new Name("Faith Foo"), new Phone("82935501"), new Email("faithful@example.com"),
+                new Address("Blk 01 Pasir Ris Street 81, #01-01"), new Salary("110"), new Password(),
+                getTagSet("barista", "bartender")),
+            new Employee(new Name("Irfan Ibrahim"), new Phone("82492021"), new Email("irfan@example.com"),
+                new Address("Blk 17 Tampines Street 20, #17-35"), new Salary("200"), new Password(),
+                getTagSet("barista")),
+            new Employee(new Name("Jessica Liu"), new Phone("92823467"), new Email("liushabao@example.com"),
+                new Address("Blk 45 Aljunied Street 85, #11-31"), new Salary("300"), new Password(),
+                getTagSet("alfresco", "cashier")),
+            new Employee(new Name("Jorge Keng"), new Phone("90129036"), new Email("kengjjj@example.com"),
+                new Address("Blk 105 Tampines Street 85, #04-01"), new Salary("80"), new Password(),
+                getTagSet("supervisor", "paperwork")),
+            new Employee(new Name("Katrina Rose"), new Phone("80924520"), new Email("rosie@example.com"),
+                new Address("Blk 555 Simei Street 05, #06-06"), new Salary("100"), new Password(),
+                getTagSet("cashier", "bartender", "paperwork")),
+            new Employee(new Name("Lee Wenqi"), new Phone("88124243"), new Email("wenqiqi@example.com"),
+                new Address("Blk 01 Defu Lane 05, #02-11"), new Salary("500"), new Password(),
+                getTagSet("bartender", "barista")),
+            new Employee(new Name("Liu Shi Qi"), new Phone("87438807"), new Email("liushishi@example.com"),
+                new Address("Blk 30 Geylang Street 29, #06-40"), new Salary("300"), new Password(),
+                getTagSet("barista", "cashier")),
+            new Employee(new Name("Mallory Hek"), new Phone("99272758"), new Email("maliciousme@example.com"),
+                new Address("Blk 30 Serangoon Gardens, #07-18"), new Salary("1000"), new Password(),
+                getTagSet("barista", "chef")),
+            new Employee(new Name("Matthew Koh"), new Phone("93210283"), new Email("madmatt@example.com"),
+                new Address("Blk 11 Ang Mo Kio Street 74, #11-04"), new Salary("100"), new Password(),
+                getTagSet("bartender")),
+            new Employee(new Name("Nathan Gay"), new Phone("91031282"), new Email("gaygaygay@example.com"),
+                new Address("Blk 436 Serangoon Gardens Street 26, #16-43"), new Salary("450"), new Password(),
+                getTagSet("paperwork", "cashier")),
+            new Employee(new Name("Ophelia Grey"), new Phone("92492021"), new Email("shades0fgrey@example.com"),
+                new Address("Blk 47 Tampines Street 20, #17-35"), new Salary("200"), new Password(),
+                getTagSet("barista")),
+            new Employee(new Name("Patrick Soo"), new Phone("91234417"), new Email("guais00s00@example.com"),
+                new Address("Blk 99 Boon Keng Road 85, #08-01"), new Salary("50"), new Password(),
+                getTagSet("bartender", "barista")),
+            new Employee(new Name("Philips Loy"), new Phone("89801253"), new Email("pheeloy@example.com"),
+                new Address("Blk 103 Hougang Street 32, #05-03"), new Salary("60"), new Password(),
+                getTagSet("alfresco")),
+            new Employee(new Name("Quentin Cool"), new Phone("92624417"), new Email("iamcool123@example.com"),
+                new Address("Blk 111 Punggol Street 05, #01-05"), new Salary("300"), new Password(),
+                getTagSet("chef")),
+            new Employee(new Name("Roy Balakrishnan"), new Phone("83623312"), new Email("royb@example.com"),
+                new Address("Blk 45 Aljunied Street 85, #11-31"), new Salary("100"), new Password(),
+                getTagSet("paperwork", "alfresco")),
+            new Employee(new Name("Vaibhavi Shandilya"), new Phone("91530773"), new Email("chiobu@example.com"),
+                new Address("Blk 45 Aljunied Street 85, #11-31"), new Salary("100"), new Password(),
+                getTagSet("supervisor")),
+        };
+    }
+
+    public static Shift[] getSampleShifts() {
+        LocalDate mondayDateOfCurrWeek = DateUtil.getMondayOfDate(LocalDate.now());
+        LocalDate mondayDateOfPrevWeek = DateUtil.getPrevWeekDate(mondayDateOfCurrWeek);
+        LocalDate mondayDateOfNextWeek = DateUtil.getNextWeekDate(mondayDateOfCurrWeek);
+        return new Shift[] {
+            // Build shifts for previous week
+            new Shift(new Date(mondayDateOfPrevWeek.plusDays(1)), new Time("0900"), new Time("1600"),
+                new Capacity("3")),
+            new Shift(new Date(mondayDateOfPrevWeek.plusDays(2)), new Time("1500"), new Time("2200"),
+                new Capacity("1")),
+            new Shift(new Date(mondayDateOfPrevWeek.plusDays(4)), new Time("1000"), new Time("1600"),
+                new Capacity("5")),
+            new Shift(new Date(mondayDateOfPrevWeek.plusDays(5)), new Time("1100"), new Time("1900"),
+                new Capacity("2")),
+
+            // Build shifts for current week
+            new Shift(new Date(mondayDateOfCurrWeek), new Time("1500"), new Time("2200"), new Capacity("1")),
+            new Shift(new Date(mondayDateOfCurrWeek.plusDays(1)), new Time("0900"), new Time("1600"),
+                new Capacity("5")),
+            new Shift(new Date(mondayDateOfCurrWeek.plusDays(2)), new Time("1000"), new Time("1700"),
+                new Capacity("3")),
+            new Shift(new Date(mondayDateOfCurrWeek.plusDays(4)), new Time("0900"), new Time("1700"),
+                new Capacity("3")),
+
+            // Build shifts for next week
+            new Shift(new Date(mondayDateOfNextWeek.plusDays(2)), new Time("1100"), new Time("1900"),
+                new Capacity("2")),
+            new Shift(new Date(mondayDateOfNextWeek.plusDays(3)), new Time("0900"), new Time("1600"),
+                new Capacity("5")),
+            new Shift(new Date(mondayDateOfNextWeek.plusDays(5)), new Time("1500"), new Time("2200"),
+                new Capacity("3")),
+            new Shift(new Date(mondayDateOfNextWeek.plusDays(6)), new Time("1200"), new Time("1900"),
+                new Capacity("5"))
+        };
+
+    }
+
+    /**
+     * This method is used in {@code getSamplePartTimeManager} to add employees to the sample shifts.
+     * Each nested array contains employee indices that corresponds to an employee in the sample employee array.
+     * Each sample shift is assigned one of these nested arrays according to their index in {@code getSampleShifts}.
+     */
+    public static int[][] getSampleEmployeesForEachShift() {
+        return new int[][] {
+            // previous week
+            new int[] {5, 17, 21},
+            new int[] {6},
+            new int[] {1, 2, 3, 4, 5},
+            new int[] {7, 9},
+
+            // current week
+            new int[] {},
+            new int[] {2, 10},
+            new int[] {2, 5, 7},
+            new int[] {3},
+
+            // next week
+            new int[] {2},
+            new int[] {15, 20},
+            new int[] {3, 5, 7},
+            new int[] {2, 8, 10},
+        };
+    }
+
+    public static ReadOnlyPartTimeManager getSamplePartTimeManager() {
+        try {
+            PartTimeManager sampleAb = new PartTimeManager();
+            Employee[] sampleEmployees = getSampleEmployees();
+            Shift[] sampleShifts = getSampleShifts();
+            int[][] sampleEmployeesForEachShift = getSampleEmployeesForEachShift();
+
+            for (Employee sampleEmployee : sampleEmployees) {
+                sampleAb.addEmployee(sampleEmployee);
+            }
+            for (int i = 0; i < sampleShifts.length; i++) {
+                for (int employeeIndex : sampleEmployeesForEachShift[i]) {
+                    sampleShifts[i].addEmployee(sampleEmployees[employeeIndex]);
+                }
+                sampleAb.addShift(sampleShifts[i]);
+            }
+            return sampleAb;
+        } catch (DuplicateEmployeeException e) {
+            throw new AssertionError("sample data cannot contain duplicate employees", e);
+        } catch (DuplicateShiftException e) {
+            throw new AssertionError("sample data cannot contain duplicate shifts", e);
+        } catch (ShiftFullException e) {
+            throw new AssertionError("sample data shifts cannot have more employees than capacity", e);
+        }
+    }
+
+    /**
+     * Returns a tag set containing the list of strings given.
+     */
+    public static Set<Tag> getTagSet(String... strings) {
+        HashSet<Tag> tags = new HashSet<>();
+        for (String s : strings) {
+            tags.add(new Tag(s));
+        }
+
+        return tags;
+    }
+
+}
+```
 ###### \java\seedu\ptman\ui\AdminModeDisplay.java
 ``` java
 /**
@@ -457,7 +627,7 @@ public class AdminModeDisplay extends UiPart<Region> {
 ###### \java\seedu\ptman\ui\EmployeeListPanel.java
 ``` java
     /**
-     * Scrools to the top of the {@code EmployeeListPanel} and deselect any current selection.
+     * Scrolls to the top of the {@code EmployeeListPanel} and deselect any current selection.
      */
     private void scrollToTopAndDeselect() {
         Platform.runLater(() -> {
@@ -483,6 +653,8 @@ public class AdminModeDisplay extends UiPart<Region> {
             new KeyCodeCombination(KeyCode.LEFT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
     private final KeyCombination keyCtrlShiftRight =
             new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
+    private final KeyCombination keyCtrlShiftDown =
+            new KeyCodeCombination(KeyCode.DOWN, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
 
 ```
 ###### \java\seedu\ptman\ui\MainWindow.java
@@ -496,81 +668,17 @@ public class AdminModeDisplay extends UiPart<Region> {
             if (keyCtrlShiftLeft.match(event)) {
                 event.consume();
                 logger.fine("Timetable view requested to display the previous week.");
-                raise(new TimetableWeekChangeRequestEvent(false, true));
+                raise(new TimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent.WeekChangeRequest.PREVIOUS));
             } else if (keyCtrlShiftRight.match(event)) {
                 event.consume();
                 logger.fine("Timetable view requested to display the next week.");
-                raise(new TimetableWeekChangeRequestEvent(true, false));
+                raise(new TimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent.WeekChangeRequest.NEXT));
+            } else if (keyCtrlShiftDown.match(event)) {
+                event.consume();
+                logger.fine("Timetable view requested to display the current week.");
+                raise(new TimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent.WeekChangeRequest.CURRENT));
             }
         });
-    }
-
-```
-###### \java\seedu\ptman\ui\OutletDetailsPanel.java
-``` java
-/**
- * The Outlet Panel of the App, which displays the Outlet name and details
- */
-public class OutletDetailsPanel extends UiPart<Region> {
-
-    private static final String FXML = "OutletDetailsPanel.fxml";
-
-    public final OutletInformation outlet;
-
-    private final Logger logger = LogsCenter.getLogger(this.getClass());
-
-    @FXML
-    private Label outletNamePanelHeader;
-
-    @FXML
-    private Label operatingHours;
-
-    @FXML
-    private Label outletContact;
-
-    @FXML
-    private Label outletEmail;
-
-    @FXML
-    private Label announcement;
-
-
-    public OutletDetailsPanel(OutletInformation outlet) {
-        super(FXML);
-        this.outlet = outlet;
-        //outletInformation.setWrapText(true);
-        setOutletInformation(outlet.getOperatingHours().getDisplayedMessage(),
-                outlet.getOutletContact().toString(),
-                outlet.getOutletEmail().toString());
-        setOutletName(outlet.getName().toString());
-        setAnnouncement(outlet.getAnnouncement().toString());
-
-        registerAsAnEventHandler(this);
-    }
-
-    private void setOutletName(String name) {
-        outletNamePanelHeader.setText(name);
-    }
-
-    private void setOutletInformation(String operatingHours, String outletContact, String outletEmail) {
-        this.operatingHours.setText(operatingHours + "    ");
-        this.outletContact.setText(outletContact + "    ");
-        this.outletEmail.setText(outletEmail);
-    }
-
-```
-###### \java\seedu\ptman\ui\OutletDetailsPanel.java
-``` java
-    @Subscribe
-    private void handleOutletInformationChangedEvent(OutletInformationChangedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        Platform.runLater(() -> setOutletInformation(event.operatingHours, event.outletContact, event.outletEmail));
-    }
-
-    @Subscribe
-    private void handleOutletNameChangedEvent(OutletNameChangedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        Platform.runLater(() -> setOutletName(event.message));
     }
 
 ```
@@ -850,6 +958,15 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
+     * Navigates the timetable view to the current week.
+     */
+    private void navigateToCurrWeek() {
+        logic.setFilteredShiftListToCurrentWeek();
+        shiftObservableList = logic.getFilteredShiftList();
+        updateTimetableView();
+    }
+
+    /**
      * Replaces the timetable view with a new timetable, with shifts taken by the employee being highlighted
      * @param employee
      */
@@ -858,9 +975,11 @@ public class TimetablePanel extends UiPart<Region> {
         updateTimetableView();
     }
 
-    private void loadMainTimetable() {
+    /**
+     * Replaces the timetable view with a default timetable with no employee being selected.
+     */
+    private void loadDefaultTimetable() {
         currentEmployee = null;
-        logic.setFilteredShiftListToCurrentWeek();
         updateTimetableView();
     }
 
@@ -980,22 +1099,27 @@ public class TimetablePanel extends UiPart<Region> {
             if (event.hasNewSelection()) {
                 loadEmployeeTimetable(event.getNewSelection().employee);
             } else {
-                loadMainTimetable();
+                loadDefaultTimetable();
             }
         });
     }
 
     @Subscribe
     private void handleTimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent event) {
+        WeekChangeRequest request = event.getRequest();
         Platform.runLater(() -> {
-            if (event.isNext && !event.isPrev) {
+            if (request == WeekChangeRequest.NEXT) {
                 logger.info(LogsCenter.getEventHandlingLogMessage(event)
                         + ": Navigating timetable to the next week....");
                 navigateToNextWeek();
-            } else if (event.isPrev && !event.isNext) {
+            } else if (request == WeekChangeRequest.PREVIOUS) {
                 logger.info(LogsCenter.getEventHandlingLogMessage(event)
                         + ": Navigating timetable to the previous week....");
                 navigateToPreviousWeek();
+            } else if (request == WeekChangeRequest.CURRENT) {
+                logger.info(LogsCenter.getEventHandlingLogMessage(event)
+                        + ": Navigating timetable to the current week....");
+                navigateToCurrWeek();
             }
         });
     }

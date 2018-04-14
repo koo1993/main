@@ -209,14 +209,14 @@ public class TimetablePanelHandle extends NodeHandle<Node> {
     }
 
     /**
-     * Navigate to the prev timetable view by clicking the next button
+     * Navigate to the prev timetable week by clicking the next button
      */
     public void navigateToPrevUsingButton() {
         guiRobot.clickOn(prevButtonNode);
     }
 
     /**
-     * Navigate to the next timetable view by clicking the next button
+     * Navigate to the next timetable week by clicking the next button
      */
     public void navigateToNextUsingButton() {
         guiRobot.clickOn(nextButtonNode);
@@ -315,6 +315,21 @@ public class TimetablePanelHandle extends NodeHandle<Node> {
 
 }
 ```
+###### \java\seedu\ptman\logic\commands\DeselectCommandTest.java
+``` java
+public class DeselectCommandTest {
+    @Rule
+    public final EventsCollectorRule eventsCollectorRule = new EventsCollectorRule();
+
+    @Test
+    public void execute_main_success() {
+        CommandResult result = new DeselectCommand().execute();
+        assertEquals(MESSAGE_SUCCESS, result.feedbackToUser);
+        assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof JumpToListRequestEvent);
+        assertTrue(eventsCollectorRule.eventsCollector.getSize() == 1);
+    }
+}
+```
 ###### \java\seedu\ptman\logic\commands\ExportCommandTest.java
 ``` java
 public class ExportCommandTest {
@@ -360,21 +375,6 @@ public class ExportCommandTest {
 
         // different email -> returns false
         assertFalse(exportAliceCommand.equals(exportBobCommand));
-    }
-}
-```
-###### \java\seedu\ptman\logic\commands\MainCommandTest.java
-``` java
-public class MainCommandTest {
-    @Rule
-    public final EventsCollectorRule eventsCollectorRule = new EventsCollectorRule();
-
-    @Test
-    public void execute_main_success() {
-        CommandResult result = new MainCommand().execute();
-        assertEquals(MESSAGE_SUCCESS, result.feedbackToUser);
-        assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof JumpToListRequestEvent);
-        assertTrue(eventsCollectorRule.eventsCollector.getSize() == 1);
     }
 }
 ```
@@ -544,9 +544,9 @@ public class ExportCommandParserTest {
 ###### \java\seedu\ptman\logic\parser\PartTimeManagerParserTest.java
 ``` java
     @Test
-    public void parseCommand_main() throws Exception {
-        assertTrue(parser.parseCommand(MainCommand.COMMAND_WORD) instanceof MainCommand);
-        assertTrue(parser.parseCommand(MainCommand.COMMAND_WORD + " 3") instanceof MainCommand);
+    public void parseCommand_defaultview() throws Exception {
+        assertTrue(parser.parseCommand(DeselectCommand.COMMAND_WORD) instanceof DeselectCommand);
+        assertTrue(parser.parseCommand(DeselectCommand.COMMAND_WORD + " 3") instanceof DeselectCommand);
     }
 
     @Test
@@ -698,8 +698,7 @@ public class OutletDetailsPanelTest extends GuiUnitTest {
         assertEquals(expectedShift.getStartTime().getLocalTime(), actualEntry.getStartTime());
         assertEquals(expectedShift.getEndTime().getLocalTime(), actualEntry.getEndTime());
         assertEquals("SHIFT " + index + "\nSlots left: " + expectedShift.getSlotsLeft() + "/"
-                        + expectedShift.getCapacity().getCapacity(),
-                actualEntry.getTitle());
+                        + expectedShift.getCapacity().getCapacity(), actualEntry.getTitle());
     }
 
     /**
@@ -711,6 +710,7 @@ public class OutletDetailsPanelTest extends GuiUnitTest {
     private static String getTagColor(String tagName) {
         switch (tagName) {
         case "supervisor":
+        case "chef":
             return "purple";
         case "paperwork":
             return "mint";
@@ -728,7 +728,10 @@ public class OutletDetailsPanelTest extends GuiUnitTest {
         case "bartender":
             return "pale-blue";
         case "husband":
+        case "cashier":
             return "yellow";
+        case "alfresco":
+            return "turquoise";
         default:
             fail(tagName + " does not have a color assigned.");
             return "";
@@ -768,7 +771,7 @@ public class TimetablePanelTest extends GuiUnitTest {
     private ExportTimetableAsImageAndEmailRequestEvent exportTimetableAsImageAndEmailRequestEventStub;
     private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventPrevStub;
     private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventNextStub;
-    private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventInvalidStub;
+    private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventCurrStub;
 
     private TimetablePanel timetablePanel;
     private TimetablePanelHandle timetablePanelHandle;
@@ -792,9 +795,9 @@ public class TimetablePanelTest extends GuiUnitTest {
         exportTimetableAsImageAndEmailRequestEventStub = new ExportTimetableAsImageAndEmailRequestEvent(
                 TIMETABLE_IMAGE_FILE_NAME_SECOND_TEST, TIMETABLE_IMAGE_EMAIL_TEST);
 
-        timetableWeekChangeRequestEventPrevStub = new TimetableWeekChangeRequestEvent(false, true);
-        timetableWeekChangeRequestEventNextStub = new TimetableWeekChangeRequestEvent(true, false);
-        timetableWeekChangeRequestEventInvalidStub = new TimetableWeekChangeRequestEvent(true, true);
+        timetableWeekChangeRequestEventPrevStub = new TimetableWeekChangeRequestEvent(WeekChangeRequest.PREVIOUS);
+        timetableWeekChangeRequestEventNextStub = new TimetableWeekChangeRequestEvent(WeekChangeRequest.NEXT);
+        timetableWeekChangeRequestEventCurrStub = new TimetableWeekChangeRequestEvent(WeekChangeRequest.CURRENT);
 
         testFilePathFirst = Paths.get("." + File.separator + TIMETABLE_IMAGE_FILE_NAME_FIRST_TEST + "."
                 + TIMETABLE_IMAGE_FILE_FORMAT);
@@ -848,34 +851,27 @@ public class TimetablePanelTest extends GuiUnitTest {
 
     @Test
     public void timetablePanel_handleTimetableWeekChangeRequestEvent() {
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         postNow(timetableWeekChangeRequestEventNextStub);
         assertEquals(getNextWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         postNow(timetableWeekChangeRequestEventPrevStub);
         assertEquals(startingDate, timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
-        postNow(timetableWeekChangeRequestEventInvalidStub);
-        assertEquals(startingDate, timetablePanelHandle.getTimetableDate());
-
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         postNow(timetableWeekChangeRequestEventPrevStub);
         assertEquals(getPrevWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
+
+        postNow(timetableWeekChangeRequestEventCurrStub);
+        assertEquals(LocalDate.now(), timetablePanelHandle.getTimetableDate());
     }
 
     @Test
     public void handleTimetableWeekChangeRequestEvent_usingButtons() {
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         timetablePanelHandle.navigateToNextUsingButton();
         assertEquals(getNextWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         timetablePanelHandle.navigateToPrevUsingButton();
         assertEquals(startingDate, timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         timetablePanelHandle.navigateToPrevUsingButton();
         assertEquals(getPrevWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
     }

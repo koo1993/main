@@ -260,9 +260,15 @@ public class AddShiftCommandTest {
         }
 
         @Override
-        public String getOutletInformationMessage() {
+        public String getEncryptionModeMessage() {
             fail("This method should not be called.");
             return null;
+        }
+
+        @Override
+        public boolean getEncryptionMode() {
+            fail("This method should not be called.");
+            return false;
         }
 
         @Override
@@ -1631,6 +1637,160 @@ public class UniqueShiftListTest {
     public void remove_shiftDoesNotExist_throwsShiftNotFoundException() {
         UniqueShiftList uniqueShiftList = new UniqueShiftList();
         assertThrows(ShiftNotFoundException.class, () -> uniqueShiftList.remove(SHIFT_MONDAY_AM));
+    }
+}
+```
+###### \java\seedu\ptman\storage\XmlAdaptedShiftTest.java
+``` java
+public class XmlAdaptedShiftTest {
+    private static final String INVALID_DATE = "1-1-18";
+    private static final String INVALID_START_TIME = "asd";
+    private static final String INVALID_END_TIME = "2500";
+    private static final String INVALID_CAPACITY = "two";
+
+    private static final String VALID_DATE = "01-01-18";
+    private static final String VALID_CAPACITY = SHIFT_THURSDAY_AM.getCapacity().toString();
+    private static final String VALID_START_TIME = SHIFT_THURSDAY_AM.getStartTime().toString();
+    private static final String VALID_END_TIME = SHIFT_THURSDAY_AM.getEndTime().toString();
+
+    private static final List<XmlAdaptedEmployee> VALID_EMPLOYEES =
+            SHIFT_THURSDAY_AM.getEmployeeList().stream()
+            .map(XmlAdaptedEmployee::new)
+            .collect(Collectors.toList());
+
+    @Test
+    public void toModelType_validShiftDetails_returnsShift() throws Exception {
+        XmlAdaptedShift shift = new XmlAdaptedShift(SHIFT_THURSDAY_AM);
+        assertEquals(SHIFT_THURSDAY_AM, shift.toModelType());
+    }
+
+    @Test
+    public void toModelType_invalidDate_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(INVALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = Date.MESSAGE_DATE_CONSTRAINTS;
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullDate_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(null, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Date.class.getSimpleName());
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidStartTime_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, INVALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = Time.MESSAGE_TIME_CONSTRAINTS;
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullPhone_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, null, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Time.class.getSimpleName());
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidEndTime_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, INVALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = Time.MESSAGE_TIME_CONSTRAINTS;
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullEndTime_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, null, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Time.class.getSimpleName());
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidCapacity_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, INVALID_CAPACITY,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = Capacity.MESSAGE_CAPACITY_CONSTRAINTS;
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullAddress_throwsIllegalValueException() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, null,
+                        VALID_EMPLOYEES);
+
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT, Capacity.class.getSimpleName());
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, shift::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidTags_throwsIllegalValueException() {
+        List<XmlAdaptedEmployee> invalidEmployees = new ArrayList<>();
+        invalidEmployees.add(new XmlAdaptedEmployee(null, null, null, null, null, null, null));
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, null,
+                        invalidEmployees);
+
+        Assert.assertThrows(IllegalValueException.class, shift::toModelType);
+    }
+
+    @Test
+    public void equals_sameObject_returnsTrue() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+        assertTrue(shift.equals(shift));
+    }
+
+    @Test
+    public void equals_sameShift_returnsTrue() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+        XmlAdaptedShift shift1 =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+        assertTrue(shift.equals(shift1));
+    }
+
+    @Test
+    public void equals_differentShift_returnsTrue() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+        XmlAdaptedShift shift1 =
+                new XmlAdaptedShift("02-14-18", VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+        assertFalse(shift.equals(shift1));
+    }
+
+    @Test
+    public void equals_null_returnsFalse() {
+        XmlAdaptedShift shift =
+                new XmlAdaptedShift(VALID_DATE, VALID_START_TIME, VALID_END_TIME, VALID_CAPACITY,
+                        VALID_EMPLOYEES);
+        assertFalse(shift.equals(null));
     }
 }
 ```

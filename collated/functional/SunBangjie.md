@@ -86,6 +86,50 @@ public class AnnouncementChangedEvent extends BaseEvent {
     }
 }
 ```
+###### \java\seedu\ptman\commons\events\ui\OutletInformationChangedEvent.java
+``` java
+/**
+ * Represents an information change in the Outlet Information
+ */
+public class OutletInformationChangedEvent extends BaseEvent {
+
+    public final String operatingHours;
+    public final String outletContact;
+    public final String outletEmail;
+
+    public OutletInformationChangedEvent(String operatingHours, String outletContact, String outletEmail) {
+        this.operatingHours = operatingHours;
+        this.outletContact = outletContact;
+        this.outletEmail = outletEmail;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+}
+```
+###### \java\seedu\ptman\commons\events\ui\OutletNameChangedEvent.java
+``` java
+/**
+ * Represents an information change in the Outlet Information
+ */
+public class OutletNameChangedEvent extends BaseEvent {
+
+    public final String message;
+
+    public OutletNameChangedEvent(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+}
+```
 ###### \java\seedu\ptman\logic\commands\AnnouncementCommand.java
 ``` java
 /**
@@ -226,7 +270,7 @@ public class EditOutletCommand extends UndoableCommand {
             editedOutlet.setOutletInformation(name, operatingHours, outletContact, outletEmail);
             model.updateOutlet(editedOutlet);
             EventsCenter.getInstance().post(new OutletInformationChangedEvent(
-                    editedOutlet.getOperatingHours().toString(),
+                    editedOutlet.getOperatingHours().getDisplayedMessage(),
                     editedOutlet.getOutletContact().toString(),
                     editedOutlet.getOutletEmail().toString()));
             EventsCenter.getInstance().post(new OutletNameChangedEvent(editedOutlet.getName().toString()));
@@ -276,7 +320,7 @@ public class EncryptDataCommand extends Command {
         if (!model.isAdminMode()) {
             throw new CommandException(MESSAGE_ACCESS_DENIED);
         }
-        if (model.getOutletInformation().getEncryptionMode()) {
+        if (model.getEncryptionMode()) {
             throw new CommandException(MESSAGE_ENCRYPT_FAILURE);
         }
         model.encryptLocalStorage();
@@ -284,23 +328,23 @@ public class EncryptDataCommand extends Command {
     }
 }
 ```
-###### \java\seedu\ptman\logic\commands\ViewOutletCommand.java
+###### \java\seedu\ptman\logic\commands\ViewEncryptionCommand.java
 ``` java
 /**
  * Displays the details of outlet in the ptman.
  */
-public class ViewOutletCommand extends Command {
+public class ViewEncryptionCommand extends Command {
 
-    public static final String COMMAND_WORD = "viewoutlet";
-    public static final String COMMAND_ALIAS = "vo";
+    public static final String COMMAND_WORD = "viewencryption";
+    public static final String COMMAND_ALIAS = "ve";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": displays outlet information and "
-            + "encryption mode.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": displays encryption status of "
+            + "local storage files.\n"
             + "Example: " + COMMAND_WORD;
 
     @Override
     public CommandResult execute() {
-        String messageToDisplay = model.getOutletInformationMessage();
+        String messageToDisplay = model.getEncryptionModeMessage();
         return new CommandResult(messageToDisplay);
     }
 }
@@ -373,15 +417,23 @@ public class EditOutletCommandParser implements Parser<EditOutletCommand> {
 ```
 ###### \java\seedu\ptman\model\ModelManager.java
 ``` java
+    /** Raises an event to indicate the model has changed */
+    private void indicateEncryptionModeChanged() {
+        raise(new PartTimeManagerChangedEvent(partTimeManager));
+        raise(new OutletDataChangedEvent(partTimeManager.getOutletInformation()));
+    }
+
+    /** Raises an event to indicate the model has changed */
+    private void indicateOutletInformationChanged() {
+        raise(new OutletDataChangedEvent(partTimeManager.getOutletInformation()));
+    }
+```
+###### \java\seedu\ptman\model\ModelManager.java
+``` java
     @Override
     public void updateOutlet(OutletInformation editedOutlet) throws NoOutletInformationFieldChangeException {
         partTimeManager.updateOutlet(editedOutlet);
-        indicatePartTimeManagerChanged();
-    }
-
-    @Override
-    public String getOutletInformationMessage() {
-        return partTimeManager.getOutletInformationMessage();
+        indicateOutletInformationChanged();
     }
 
     @Override
@@ -390,15 +442,25 @@ public class EditOutletCommandParser implements Parser<EditOutletCommand> {
     }
 
     @Override
+    public boolean getEncryptionMode() {
+        return getOutletInformation().getEncryptionMode();
+    }
+
+    @Override
+    public String getEncryptionModeMessage() {
+        return getOutletInformation().getEncryptionModeMessage();
+    }
+
+    @Override
     public void encryptLocalStorage() {
         partTimeManager.encryptLocalStorage();
-        indicatePartTimeManagerChanged();
+        indicateEncryptionModeChanged();
     }
 
     @Override
     public void decryptLocalStorage() {
         partTimeManager.decryptLocalStorage();
-        indicatePartTimeManagerChanged();
+        indicateEncryptionModeChanged();
     }
 ```
 ###### \java\seedu\ptman\model\outlet\Announcement.java
@@ -679,9 +741,9 @@ public class OutletInformation {
     public static final String DEFAULT_OUTLET_EMAIL = "DefaultOutlet@gmail.com";
     public static final String DEFAULT_ANNOUNCEMENT_MESSAGE = "No announcement. "
             + "Please add new announcement with announcement command.";
-    public static final String DATA_ENCRYPTED_MESSAGE = "Outlet information storage files are encrypted.";
+    public static final String DATA_ENCRYPTED_MESSAGE = "Local storage files are encrypted.";
     public static final String DATA_NOT_ENCRYPTED_MESSAGE =
-            "Outlet information storage files are not encrypted.";
+            "Local storage files are not encrypted.";
 
     private OutletName name;
     private Password masterPassword;
@@ -947,12 +1009,15 @@ public class OutletName {
 ```
 ###### \java\seedu\ptman\model\PartTimeManager.java
 ``` java
-    public void updateOutlet(OutletInformation editedOutlet) throws NoOutletInformationFieldChangeException {
-        outlet.setOutletInformation(editedOutlet);
+    public void setOutletInformation(OutletInformation outlet) throws NoOutletInformationFieldChangeException {
+        this.outlet.setOutletInformation(outlet);
     }
 
-    public String getOutletInformationMessage() {
-        return outlet.toString();
+```
+###### \java\seedu\ptman\model\PartTimeManager.java
+``` java
+    public void updateOutlet(OutletInformation editedOutlet) throws NoOutletInformationFieldChangeException {
+        outlet.setOutletInformation(editedOutlet);
     }
 
     @Override
@@ -1030,6 +1095,7 @@ public interface OutletInformationStorage {
             raise(new DataSavingExceptionEvent(e));
         }
     }
+
 
     // ================ backup methods ==============================
 
@@ -1564,347 +1630,6 @@ public class XmlEncryptedAdaptedEmployee {
     }
 }
 ```
-###### \java\seedu\ptman\storage\XmlEncryptedAdaptedShift.java
-``` java
-/**
- * JAXB-friendly version of the Shift.
- */
-public class XmlEncryptedAdaptedShift {
-
-    public static final String MISSING_FIELD_MESSAGE_FORMAT_SHIFT = "Shifts's %s field is missing!";
-    public static final String DECRYPT_FAIL_MESSAGE = "Cannot decrypt %s.";
-
-    @XmlElement(required = true)
-    private String date;
-    @XmlElement(required = true)
-    private String startTime;
-    @XmlElement(required = true)
-    private String endTime;
-    @XmlElement(required = true)
-    private String capacity;
-
-    @XmlElement
-    private List<XmlEncryptedAdaptedEmployee> employees = new ArrayList<>();
-
-    /**
-     * Constructs an XmlAdaptedShift.
-     * This is the no-arg constructor that is required by JAXB.
-     */
-    public XmlEncryptedAdaptedShift() {}
-
-    /**
-     * Constructs an {@code XmlAdaptedShift} with the given shift details.
-     */
-    public XmlEncryptedAdaptedShift(String date, String startTime, String endTime,
-                                    String capacity, List<XmlEncryptedAdaptedEmployee> employees) {
-        try {
-            this.date = encrypt(date);
-            this.startTime = encrypt(startTime);
-            this.endTime = encrypt(endTime);
-            this.capacity = encrypt(capacity);
-        } catch (Exception e) {
-            //Encryption should not fail
-        }
-
-        if (employees != null) {
-            this.employees = new ArrayList<>(employees);
-        }
-    }
-
-    /**
-     * Converts a given Shift into this class for JAXB use.
-     *
-     * @param source future changes to this will not affect the created XmlAdaptedShift
-     */
-    public XmlEncryptedAdaptedShift(Shift source) {
-        try {
-            date = encrypt(source.getDate().toString());
-            startTime = encrypt(source.getStartTime().toString());
-            endTime = encrypt(source.getEndTime().toString());
-            capacity = encrypt(source.getCapacity().toString());
-        } catch (Exception e) {
-            //Encryption should not fail
-        }
-
-        employees = new ArrayList<>();
-        for (Employee employee : source.getEmployeeList()) {
-            employees.add(new XmlEncryptedAdaptedEmployee(employee));
-        }
-    }
-
-    public void setAttributesFromSource(Shift source) {
-        date = source.getDate().toString();
-        startTime = source.getStartTime().toString();
-        endTime = source.getEndTime().toString();
-        capacity = source.getCapacity().toString();
-    }
-
-    public void setAttributesFromStrings(String date, String startTime, String endTime, String capacity) {
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.capacity = capacity;
-    }
-
-    /**
-     * Decrypts date
-     * @return
-     * @throws IllegalValueException
-     */
-    private Date decryptDate() throws IllegalValueException {
-        String decryptedDate;
-        try {
-            decryptedDate = decrypt(this.date);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Date.class.getSimpleName()));
-        }
-        if (decryptedDate == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
-                    Date.class.getSimpleName()));
-        }
-        if (!Date.isValidDate(decryptedDate)) {
-            throw new IllegalValueException(Date.MESSAGE_DATE_CONSTRAINTS);
-        }
-        return new Date(decryptedDate);
-    }
-
-    /**
-     * Decryptes time
-     * @param time
-     * @return
-     * @throws IllegalValueException
-     */
-    private Time decryptTime(String time) throws IllegalValueException {
-        String decryptedTime;
-        try {
-            decryptedTime = decrypt(time);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Time.class.getSimpleName()));
-        }
-        if (decryptedTime == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
-                    Time.class.getSimpleName()));
-        }
-        if (!Time.isValidTime(decryptedTime)) {
-            throw new IllegalValueException(Time.MESSAGE_TIME_CONSTRAINTS);
-        }
-        return new Time(decryptedTime);
-    }
-
-    /**
-     * Decryptes capacity
-     * @return
-     * @throws IllegalValueException
-     */
-    private Capacity decryptCapacity() throws IllegalValueException {
-        String decryptedCapacity;
-        try {
-            decryptedCapacity = decrypt(this.capacity);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Capacity.class.getSimpleName()));
-        }
-        if (decryptedCapacity == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT_SHIFT,
-                    Capacity.class.getSimpleName()));
-        }
-        if (!Capacity.isValidCapacity(decryptedCapacity)) {
-            throw new IllegalValueException(Capacity.MESSAGE_CAPACITY_CONSTRAINTS);
-        }
-        return new Capacity(decryptedCapacity);
-    }
-
-    /**
-     * Converts this jaxb-friendly adapted shift object into the model's Shift object.
-     *
-     * @throws IllegalValueException if there were any data constraints violated in the adapted shift
-     */
-    public Shift toModelType() throws IllegalValueException {
-        final List<Employee> employees = new ArrayList<>();
-        for (XmlEncryptedAdaptedEmployee employee : this.employees) {
-            employees.add(employee.toModelType());
-        }
-
-        final Date date = decryptDate();
-        final Time startTime = decryptTime(this.startTime);
-        final Time endTime = decryptTime(this.endTime);
-        final Capacity capacity = decryptCapacity();
-
-        return new Shift(date, startTime, endTime, capacity, new HashSet<>(employees));
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-
-        if (!(other instanceof XmlEncryptedAdaptedShift)) {
-            return false;
-        }
-
-        XmlEncryptedAdaptedShift otherShift = (XmlEncryptedAdaptedShift) other;
-        return Objects.equals(date, otherShift.date)
-                && Objects.equals(startTime, otherShift.startTime)
-                && Objects.equals(endTime, otherShift.endTime)
-                && Objects.equals(capacity, otherShift.capacity)
-                && employees.equals(otherShift.employees);
-    }
-}
-```
-###### \java\seedu\ptman\storage\XmlEncryptedAdaptedTag.java
-``` java
-/**
- * JAXB-friendly adapted version of the Tag.
- */
-public class XmlEncryptedAdaptedTag {
-
-    public static final String DECRYPT_FAIL_MESSAGE = "Cannot decrypt %s";
-
-    @XmlValue
-    private String tagName;
-
-    /**
-     * Constructs an XmlAdaptedTag.
-     * This is the no-arg constructor that is required by JAXB.
-     */
-    public XmlEncryptedAdaptedTag() {}
-
-    /**
-     * Constructs a {@code XmlAdaptedTag} with the given {@code tagName}.
-     */
-    public XmlEncryptedAdaptedTag(String tagName) {
-        try {
-            this.tagName = encrypt(tagName);
-        } catch (Exception e) {
-            //Encryption should not fail
-        }
-    }
-
-    /**
-     * Converts a given Tag into this class for JAXB use.
-     *
-     * @param source future changes to this will not affect the created
-     */
-    public XmlEncryptedAdaptedTag(Tag source) {
-        try {
-            tagName = encrypt(source.tagName);
-        } catch (Exception e) {
-            //Encryption should not fail
-        }
-    }
-
-    /**
-     * Converts this jaxb-friendly adapted tag object into the model's Tag object.
-     *
-     * @throws IllegalValueException if there were any data constraints violated in the adapted employee
-     */
-    public Tag toModelType() throws IllegalValueException {
-        String decryptedTagName;
-        try {
-            decryptedTagName = decrypt(tagName);
-        } catch (Exception e) {
-            throw new IllegalValueException(String.format(DECRYPT_FAIL_MESSAGE, Tag.class.getSimpleName()));
-        }
-        if (!Tag.isValidTagName(decryptedTagName)) {
-            throw new IllegalValueException(Tag.MESSAGE_TAG_CONSTRAINTS);
-        }
-        return new Tag(decryptedTagName);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-
-        if (!(other instanceof XmlEncryptedAdaptedTag)) {
-            return false;
-        }
-
-        return tagName.equals(((XmlEncryptedAdaptedTag) other).tagName);
-    }
-}
-```
-###### \java\seedu\ptman\storage\XmlEncryptedSerializablePartTimeManager.java
-``` java
-/**
- * An Immutable PartTimeManager that is serializable to XML format
- */
-@XmlRootElement(name = "parttimemanager")
-public class XmlEncryptedSerializablePartTimeManager {
-
-    private static final String ENCRYPTED_MESSAGE = "PartTimerManager storage files are encrypted.";
-    private static final String DECRYPTED_MESSAGE = "PartTimerManager storage files are not encrypted.";
-
-    @XmlElement
-    private String encryptionMode;
-    @XmlElement
-    private List<XmlEncryptedAdaptedEmployee> employees;
-    @XmlElement
-    private List<XmlEncryptedAdaptedTag> tags;
-    @XmlElement
-    private List<XmlEncryptedAdaptedShift> shifts;
-
-    /**
-     * Creates an empty XmlEncryptedSerializablePartTimeManager.
-     * This empty constructor is required for marshalling.
-     */
-    public XmlEncryptedSerializablePartTimeManager() {
-        employees = new ArrayList<>();
-        tags = new ArrayList<>();
-        shifts = new ArrayList<>();
-    }
-
-    /**
-     * Conversion
-     */
-    public XmlEncryptedSerializablePartTimeManager(ReadOnlyPartTimeManager src) {
-        this();
-        this.encryptionMode = src.getOutletInformation().getEncryptionMode()
-                ? ENCRYPTED_MESSAGE : DECRYPTED_MESSAGE;
-        employees.addAll(src.getEmployeeList().stream().map(XmlEncryptedAdaptedEmployee::new)
-                .collect(Collectors.toList()));
-        tags.addAll(src.getTagList().stream().map(XmlEncryptedAdaptedTag::new).collect(Collectors.toList()));
-        shifts.addAll(src.getShiftList().stream().map(XmlEncryptedAdaptedShift::new).collect(Collectors.toList()));
-    }
-
-    /**
-     * Converts this parttimemanager into the model's {@code PartTimeManager} object.
-     *
-     * @throws IllegalValueException if there were any data constraints violated or duplicates in the
-     * {@code XmlAdaptedEmployee} or {@code XmlAdaptedTag}.
-     */
-    public PartTimeManager toModelType() throws IllegalValueException {
-        PartTimeManager partTimeManager = new PartTimeManager();
-        for (XmlEncryptedAdaptedTag t : tags) {
-            partTimeManager.addTag(t.toModelType());
-        }
-        for (XmlEncryptedAdaptedEmployee p : employees) {
-            partTimeManager.addEmployee(p.toModelType());
-        }
-        for (XmlEncryptedAdaptedShift s : shifts) {
-            partTimeManager.addShift(s.toModelType());
-        }
-        return partTimeManager;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-
-        if (!(other instanceof XmlEncryptedSerializablePartTimeManager)) {
-            return false;
-        }
-
-        XmlEncryptedSerializablePartTimeManager otherPtm = (XmlEncryptedSerializablePartTimeManager) other;
-        return employees.equals(otherPtm.employees)
-                && tags.equals(otherPtm.tags)
-                && shifts.equals(otherPtm.shifts);
-    }
-}
-```
 ###### \java\seedu\ptman\storage\XmlOutletFileStorage.java
 ``` java
 /**
@@ -2031,8 +1756,70 @@ public class XmlOutletInformationStorage implements OutletInformationStorage {
 ```
 ###### \java\seedu\ptman\ui\OutletDetailsPanel.java
 ``` java
+/**
+ * The Outlet Panel of the App, which displays the Outlet name and details
+ */
+public class OutletDetailsPanel extends UiPart<Region> {
+
+    private static final String FXML = "OutletDetailsPanel.fxml";
+
+    public final OutletInformation outlet;
+
+    private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    @FXML
+    private Label outletNamePanelHeader;
+
+    @FXML
+    private Label operatingHours;
+
+    @FXML
+    private Label outletContact;
+
+    @FXML
+    private Label outletEmail;
+
+    @FXML
+    private Label announcement;
+
+
+    public OutletDetailsPanel(OutletInformation outlet) {
+        super(FXML);
+        this.outlet = outlet;
+        //outletInformation.setWrapText(true);
+        setOutletInformation(outlet.getOperatingHours().getDisplayedMessage(),
+                outlet.getOutletContact().toString(),
+                outlet.getOutletEmail().toString());
+        setOutletName(outlet.getName().toString());
+        setAnnouncement(outlet.getAnnouncement().toString());
+
+        registerAsAnEventHandler(this);
+    }
+
+    private void setOutletName(String name) {
+        outletNamePanelHeader.setText(name);
+    }
+
+    private void setOutletInformation(String operatingHours, String outletContact, String outletEmail) {
+        this.operatingHours.setText(operatingHours + "    ");
+        this.outletContact.setText(outletContact + "    ");
+        this.outletEmail.setText(outletEmail);
+    }
+
     private void setAnnouncement(String text) {
         announcement.setText(text);
+    }
+
+    @Subscribe
+    private void handleOutletInformationChangedEvent(OutletInformationChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        Platform.runLater(() -> setOutletInformation(event.operatingHours, event.outletContact, event.outletEmail));
+    }
+
+    @Subscribe
+    private void handleOutletNameChangedEvent(OutletNameChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        Platform.runLater(() -> setOutletName(event.message));
     }
 
 ```
