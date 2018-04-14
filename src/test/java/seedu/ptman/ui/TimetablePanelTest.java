@@ -20,7 +20,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,6 +33,7 @@ import seedu.ptman.commons.events.ui.EmployeePanelSelectionChangedEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageAndEmailRequestEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageRequestEvent;
 import seedu.ptman.commons.events.ui.TimetableWeekChangeRequestEvent;
+import seedu.ptman.commons.events.ui.TimetableWeekChangeRequestEvent.WeekChangeRequest;
 import seedu.ptman.logic.Logic;
 import seedu.ptman.logic.LogicManager;
 import seedu.ptman.model.Model;
@@ -64,7 +64,7 @@ public class TimetablePanelTest extends GuiUnitTest {
     private ExportTimetableAsImageAndEmailRequestEvent exportTimetableAsImageAndEmailRequestEventStub;
     private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventPrevStub;
     private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventNextStub;
-    private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventInvalidStub;
+    private TimetableWeekChangeRequestEvent timetableWeekChangeRequestEventCurrStub;
 
     private TimetablePanel timetablePanel;
     private TimetablePanelHandle timetablePanelHandle;
@@ -88,9 +88,9 @@ public class TimetablePanelTest extends GuiUnitTest {
         exportTimetableAsImageAndEmailRequestEventStub = new ExportTimetableAsImageAndEmailRequestEvent(
                 TIMETABLE_IMAGE_FILE_NAME_SECOND_TEST, TIMETABLE_IMAGE_EMAIL_TEST);
 
-        timetableWeekChangeRequestEventPrevStub = new TimetableWeekChangeRequestEvent(false, true);
-        timetableWeekChangeRequestEventNextStub = new TimetableWeekChangeRequestEvent(true, false);
-        timetableWeekChangeRequestEventInvalidStub = new TimetableWeekChangeRequestEvent(true, true);
+        timetableWeekChangeRequestEventPrevStub = new TimetableWeekChangeRequestEvent(WeekChangeRequest.PREVIOUS);
+        timetableWeekChangeRequestEventNextStub = new TimetableWeekChangeRequestEvent(WeekChangeRequest.NEXT);
+        timetableWeekChangeRequestEventCurrStub = new TimetableWeekChangeRequestEvent(WeekChangeRequest.CURRENT);
 
         testFilePathFirst = Paths.get("." + File.separator + TIMETABLE_IMAGE_FILE_NAME_FIRST_TEST + "."
                 + TIMETABLE_IMAGE_FILE_FORMAT);
@@ -144,34 +144,27 @@ public class TimetablePanelTest extends GuiUnitTest {
 
     @Test
     public void timetablePanel_handleTimetableWeekChangeRequestEvent() {
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         postNow(timetableWeekChangeRequestEventNextStub);
         assertEquals(getNextWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         postNow(timetableWeekChangeRequestEventPrevStub);
         assertEquals(startingDate, timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
-        postNow(timetableWeekChangeRequestEventInvalidStub);
-        assertEquals(startingDate, timetablePanelHandle.getTimetableDate());
-
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         postNow(timetableWeekChangeRequestEventPrevStub);
         assertEquals(getPrevWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
+
+        postNow(timetableWeekChangeRequestEventCurrStub);
+        assertEquals(LocalDate.now(), timetablePanelHandle.getTimetableDate());
     }
 
     @Test
     public void handleTimetableWeekChangeRequestEvent_usingButtons() {
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         timetablePanelHandle.navigateToNextUsingButton();
         assertEquals(getNextWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         timetablePanelHandle.navigateToPrevUsingButton();
         assertEquals(startingDate, timetablePanelHandle.getTimetableDate());
 
-        Logger.getAnonymousLogger().info("starting date " + startingDate);
         timetablePanelHandle.navigateToPrevUsingButton();
         assertEquals(getPrevWeekDate(startingDate), timetablePanelHandle.getTimetableDate());
     }

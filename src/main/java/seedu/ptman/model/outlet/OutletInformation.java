@@ -21,9 +21,9 @@ public class OutletInformation {
     public static final String DEFAULT_OUTLET_EMAIL = "DefaultOutlet@gmail.com";
     public static final String DEFAULT_ANNOUNCEMENT_MESSAGE = "No announcement. "
             + "Please add new announcement with announcement command.";
-    public static final String DATA_ENCRYPTED_MESSAGE = "Outlet information storage files are encrypted.";
+    public static final String DATA_ENCRYPTED_MESSAGE = "Local storage files are encrypted.";
     public static final String DATA_NOT_ENCRYPTED_MESSAGE =
-            "Outlet information storage files are not encrypted.";
+            "Local storage files are not encrypted.";
 
     private OutletName name;
     private Password masterPassword;

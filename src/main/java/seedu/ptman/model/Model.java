@@ -93,7 +93,7 @@ public interface Model {
 
     void updateOutlet(OutletInformation outlet) throws NoOutletInformationFieldChangeException;
 
-    String getOutletInformationMessage();
+    String getEncryptionModeMessage();
 
     void encryptLocalStorage();
 

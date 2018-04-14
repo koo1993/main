@@ -62,11 +62,13 @@ public class Shift {
      * @throws DuplicateEmployeeException
      * @throws ShiftFullException
      */
-    public void addEmployee(Employee employee) throws DuplicateEmployeeException, ShiftFullException {
+    public void addEmployee(Employee... employees) throws DuplicateEmployeeException, ShiftFullException {
         if (this.isFull()) {
             throw new ShiftFullException();
         }
-        uniqueEmployeeList.add(employee);
+        for (Employee employee : employees) {
+            uniqueEmployeeList.add(employee);
+        }
     }
 
     /**

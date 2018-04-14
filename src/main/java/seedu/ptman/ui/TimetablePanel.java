@@ -42,6 +42,7 @@ import seedu.ptman.commons.events.ui.EmployeePanelSelectionChangedEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageAndEmailRequestEvent;
 import seedu.ptman.commons.events.ui.ExportTimetableAsImageRequestEvent;
 import seedu.ptman.commons.events.ui.TimetableWeekChangeRequestEvent;
+import seedu.ptman.commons.events.ui.TimetableWeekChangeRequestEvent.WeekChangeRequest;
 import seedu.ptman.commons.services.EmailService;
 import seedu.ptman.commons.util.DateUtil;
 import seedu.ptman.logic.Logic;
@@ -295,6 +296,15 @@ public class TimetablePanel extends UiPart<Region> {
     }
 
     /**
+     * Navigates the timetable view to the current week.
+     */
+    private void navigateToCurrWeek() {
+        logic.setFilteredShiftListToCurrentWeek();
+        shiftObservableList = logic.getFilteredShiftList();
+        updateTimetableView();
+    }
+
+    /**
      * Replaces the timetable view with a new timetable, with shifts taken by the employee being highlighted
      * @param employee
      */
@@ -303,9 +313,11 @@ public class TimetablePanel extends UiPart<Region> {
         updateTimetableView();
     }
 
-    private void loadMainTimetable() {
+    /**
+     * Replaces the timetable view with a default timetable with no employee being selected.
+     */
+    private void loadDefaultTimetable() {
         currentEmployee = null;
-        logic.setFilteredShiftListToCurrentWeek();
         updateTimetableView();
     }
 
@@ -425,22 +437,27 @@ public class TimetablePanel extends UiPart<Region> {
             if (event.hasNewSelection()) {
                 loadEmployeeTimetable(event.getNewSelection().employee);
             } else {
-                loadMainTimetable();
+                loadDefaultTimetable();
             }
         });
     }
 
     @Subscribe
     private void handleTimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent event) {
+        WeekChangeRequest request = event.getRequest();
         Platform.runLater(() -> {
-            if (event.isNext && !event.isPrev) {
+            if (request == WeekChangeRequest.NEXT) {
                 logger.info(LogsCenter.getEventHandlingLogMessage(event)
                         + ": Navigating timetable to the next week....");
                 navigateToNextWeek();
-            } else if (event.isPrev && !event.isNext) {
+            } else if (request == WeekChangeRequest.PREVIOUS) {
                 logger.info(LogsCenter.getEventHandlingLogMessage(event)
                         + ": Navigating timetable to the previous week....");
                 navigateToPreviousWeek();
+            } else if (request == WeekChangeRequest.CURRENT) {
+                logger.info(LogsCenter.getEventHandlingLogMessage(event)
+                        + ": Navigating timetable to the current week....");
+                navigateToCurrWeek();
             }
         });
     }

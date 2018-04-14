@@ -149,7 +149,7 @@ public class OutletInformationTest {
                 announcement, password, false);
         String expected = "Outlet Name: outlet Operating Hours: 09:00-22:00 "
                 + "Contact: 91234567 Email: outlet@gmail.com Announcement: New announcement. "
-                + "Encryption: Outlet information storage files are not encrypted.";
+                + "Encryption: Local storage files are not encrypted.";
         assertEquals(outlet.toString(), expected);
     }
 }

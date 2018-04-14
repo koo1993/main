@@ -103,6 +103,7 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
         this.employees.setEmployees(employees);
     }
 
+    //@@author SunBangjie
     public void setOutletInformation(OutletInformation outlet) throws NoOutletInformationFieldChangeException {
         this.outlet.setOutletInformation(outlet);
     }
@@ -184,10 +185,6 @@ public class PartTimeManager implements ReadOnlyPartTimeManager {
     //@@author SunBangjie
     public void updateOutlet(OutletInformation editedOutlet) throws NoOutletInformationFieldChangeException {
         outlet.setOutletInformation(editedOutlet);
-    }
-
-    public String getOutletInformationMessage() {
-        return outlet.toString();
     }
 
     @Override

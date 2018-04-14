@@ -17,8 +17,8 @@ import seedu.ptman.model.outlet.OutletInformation;
 /**
  * Contains integration tests (interaction with the Model) for {@code ViewOutletCommand}.
  */
-public class ViewOutletCommandTest {
-    private ViewOutletCommand command;
+public class ViewEncryptionCommandTest {
+    private ViewEncryptionCommand command;
     private Model model;
     private Model expectedModel;
 
@@ -28,17 +28,13 @@ public class ViewOutletCommandTest {
                 new OutletInformation());
         expectedModel = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(),
                 new OutletInformation());
-        command = new ViewOutletCommand();
+        command = new ViewEncryptionCommand();
         command.setData(model, new CommandHistory(), new UndoRedoStack());
     }
 
     @Test
     public void execute_validOutletInformation_showsCorrectInformation() {
-        String expectedMessage = "Outlet Name: DefaultOutlet Operating Hours: 09:00-22:00 Contact: 91234567 "
-                + "Email: DefaultOutlet@gmail.com Announcement: No announcement. "
-                + "Please add new announcement "
-                + "with announcement command. "
-                + "Encryption: Outlet information storage files are not encrypted.";
+        String expectedMessage = "Local storage files are not encrypted.";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 }

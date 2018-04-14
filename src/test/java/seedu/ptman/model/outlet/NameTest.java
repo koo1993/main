@@ -32,41 +32,41 @@ public class NameTest {
         assertFalse(OutletName.isValidName("")); // empty string
         assertFalse(OutletName.isValidName(" ")); // spaces only
         assertFalse(OutletName.isValidName("^")); // only non-alphanumeric characters
-        assertFalse(OutletName.isValidName("peter*")); // contains non-alphanumeric characters
+        assertFalse(OutletName.isValidName("coffee*")); // contains non-alphanumeric characters
     }
 
     @Test
     public void isValidName_validName_returnsTrue() {
-        assertTrue(OutletName.isValidName("peter jack")); // alphabets only
+        assertTrue(OutletName.isValidName("cool coffee")); // alphabets only
         assertTrue(OutletName.isValidName("12345")); // numbers only
-        assertTrue(OutletName.isValidName("peter the 2nd")); // alphanumeric characters
-        assertTrue(OutletName.isValidName("Capital Tan")); // with capital letters
-        assertTrue(OutletName.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(OutletName.isValidName("cool coffee 3rd branch")); // alphanumeric characters
+        assertTrue(OutletName.isValidName("Cool Coffee")); // with capital letters
+        assertTrue(OutletName.isValidName("The Best and Coolest Coffee in the World")); // long names
     }
 
     @Test
     public void toString_sameValue_returnsTrue() {
-        OutletName test = new OutletName("valid name");
-        assertEquals(test.toString(), "valid name");
+        OutletName test = new OutletName("Cool Coffee");
+        assertEquals(test.toString(), "Cool Coffee");
     }
 
     @Test
     public void equals_sameValue_returnsTrue() {
-        OutletName test = new OutletName("valid name");
-        OutletName other = new OutletName("valid name");
+        OutletName test = new OutletName("Cool Coffee");
+        OutletName other = new OutletName("Cool Coffee");
         assertTrue(test.equals(other));
     }
 
     @Test
     public void equals_differentValue_returnsFalse() {
-        OutletName test = new OutletName("valid name");
-        OutletName other = new OutletName("another valid name");
+        OutletName test = new OutletName("Cool Coffee");
+        OutletName other = new OutletName("Coolest Coffee");
         assertFalse(test.equals(other));
     }
 
     @Test
     public void hashCode_sameFullName_returnsTrue() {
-        OutletName test = new OutletName("valid name");
-        assertEquals(test.hashCode(), "valid name".hashCode());
+        OutletName test = new OutletName("Cool Coffee");
+        assertEquals(test.hashCode(), "Cool Coffee".hashCode());
     }
 }

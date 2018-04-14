@@ -64,6 +64,7 @@ https://github.com/CS2103JAN2018-F09-B3/main/issues/164[#164]
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
+include::../UserGuide.adoc[tag=timetableIntro]
 include::../UserGuide.adoc[tag=timetableInteractions]
 
 

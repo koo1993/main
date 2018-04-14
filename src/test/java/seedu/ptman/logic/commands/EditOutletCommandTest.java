@@ -27,6 +27,9 @@ import seedu.ptman.model.outlet.OutletName;
 import seedu.ptman.model.outlet.exceptions.NoOutletInformationFieldChangeException;
 
 //@@author SunBangjie
+/**
+ * Contains integration tests (interaction with the Model) for {@code EditOutletCommand}.
+ */
 public class EditOutletCommandTest {
 
     private Model model = new ModelManager(getTypicalPartTimeManager(), new UserPrefs(), new OutletInformation());

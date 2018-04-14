@@ -60,8 +60,7 @@ public class GuiTestAssert {
         assertEquals(expectedShift.getStartTime().getLocalTime(), actualEntry.getStartTime());
         assertEquals(expectedShift.getEndTime().getLocalTime(), actualEntry.getEndTime());
         assertEquals("SHIFT " + index + "\nSlots left: " + expectedShift.getSlotsLeft() + "/"
-                        + expectedShift.getCapacity().getCapacity(),
-                actualEntry.getTitle());
+                        + expectedShift.getCapacity().getCapacity(), actualEntry.getTitle());
     }
 
     /**
@@ -73,6 +72,7 @@ public class GuiTestAssert {
     private static String getTagColor(String tagName) {
         switch (tagName) {
         case "supervisor":
+        case "chef":
             return "purple";
         case "paperwork":
             return "mint";
@@ -90,7 +90,10 @@ public class GuiTestAssert {
         case "bartender":
             return "pale-blue";
         case "husband":
+        case "cashier":
             return "yellow";
+        case "alfresco":
+            return "turquoise";
         default:
             fail(tagName + " does not have a color assigned.");
             return "";

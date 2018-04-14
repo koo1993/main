@@ -15,7 +15,7 @@ import seedu.ptman.model.employee.Employee;
 public class SelectCommand extends Command {
 
     public static final String COMMAND_WORD = "select";
-    public static final String COMMAND_ALIAS = "s";
+    public static final String COMMAND_ALIAS = "sel";
 
     public static final String COMMAND_FORMAT = "EMPLOYEE_INDEX";
     public static final String MESSAGE_USAGE = COMMAND_WORD

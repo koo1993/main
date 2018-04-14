@@ -19,7 +19,6 @@ import seedu.ptman.model.shift.Shift;
 import seedu.ptman.model.shift.Time;
 import seedu.ptman.testutil.Assert;
 
-//@@author SunBangjie
 public class XmlEncryptedAdaptedShiftTest {
     private static final String INVALID_DATE = "1-1-18";
     private static final String INVALID_START_TIME = "asd";

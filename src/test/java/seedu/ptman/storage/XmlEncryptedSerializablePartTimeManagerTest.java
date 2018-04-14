@@ -16,7 +16,6 @@ import seedu.ptman.commons.util.XmlUtil;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.util.SampleDataUtil;
 
-//@@author SunBangjie
 public class XmlEncryptedSerializablePartTimeManagerTest {
 
     private static final String TEST_DATA_FOLDER =

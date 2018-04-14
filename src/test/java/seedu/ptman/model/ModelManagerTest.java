@@ -55,6 +55,38 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void getEncryptionMode_defaultData_returnsFalse() {
+        ModelManager modelManager = new ModelManager();
+        assertFalse(modelManager.getEncryptionMode());
+    }
+
+    @Test
+    public void getEncryptionModeMessage_defaultData_returnsCorrectMessage() {
+        ModelManager modelManager = new ModelManager();
+        String actualMessage = modelManager.getEncryptionModeMessage();
+        String expectedMessage = new OutletInformation().getEncryptionModeMessage();
+        assertEquals(actualMessage, expectedMessage);
+    }
+
+    @Test
+    public void getEncryptionMode_encryptedData_returnsTrue() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.encryptLocalStorage();
+        assertTrue(modelManager.getEncryptionMode());
+    }
+
+    @Test
+    public void getEncryptionModeMessage_encryptedData_returnsCorrectMessage() {
+        ModelManager modelManager = new ModelManager();
+        modelManager.encryptLocalStorage();
+        String actualMessage = modelManager.getEncryptionModeMessage();
+        OutletInformation outletInformation = new OutletInformation();
+        outletInformation.setEncryptionMode(true);
+        String expectedMessage = outletInformation.getEncryptionModeMessage();
+        assertEquals(actualMessage, expectedMessage);
+    }
+
+    @Test
     public void encryptLocalStorage_dataNotEncrypted_success() {
         PartTimeManager partTimeManager = new PartTimeManager();
         PartTimeManager differentPartTimeManager = new PartTimeManager();

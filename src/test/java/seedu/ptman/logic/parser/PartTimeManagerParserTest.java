@@ -35,6 +35,7 @@ import seedu.ptman.logic.commands.ClearCommand;
 import seedu.ptman.logic.commands.DecryptDataCommand;
 import seedu.ptman.logic.commands.DeleteCommand;
 import seedu.ptman.logic.commands.DeleteShiftCommand;
+import seedu.ptman.logic.commands.DeselectCommand;
 import seedu.ptman.logic.commands.EditCommand;
 import seedu.ptman.logic.commands.EditCommand.EditEmployeeDescriptor;
 import seedu.ptman.logic.commands.EditOutletCommand;
@@ -46,12 +47,11 @@ import seedu.ptman.logic.commands.HelpCommand;
 import seedu.ptman.logic.commands.HistoryCommand;
 import seedu.ptman.logic.commands.ListCommand;
 import seedu.ptman.logic.commands.LogOutAdminCommand;
-import seedu.ptman.logic.commands.MainCommand;
 import seedu.ptman.logic.commands.RedoCommand;
 import seedu.ptman.logic.commands.SelectCommand;
 import seedu.ptman.logic.commands.UnapplyCommand;
 import seedu.ptman.logic.commands.UndoCommand;
-import seedu.ptman.logic.commands.ViewOutletCommand;
+import seedu.ptman.logic.commands.ViewEncryptionCommand;
 import seedu.ptman.logic.commands.ViewShiftCommand;
 import seedu.ptman.logic.parser.exceptions.ParseException;
 import seedu.ptman.model.Password;
@@ -303,12 +303,12 @@ public class PartTimeManagerParserTest {
 
     @Test
     public void parseCommand_viewoutlet() throws Exception {
-        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_WORD) instanceof ViewOutletCommand);
+        assertTrue(parser.parseCommand(ViewEncryptionCommand.COMMAND_WORD) instanceof ViewEncryptionCommand);
     }
 
     @Test
     public void parseCommand_viewoutletAlias() throws Exception {
-        assertTrue(parser.parseCommand(ViewOutletCommand.COMMAND_ALIAS) instanceof ViewOutletCommand);
+        assertTrue(parser.parseCommand(ViewEncryptionCommand.COMMAND_ALIAS) instanceof ViewEncryptionCommand);
     }
 
     //@@author hzxcaryn
@@ -361,9 +361,9 @@ public class PartTimeManagerParserTest {
 
     //@@author hzxcaryn
     @Test
-    public void parseCommand_main() throws Exception {
-        assertTrue(parser.parseCommand(MainCommand.COMMAND_WORD) instanceof MainCommand);
-        assertTrue(parser.parseCommand(MainCommand.COMMAND_WORD + " 3") instanceof MainCommand);
+    public void parseCommand_defaultview() throws Exception {
+        assertTrue(parser.parseCommand(DeselectCommand.COMMAND_WORD) instanceof DeselectCommand);
+        assertTrue(parser.parseCommand(DeselectCommand.COMMAND_WORD + " 3") instanceof DeselectCommand);
     }
 
     @Test

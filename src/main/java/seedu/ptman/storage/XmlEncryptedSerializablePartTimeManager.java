@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.model.PartTimeManager;
 import seedu.ptman.model.ReadOnlyPartTimeManager;
+import seedu.ptman.model.outlet.OutletInformation;
 
-//@@author SunBangjie
 /**
  * An Immutable PartTimeManager that is serializable to XML format
  */
 @XmlRootElement(name = "parttimemanager")
 public class XmlEncryptedSerializablePartTimeManager {
 
-    private static final String ENCRYPTED_MESSAGE = "PartTimerManager storage files are encrypted.";
-    private static final String DECRYPTED_MESSAGE = "PartTimerManager storage files are not encrypted.";
+    private static final String ENCRYPTED_MESSAGE = OutletInformation.DATA_ENCRYPTED_MESSAGE;
+    private static final String DECRYPTED_MESSAGE = OutletInformation.DATA_NOT_ENCRYPTED_MESSAGE;
 
     @XmlElement
     private String encryptionMode;

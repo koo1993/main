@@ -89,6 +89,7 @@ public class ModelManager extends ComponentManager implements Model {
         raise(new PartTimeManagerChangedEvent(partTimeManager));
     }
 
+    //@@author SunBangjie
     /** Raises an event to indicate the model has changed */
     private void indicateEncryptionModeChanged() {
         raise(new PartTimeManagerChangedEvent(partTimeManager));
@@ -99,6 +100,7 @@ public class ModelManager extends ComponentManager implements Model {
     private void indicateOutletInformationChanged() {
         raise(new OutletDataChangedEvent(partTimeManager.getOutletInformation()));
     }
+    //@@author
 
     @Override
     public synchronized void deleteEmployee(Employee target) throws EmployeeNotFoundException {
@@ -229,11 +231,6 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public String getOutletInformationMessage() {
-        return partTimeManager.getOutletInformationMessage();
-    }
-
-    @Override
     public OutletInformation getOutletInformation() {
         return partTimeManager.getOutletInformation();
     }
@@ -241,6 +238,11 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public boolean getEncryptionMode() {
         return getOutletInformation().getEncryptionMode();
+    }
+
+    @Override
+    public String getEncryptionModeMessage() {
+        return getOutletInformation().getEncryptionModeMessage();
     }
 
     @Override
@@ -255,6 +257,7 @@ public class ModelManager extends ComponentManager implements Model {
         indicateEncryptionModeChanged();
     }
     //@@author
+
     //=========== Filtered Employee List Accessors =============================================================
     @Override
     public void deleteTagFromAllEmployee(Tag tag) {

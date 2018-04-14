@@ -87,6 +87,20 @@ The default employee password is `DEFAULT1`.
 It is crucial to change the default employee password to prevent unauthorized execution of employee commands.
 You may refer to <<Changing your employee password: `changepw`>> for instructions on how to do so.
 
+// tag::outletManagement[]
+=== Outlet Management
+If you are a manager, PTMan allows you to manage your outlet. You can edit your outlet name, operating hours, contact number and email.
+The timetable automatically re-sizes according to the operating hours. You can also create any announcement and broadcast to your employees.
+
+If you are an employee, you can view announcement created by your manager and take actions accordingly.
+
+_<<fig-Feature_Outlet>>_ shows where you can view your outlet information.
+
+[[fig-Feature_Outlet]]
+.Sample Outlet Information Displayed +
+image::IntroductionToOutlet.jpg[width="790"]
+// end::outletManagement[]
+
 === Shift Management
 If you are a manager, PTMan allows you to manage your employees' work shifts.
 // TODO: Add how PTMan is better than traditional paperwork
@@ -95,6 +109,7 @@ If you are an employee, PTMan gives you flexibility in your working hours by all
 
 You are able to view shifts that are in PTMan via the <<Timetable, timetable>>.
 
+// tag::timetableIntro[]
 === Timetable
 PTMan has a timetable that displays all the shifts in a weekly format. There are many interactions between the
 timetable and you, as a user, so this section aims to familiarise you with the timetable.
@@ -129,11 +144,13 @@ There are two ways to navigate through the different weeks in the timetable:
 . Using Keyboard Shortcuts
 +
 * For Windows:
-** kbd:[Ctrl] + kbd:[Shift] + kbd:[->] : Navigates timetable to the next week.
-** kbd:[Ctrl] + kbd:[Shift] + kbd:[<-] : Navigates timetable to the previous week.
+** kbd:[Ctrl] + kbd:[Shift] + kbd:[→] : Navigates timetable to the next week.
+** kbd:[Ctrl] + kbd:[Shift] + kbd:[←] : Navigates timetable to the previous week.
+** kbd:[Ctrl] + kbd:[Shift] + kbd:[↓] : Navigates timetable to the current week.
 * For Mac:
-** kbd:[Command] + kbd:[Shift] + kbd:[->] : Navigates timetable to the next week.
-** kbd:[Command] + kbd:[Shift] + kbd:[<-] : Navigates timetable to the previous week.
+** kbd:[Command] + kbd:[Shift] + kbd:[→] : Navigates timetable to the next week.
+** kbd:[Command] + kbd:[Shift] + kbd:[←] : Navigates timetable to the previous week.
+** kbd:[Command] + kbd:[Shift] + kbd:[↓] : Navigates timetable to the current week.
 . Using Mouse Clicks
 +
 * At the top of the timetable, there is a navigation bar with two arrow buttons which you can click on.
@@ -143,27 +160,15 @@ _<<fig-Feature_Timetable3>>_ below shows the navigation bar, with the two arrow 
 [[fig-Feature_Timetable3]]
 .Navigation Bar of Timetable +
 image::Feature_Timetable3.png[width="790"]
+// end::timetableIntro[]
 
-// tag::outletManagement[]
-=== Outlet Management
-If you are a manager, PTMan allows you to manage your outlet. You can edit your outlet name, operating hours, contact number and email.
-The timetable automatically re-sizes according to the operating hours. You can also create any announcement and broadcast to your employees.
 
-If you are an employee, you can view announcement created by your manager and take actions accordingly.
-
-_<<fig-Feature_Outlet>>_ shows where you can view your outlet information.
-
-[[fig-Feature_Outlet]]
-.Sample Outlet Information Displayed +
-image::IntroductionToOutlet.jpg[width="790"]
-// end::outletManagement[]
-
-=== Saving the data
+=== Saving the Data
 
 All data is saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 // tag::backup[]
-=== Backing up the data
+=== Backing Up the Data
 Backup files are automatically created and saved in the hard disk upon exit of the app. There is no need to do backup manually. +
 You can replace any local storage files with backup files by the following steps:
 
@@ -176,12 +181,12 @@ You can replace any local storage files with backup files by the following steps
 . Run the app `PTMan.jar` and you will see all the restored data read from backup files.
 // end::backup[]
 
-=== Keeping track of employees' monthly salaries [Coming in v2.0]
+=== Keeping Track of Employees' Monthly Salaries [Coming in v2.0]
 
 As employees work, their pay is calculated based on the hours they have worked.
 The manager can use this information to distribute their salaries.
 
-=== Saving data to the cloud [Coming in v2.0]
+=== Saving Data to the Cloud [Coming in v2.0]
 
 Currently, PTMan is meant to be used on a single shared device as it is limited by local storage.
 By saving PTMan's data to the cloud, both employees and managers can access PTMan from their own devices since the data can be shared.
@@ -494,7 +499,7 @@ The `redo` command fails as there are no `undo` commands executed previously.
 ==== Editing the outlet information: `editoutlet`
 Edits the outlet information. +
 
-*Format:* `editoutlet [n/NAME] [h/OPERATING_HOURS] [c/CONTACT_NUMBER] [e/EMAIL]`  +
+*Format:* `editoutlet n/OUTLET_NAME h/OPERATING_HOURS c/CONTACT_NUMBER e/EMAIL`  +
 *Shorthand:* `eo`
 ****
 * At least one of the optional fields must be provided.
@@ -513,26 +518,27 @@ Examples:
 .Default Outlet Information +
 image::DefaultOutlet.jpg[width="790"]
 
-. You can edit the name, operating hours, contact number, and email of the outlet to be `AwesomeCoffee`, `10am to 11pm`, `98134086`, and `awesomecoffee@gmail.com` respectively, type: +
-`editoutlet n/AwesomeCoffee h/1000-2300 c/98134086 e/awesomecoffee@gmail.com`. Or you can refer to _<<fig-Edit1>>_.
+. In the admin mode, you can edit the name, operating hours, contact number, and email of the outlet to be `AwesomeCoffee`, `10am to 11pm`, `98134086`, and `awesomecoffee@gmail.com` respectively, by typing: +
+`editoutlet n/AwesomeCoffee h/1000-2300 c/98134086 e/awesomecoffee@gmail.com`. +
+You can refer to _<<fig-Edit1>>_.
 +
 [[fig-Edit1]]
 .Example of `editoutlet` command usage +
 image::Ui_editoutlet1.png[width="790"]
 
-. Click kbd:[Enter] and you would see a confirmation message below the command bar, and the changes applied to the outlet information.
+. Press kbd:[Enter] and you would see a confirmation message below the command bar, and the changes applied to the outlet information.
 _<<fig-Edit2>>_ shows how PTMan should look like after the above command.
 +
 [[fig-Edit2]]
 .Successful editing of outlet information in PTMan +
-image::Ui_editoutlet2.png[width="790"]
+image::Ui_editoutlet2.png[width="600"]
 
-. To only edit the name and contact number to be `Nice Dim Sum` and `901234567` respectively, type: `editoutlet n/Nice Dim Sum c/901234567`.
+. To only edit the name and contact number to be `Nice Dim Sum` and `901234567` respectively, you can type: `editoutlet n/Nice Dim Sum c/901234567`.
 You will see changes as shown in _<<fig-Edit3>>_.
 +
 [[fig-Edit3]]
 .Successful editing of outlet information in PTMan +
-image::Ui_editoutlet3.png[width="790"]
+image::Ui_editoutlet3.png[width="600"]
 
 [[Announcement]]
 ==== Creating an announcement: `announcement`
@@ -543,9 +549,7 @@ Sets an announcement for the outlet. +
 
 Examples:
 
-. Your store has a *new drink released this coming Wednesday*, and you want your employees who come working on Wednesday to be
-familiar with the recipe for it. You can leave a note for your employees so that they can be prepared for their shifts.
-To make an announcement in PTMan, you can type the following command as illustrated in _<<fig-Announce1>>_.
+. You can leave a note for your employees by making an announcement in PTMan. You can type the following command as illustrated in _<<fig-Announce1>>_.
 +
 [[fig-Announce1]]
 .Example of `announce` command usage +
@@ -556,7 +560,7 @@ _<<fig-Announce2>>_ shows how PTMan should look like after the above command.
 +
 [[fig-Announce2]]
 .Successful announcement made in PTMan +
-image::Ui_announcement2.png[width="790"]
+image::Ui_announcement2.png[width="600"]
 
 [[Encrypt]]
 ==== Encrypting the local storage files: `encrypt`
@@ -568,18 +572,18 @@ After your `encrypt` command is executed successfully, you would see a confirmat
 
 [[fig-SuccessfulEncryptCommand]]
 .Successful `encrypt` command made in PTMan +
-image::SuccessfulEncryptCommand.jpg[width="790"]
+image::SuccessfulEncryptCommand.jpg[width="500"]
 
 In addition, you can view your data stored in local files by the following steps:
 
 . Open the folder where your app `PTMan.jar` is at.
 . Open the folder named `data`. You will see two files `outletinformation.xml` and `parttimemanager.xml` there.
-. Open `outletinformation.xml`. The third line of the file indicates the encryption status with reference to _<<fig-Encrypt>>_.
+. Open `outletinformation.xml` with Internet Explorer (IE). The third line of the file indicates the encryption status with reference to _<<fig-Encrypt>>_.
 
 _<<fig-Encrypt>>_ shows an example of what the `outletinformation.xml` file should look like when the `encrypt` command is successfully executed.
 
 [[fig-Encrypt]]
-.Example of Encrypted `outletinformation.xml` File in `data` Folder +
+.Example of encrypted `outletinformation.xml` file in `data` folder +
 image::OutletInformationEncryptedXMLFile.jpg[width="790"]
 
 [[Decrypt]]
@@ -592,13 +596,25 @@ After your `decrypt` command is executed successfully, you would see a confirmat
 
 [[fig-SuccessfulDecryptCommand]]
 .Successful `decrypt` command made in PTMan +
-image::SuccessfulDecryptCommand.jpg[width="790"]
+image::SuccessfulDecryptCommand.jpg[width="500"]
 
 Open `outletinformation.xm;` file again, now you can read and understand the data stored as shown in _<<fig-Decrypt>>_.
 
 [[fig-Decrypt]]
-.Example of Decrypted `outletinformation.xml` File in `data` Folder +
+.Example of decrypted `outletinformation.xml` file in `data` folder +
 image::OutletInformationDecryptedXMLFile.jpg[width="790"]
+
+==== Viewing encryption status: `viewencrytion`
+Shows encryption status of local storage files.
+
+*Format:* `viewencryption` +
+*Shorthand:* `ve`
+
+After your `viewencryption` command is executed successfully, you would see an encryption status message below the command bar as shown in _<<fig-SuccessfulVECommand>>_.
+
+[[fig-SuccessfulVECommand]]
+.Example of `viewencryption` command made in PTMan +
+image::SuccessfulVECommand.jpg[width="400"]
 // end::outletCommand[]
 
 // tag::shiftmanager[]
@@ -876,7 +892,7 @@ Displays the shifts of the selected employee on the timetable view. Shifts appli
  in blue, while the other shifts would be displayed in brown. +
 
 *Format:* `select EMPLOYEE_INDEX` +
-*Shorthand:* `s EMPLOYEE_INDEX`
+*Shorthand:* `sel EMPLOYEE_INDEX`
 
 // TODO: SCREENSHOT
 Examples:
@@ -891,16 +907,18 @@ Examples:
 Alternatively, you can select an employee simply by clicking on the employee's card in the employee list
 
 [TIP]
-To stop displaying the employee's shifts on the timetable, use the `main` command. +
-Refer to <<Displaying the default timetable: `main`>> for more information.
+To stop displaying the employee's shifts on the timetable, use the `defaultview` command. +
+Refer to <<Displaying the default timetable: `defaultview`>> for more information.
 
-[[Main]]
-==== Displaying the default timetable: `main`
+[[Dv]]
+==== Deselecting an employee: `deselect`
 
-Displays the main timetable view (of the current week). Useful for users to navigate back to the default timetable
-after using the `select` command. +
+Displays the timetable without any employee selected.
+Useful for users to navigate back to the default timetable after using the `select` command, or when they have lost track of
+where they have navigated the timetable week to. +
 
-*Format:* `main`
+*Format:* `deselect`
+*Shorthand:* `dsel`
 
 [[Export]]
 ==== Exporting the timetable as image: `export`
@@ -957,7 +975,7 @@ Exits the app. +
 * <<List, *List*>>: `list`
 * <<Viewshift, *View shift*>>: `viewshift SHIFT_INDEX`
 * <<Select, *Display employee's shifts*>>: `select EMPLOYEE_INDEX`
-* <<Main, *Display default timetable*>>: `main`
+* <<Dv, *Display default timetable*>>: `defaultview`
 * <<Export, *Export timetable*>>: `export`
 * <<History, *History*>>: `history`
 * <<Exit, *Exit*>>: `exit`

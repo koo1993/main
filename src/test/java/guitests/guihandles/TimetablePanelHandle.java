@@ -82,14 +82,14 @@ public class TimetablePanelHandle extends NodeHandle<Node> {
     }
 
     /**
-     * Navigate to the prev timetable view by clicking the next button
+     * Navigate to the prev timetable week by clicking the next button
      */
     public void navigateToPrevUsingButton() {
         guiRobot.clickOn(prevButtonNode);
     }
 
     /**
-     * Navigate to the next timetable view by clicking the next button
+     * Navigate to the next timetable week by clicking the next button
      */
     public void navigateToNextUsingButton() {
         guiRobot.clickOn(nextButtonNode);

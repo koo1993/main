@@ -18,6 +18,7 @@ import seedu.ptman.model.shift.Date;
 import seedu.ptman.model.shift.Time;
 import seedu.ptman.testutil.Assert;
 
+//@@author shanwpf
 public class XmlAdaptedShiftTest {
     private static final String INVALID_DATE = "1-1-18";
     private static final String INVALID_START_TIME = "asd";

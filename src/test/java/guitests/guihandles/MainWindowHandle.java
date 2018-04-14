@@ -1,5 +1,6 @@
 package guitests.guihandles;
 
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 /**
@@ -15,6 +16,10 @@ public class MainWindowHandle extends StageHandle {
     private final MainMenuHandle mainMenu;
     private final OutletDetailsPanelHandle outletPanel;
     private final TimetablePanelHandle timetablePanel;
+
+    private final KeyCode[] keyCtrlShiftLeft = {KeyCode.SHORTCUT, KeyCode.SHIFT, KeyCode.LEFT};
+    private final KeyCode[] keyCtrlShiftRight = {KeyCode.SHORTCUT, KeyCode.SHIFT, KeyCode.RIGHT};
+    private final KeyCode[] keyCtrlShiftDown = {KeyCode.SHORTCUT, KeyCode.SHIFT, KeyCode.DOWN};
 
     public MainWindowHandle(Stage stage) {
         super(stage);

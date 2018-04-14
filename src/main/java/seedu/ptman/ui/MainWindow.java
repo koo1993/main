@@ -38,6 +38,8 @@ public class MainWindow extends UiPart<Stage> {
             new KeyCodeCombination(KeyCode.LEFT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
     private final KeyCombination keyCtrlShiftRight =
             new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
+    private final KeyCombination keyCtrlShiftDown =
+            new KeyCodeCombination(KeyCode.DOWN, KeyCombination.SHIFT_DOWN, KeyCombination.SHORTCUT_DOWN);
 
     //@@author
     private Stage primaryStage;
@@ -204,11 +206,15 @@ public class MainWindow extends UiPart<Stage> {
             if (keyCtrlShiftLeft.match(event)) {
                 event.consume();
                 logger.fine("Timetable view requested to display the previous week.");
-                raise(new TimetableWeekChangeRequestEvent(false, true));
+                raise(new TimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent.WeekChangeRequest.PREVIOUS));
             } else if (keyCtrlShiftRight.match(event)) {
                 event.consume();
                 logger.fine("Timetable view requested to display the next week.");
-                raise(new TimetableWeekChangeRequestEvent(true, false));
+                raise(new TimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent.WeekChangeRequest.NEXT));
+            } else if (keyCtrlShiftDown.match(event)) {
+                event.consume();
+                logger.fine("Timetable view requested to display the current week.");
+                raise(new TimetableWeekChangeRequestEvent(TimetableWeekChangeRequestEvent.WeekChangeRequest.CURRENT));
             }
         });
     }

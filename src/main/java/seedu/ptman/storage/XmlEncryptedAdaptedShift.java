@@ -17,7 +17,6 @@ import seedu.ptman.model.shift.Date;
 import seedu.ptman.model.shift.Shift;
 import seedu.ptman.model.shift.Time;
 
-//@@author SunBangjie
 /**
  * JAXB-friendly version of the Shift.
  */

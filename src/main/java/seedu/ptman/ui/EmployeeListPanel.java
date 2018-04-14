@@ -71,7 +71,7 @@ public class EmployeeListPanel extends UiPart<Region> {
 
     //@@author hzxcaryn
     /**
-     * Scrools to the top of the {@code EmployeeListPanel} and deselect any current selection.
+     * Scrolls to the top of the {@code EmployeeListPanel} and deselect any current selection.
      */
     private void scrollToTopAndDeselect() {
         Platform.runLater(() -> {

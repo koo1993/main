@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlValue;
 import seedu.ptman.commons.exceptions.IllegalValueException;
 import seedu.ptman.model.tag.Tag;
 
-//@@author SunBangjie
 /**
  * JAXB-friendly adapted version of the Tag.
  */

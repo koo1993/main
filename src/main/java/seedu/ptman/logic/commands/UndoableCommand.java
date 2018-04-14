@@ -45,7 +45,8 @@ public abstract class UndoableCommand extends Command {
         model.resetData(previousPartTimeManager);
         model.updateFilteredEmployeeList(PREDICATE_SHOW_ALL_EMPLOYEES);
         OutletInformation previousOutlet = previousPartTimeManager.getOutletInformation();
-        EventsCenter.getInstance().post(new OutletInformationChangedEvent(previousOutlet.getOperatingHours().toString(),
+        EventsCenter.getInstance().post(new OutletInformationChangedEvent(
+                previousOutlet.getOperatingHours().getDisplayedMessage(),
                 previousOutlet.getOutletContact().toString(), previousOutlet.getOutletEmail().toString()));
         EventsCenter.getInstance().post(new OutletNameChangedEvent(previousOutlet.getName().toString()));
         EventsCenter.getInstance().post(new AnnouncementChangedEvent(previousOutlet.getAnnouncement().toString()));

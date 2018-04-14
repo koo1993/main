@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <outletinformation>
-    <encryptionMode>Outlet information storage files are not encrypted.</encryptionMode>
+    <encryptionMode>Local storage files are not encrypted.</encryptionMode>
     <outletName>DefaultOutlet</outletName>
     <operatingHours>0900-2200</operatingHours>
     <outletContact>91234567</outletContact>

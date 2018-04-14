@@ -119,13 +119,6 @@ public class PartTimeManagerTest {
 
     //@@author SunBangjie
     @Test
-    public void getOutletInformationMessage_defaultData_returnCorrectMessage() {
-        String actualMessage = partTimeManager.getOutletInformationMessage();
-        String expectedMessage = new OutletInformation().toString();
-        assertEquals(actualMessage, expectedMessage);
-    }
-
-    @Test
     public void encryptLocalStorage_dataNotEncrypted_encryptSuccessfully() {
         partTimeManager.encryptLocalStorage();
         assertTrue(partTimeManager.getOutletInformation().getEncryptionMode());

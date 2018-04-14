@@ -207,7 +207,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public String getOutletInformationMessage() {
+        public String getEncryptionModeMessage() {
             fail("This method should not be called.");
             return null;
         }

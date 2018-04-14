@@ -277,7 +277,7 @@ Such details are essential to facilitate other functions such as the access cont
 The `OutletInformation` class represents an outlet in PTMan.
 It supports relevant commands that utilize attributes of this class. It is also responsible for information displayed in the UI and data stored in local storage files. +
 
-_<<fig-OutletClassDiagram>>_ is a class diagram that displays the association between `OutletInformation` and other components in the `Model`.
+_<<fig-OutletClassDiagram>>_ is a class diagram that displays the association between `OutletInformation` and other classes in the `Model`.
 
 [[fig-OutletClassDiagram]]
 .Overview of the OutletInformation Class in the Model Component
@@ -305,8 +305,10 @@ Otherwise, users are unable to log in with correct password when they start usin
 
 ===== Commands
 
-Currently, there are two commands that allow employers to change attributes of the `OutletInformation`.
-There are also commands that allow employers to encrypt and decrypt local storage files. +
+Currently, there are two commands that allow employers to change attributes of the `OutletInformation`: `editoutlet` and `announcement` commands which are implemented in similar ways.
+The implementation of `editoutlet` command will be explained in details.
+In addition, there are also commands that allow employers to encrypt and decrypt local storage files.
+The implementation of `encrypt` command and how data is encrypted will be explained in details. +
 
 ====== Edit outlet command
 
@@ -323,27 +325,22 @@ The reason why it is implemented in this why is that it enables employers to edi
 
 In order to check whether some fields are specified, several branches are created in the `setOutletInformation` method of the `OutletInformation` class.
 When all fields are null, it throws a new exception as shown below:
+[source,java]
 ----
-public void setOutletInformation(...) throws NoOutletInformationFieldChangeException {
-    ...
-    if (name == null && operatingHours == null && outletContact == null && outletEmail == null) {
-        throw new NoOutletInformationFieldChangeException();
-    }
-    ...
+if (name == null && operatingHours == null && outletContact == null && outletEmail == null) {
+    throw new NoOutletInformationFieldChangeException();
 }
+
 ----
 This `NoOutletInformationFieldChangeException` is then handled by the `EditOutletCommand`.
 When the exception is caught, the `CommandException` with a message of command failure will be thrown,
 with reference to the function below:
+[source,java]
 ----
-public CommandResult executeUndoableCommand() throws CommandException {
-    ...
-    try {
-        editedOutlet.setOutletInformation(name, operatingHours, outletContact, outletEmail);
-    } catch (NoOutletInformationFieldChangeException e) {
-        throw new CommandException(MESSAGE_EDIT_OUTLET_FAILURE);
-    }
-    ...
+try {
+    editedOutlet.setOutletInformation(name, operatingHours, outletContact, outletEmail);
+} catch (NoOutletInformationFieldChangeException e) {
+    throw new CommandException(MESSAGE_EDIT_OUTLET_FAILURE);
 }
 ----
 The following sequence diagram (_<<fig-EditOutletCommandSequenceDiagram>>_) illustrates how an `editoutlet` command is executed in the Logic Component, and how it interacts with the Model Component.
@@ -352,35 +349,15 @@ The following sequence diagram (_<<fig-EditOutletCommandSequenceDiagram>>_) illu
 .Interactions inside the Logic Component for the `editoutlet n/Edited Outlet` Admin Command
 image::EditOutletCommandSequenceDiagram.png[width="800"]
 
-When an `editoutlet` executes successfully, three events will be raised and handled with reference to _<<fig-EditOutletCommandHighLevelSequenceDiagram>>_:
+When an `editoutlet` executes successfully, three events will be raised and handled as shown in _<<fig-EditOutletCommandHighLevelSequenceDiagram>>_:
 
 . `OutletNameChangedEvent` updates the outlet name displayed in the app.
-. `OutletInformationChangedEvent` updates the operating hours, contact numbers and email displayed in the app.
-. `OutletDataChangedEvent` saves latest outlet information in local storage file "data/outletinformation.xml".
+. `OutletInformationChangedEvent` updates the operating hours, contact number and email displayed in the app.
+. `OutletDataChangedEvent` saves latest outlet information to local storage file "data/outletinformation.xml".
 
 [[fig-EditOutletCommandHighLevelSequenceDiagram]]
 .High Level Sequence Diagram for the `editoutlet` Command
 image::EditOutletCommandHighLevelSequenceDiagrams.png[width="800"]
-
-====== Announcement command
-
-Similar to `editoutlet` command, `announcement` command changes the `announcement` attribute of `OutletInformation`.
-The implementation is similar to the implementation of `editoutlet` command mentioned previously.
-Take note that there is not any input constraint on the `announcement`, unlike outlet name, operating hours, contact number and email which have specific input constraints.
-
-Thus, an alternative implementation of the `Announcement` class can put certain constraints on the input string, and check whether the input string matches the validation regex as shown below:
-----
-public static final String ANNOUNCEMENT_VALIDATION_REGEX = //your own validation regex;
-public static boolean isValidAnnouncement(String test) {
-    return test.matches(ANNOUNCEMENT_VALIDATION_REGEX);
-}
-----
-When an `announcement` command executes successfully, `AnnouncementChangedEvent` is raised and handled to update the information displayed in the app as highlighted in _<<fig-AnnouncementDisplayed>>_.
-[[fig-AnnouncementDisplayed]]
-.Example of the Announcement Displayed
-image::announcementdisplay.jpg[width="600"]
-
-Similarly, `OutletDataChangedEvent` is also raised and handled to save the latest announcement into local storage file "data/outletinformation.xml".
 
 ====== Encrypt and decrypt commands
 Since PTMan stores files locally, it is highly possible that any worker in the outlet can open the storage files and read data inside.
@@ -396,8 +373,8 @@ image::EncryptDataCommandSequenceDiagram.png[width="800"]
 
 When an `encrypt` executes successfully, two events will be raised and handled with reference to _<<fig-EncryptCommandHighLevelSequenceDiagram>>_:
 
-. `PartTimeManagerChangedEvent` saves encrypted or decrypted information on employees and shifts in local storage file "data/parttimemanager.xml".
-. `OutletDataChangedEvent` saves encrypted or decrypted outlet information in local storage file "data/outletinformation.xml".
+. `PartTimeManagerChangedEvent` saves encrypted or decrypted information of employees and shifts to local storage file "data/parttimemanager.xml".
+. `OutletDataChangedEvent` saves encrypted or decrypted outlet information to local storage file "data/outletinformation.xml".
 
 [[fig-EncryptCommandHighLevelSequenceDiagram]]
 .High Level Sequence Diagram for the `encrypt` Command
@@ -405,7 +382,8 @@ image::EncryptCommandHighLevelSequenceDiagrams.png[width="800"]
 
 Currently, the local data is encrypted in the Advanced Encryption Standard (AES) in XML files.
 If data is encrypted, data read from XML files must be decrypted before passing to the constructor of any object.
-The function below demonstrates how outlet data is encrypted using the encrypt(String text) function: +
+The function below demonstrates how outlet data is encrypted using the encrypt(String text) function when converting to a XML file: +
+[source, java]
 ----
 public XmlAdaptedOutletInformation(String outletName, ...) {
     ...
@@ -425,6 +403,7 @@ image::OutletInformationEncryptedXMLFile.jpg[width="800"]
 
 The limitation of the current implementation leads to an alternative implementation that encrypts the entire XML file.
 The XMLCipher package from apache.org can be used to encrypt the XML file stored locally, as illustrated below:
+[source, java]
 ----
 Document encryptedDoc = XMLUtil.encryptDocument(document, secretKey, XMLCipher.AES_128);
 XMLUtil.saveDocumentTo(encryptedDoc, encryptedFile);
@@ -432,6 +411,7 @@ Document decryptedDoc = XMLUtil.decryptDocument(encryptedDoc, secretKey, XMLCiph
 XMLUtil.saveDocumentTo(decryptedDoc, decryptedFile);
 ----
 You can implement `encryptDocument` using the code below. Take note that `decryptDocument` is simply the reverse process of `encryptDocument`.
+[source, java]
 ----
 public static Document encryptDocument(Document document, SecretKey secretKey, String algorithm) throws Exception {
     Element rootElement = document.getDocumentElement();
@@ -643,9 +623,9 @@ public EmployeePanelSelectionChangedEvent(EmployeeCard newSelection)
 `TimetablePanel` subscribes to this event and handles it by calling the `loadEmployeeTimetable` method for the `newSelection`. +
  +
 
-===== Returning to main view of timetable
+===== Returning to default view of timetable
 
-The returning to main timetable view is called through `MainCommand`, which also posts an `EmployeePanelSelectionChangedEvent` event
+The returning to default timetable view is called through `DefaultViewCommand`, which also posts an `EmployeePanelSelectionChangedEvent` event
 with null as the argument.
 
 `TimetablePanel` subscribes to this event and handles it by calling the `loadMainTimetable` method. +
