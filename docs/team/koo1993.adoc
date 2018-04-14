@@ -17,14 +17,16 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. It
 == Summary of contributions
 
 * *Major enhancement*: Added *access control* that manages functions for employer and employee. [https://github.com/CS2103JAN2018-W14-B2/main/issues/39[Issue #39]]
-** What it does: Each employer and employee is assigned to a password. This restrict employee to use functions that are meant for the employer.
-** What it includes:
-*** Separation of employer and employee command.
-*** API for password checking that needs password.
-*** Login/Logout to admin mode for employer to use admin commands at ease.
-*** Change/reset password for both group of user with email service.
-** Justification: This ensure only authenticated personnel can use the system and prevent misuse of PTMan.
-
+** What it does:
+*** Assigns password to each employer and employee.
+*** Separates command for employer and employee.
+*** Implements API for password checking that needs password.
+*** Implements Login/Logout to admin mode for employer to use admin commands at ease.
+*** Implements Change/reset password for both group of user with email service.
+** Justification: This ensure only authenticated personnel can use the system and restrict employee to use functions that are meant for the employer. This prevent misuse of PTMan.
+** Highlights:
+This enhancement puts security in high regard.
+Lots of consideration is put into avoiding inconvience for the user while maintaining high security.
 
 * *Minor enhancement*: Added salary parameter and addsalary command for employer to manage employees' pay.
 
