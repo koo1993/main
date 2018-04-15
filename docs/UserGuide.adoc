@@ -699,7 +699,7 @@ Adds a shift to the timetable to indicate that you require employees at that per
 * The `CAPACITY` should be a positive integer.
 ****
 
-*Example*:
+*Guided Example*:
 
 . To add a shift on 13th April 2018 from 12pm to 6pm that requires 3 employees, execute the command +
 `addshift d/13-04-18 ts/1200 te/1800 c/3` as shown in _<<fig-addshiftBefore>>_.
@@ -708,7 +708,7 @@ Adds a shift to the timetable to indicate that you require employees at that per
 .Adding a Shift +
 image::AddshiftBefore.png[width="800"]
 +
-. You should see a confirmation message in the feedback box along with the shift you've added being displayed in the timetable.
+. You should see a confirmation message in the result display along with the shift you've added being displayed in the timetable.
 This is illustrated in _<<fig-addshiftAfter>>_.
 +
 [[fig-addshiftAfter]]
@@ -734,12 +734,13 @@ Deletes a shift from the timetable.
 .Deleting Shift 1 +
 image::DeleteShiftBefore.png[width="800"]
 +
-. Upon successful deletion, you will see a confirmation message in the feedback box and you can no longer see the shift in the timetable.
+. Upon successful deletion, you will see a confirmation message in the result display and you can no longer see the shift in the timetable.
 _<<fig-deleteShiftAfter>>_ illustrates the successful deletion of shift 1.
 +
 [[fig-deleteShiftAfter]]
 .Successful Deletion of Shift 1 +
 image::DeleteShiftAfter.png[width="800"]
+// end::shiftmanager[]
 
 [[Apply]]
 ==== Applying an employee for a shift: `apply`
@@ -762,7 +763,7 @@ Applies an employee for a shift. +
 image::ApplyAdminBefore.png[width="800"]
 
 +
-. As highlighted by the red boxes in _<<fig-applyAdminAfter>>_, you should see a confirmation message in the feedback box
+. As highlighted by the red boxes in _<<fig-applyAdminAfter>>_, you should see a confirmation message in the result display
 and the slots left in the shift will decrease by 1 upon successful application.
 +
 [[fig-applyAdminAfter]]
@@ -792,13 +793,12 @@ Removes an employee from a shift. +
 [[fig-unapplyAdminBefore]]
 .Removing Employee 2 from Shift 3 +
 image::UnapplyAdminBefore.png[width="800"]
-. As highlighted by the red boxes in _<<fig-unapplyAdminAfter>>_, you should see a confirmation message in the feedback box
+. As highlighted by the red boxes in _<<fig-unapplyAdminAfter>>_, you should see a confirmation message in the result display
 and the slots left in the shift will increase by 1 upon successful removal.
 +
 [[fig-unapplyAdminAfter]]
 .Successful Removal of Employee 2 from Shift 3 +
 image::UnapplyAdminAfter.png[width="800"]
-// end::shiftmanager[]
 
 === Employee Commands
 As an employee, you are able to access these commands in addition to the <<General Commands, general commands>>.
@@ -826,7 +826,7 @@ Applies for a shift. +
 .Applying Employee 2 to Shift 3 +
 image::ApplyBefore.png[width="800"]
 +
-. As highlighted by the red boxes in _<<fig-applyAfter>>_, you should see a confirmation message in the feedback box
+. As highlighted by the red boxes in _<<fig-applyAfter>>_, you should see a confirmation message in the result display
 and the slots left in the shift will decrease by 1 upon successful application.
 +
 [[fig-applyAfter]]
@@ -858,7 +858,7 @@ Removes youreself from a shift. +
 .Removing Employee 2 from Shift 3 +
 image::UnapplyBefore.png[width="800"]
 +
-. As highlighted by the red boxes in _<<fig-unapplyAfter>>_, you should see a confirmation message in the feedback box
+. As highlighted by the red boxes in _<<fig-unapplyAfter>>_, you should see a confirmation message in the result display
 and the slots left in the shift will increase by 1 upon successful removal.
 +
 [[fig-unapplyAfter]]
