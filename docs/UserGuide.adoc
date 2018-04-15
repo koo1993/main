@@ -307,7 +307,7 @@ You must key in the current and new password in the correct sequence as given in
 
 *Guided Example:*
 
-* To change the password from `DEFAULT1` to `hunter2`, type: `changeadminpw pw/DEFAULT1 pw/hunter22 pw/hunter22`.
+* To change the password from `DEFAULT1` to `hunter22`, type: `changeadminpw pw/DEFAULT1 pw/hunter22 pw/hunter22`.
 The passwords will be masked by asterisks as shown in _<<fig-changingAdminPassword>>_.
 +
 [[fig-changingAdminPassword]]
@@ -902,8 +902,8 @@ The sequence of current and new password entered must be of the format.
 
 *More Examples:*
 
-* If your index is `5`, your current password is `DEFAULT1`, and you wish to change it to `hunter2`, type: +
-`cp 5 pw/DEFAULT1 pw/hunter2 pw/hunter2`
+* If your index is `5`, your current password is `DEFAULT1`, and you wish to change it to `hunter22`, type: +
+`cp 5 pw/DEFAULT1 pw/hunter22 pw/hunter22`
 //* If your index is `2`, your current password is `mypassword`, and you wish to change it to `NewPassw0rd`, type: +
 //`cp 2 pw/mypassword pw/NewPassw0rd pw/NewPassw0rd`
 
