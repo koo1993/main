@@ -26,12 +26,17 @@ Role: Developer +
 Responsibilities: Logic + Documentation + Integration
 
 * Features Implemented : +
-** https://github.com/CS2103JAN2018-W14-B2/main/pull/32[Create Additional Salary Parameter]
-
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/20[Password Class]
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/65[Access Control/Admin Mode for employer]
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/101[Change password for employer and employee]
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/113[Reset password for employer and employee]
 
 
 * Other Contributions : +
-** https://github.com/CS2103JAN2018-W14-B2/main/pull/20[Password Class]
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/32[Create additional salary parameter]
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/198[Add salary command for employer]
+** https://github.com/CS2103JAN2018-W14-B2/main/pull/132[Obscure password when typing on textfield]
+
 
 '''
 
